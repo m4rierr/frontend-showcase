@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Клуб</title>
+  <meta name="description" content="Одна система клуба. Три рабочих места: клиент, тренер, администратор.">
+  <style>
+    :root {
+      --canvas: #E9E9E6;
+      --surface: #FAFAF9;
+      --ink: #16181B;
+      --muted: #5C636B;
+      --line: #D5D6D2;
+      --brand: #FFDD2D;
+      --brand-ink: #232830;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--canvas);
+      color: var(--ink);
+      font: 16px/1.45 "Segoe UI", system-ui, sans-serif;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 20px 64px;
+    }
+    .eyebrow {
+      margin: 0 0 8px;
+      font-size: 13px;
+      font-weight: 650;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    h1 {
+      margin: 0;
+      font-size: 40px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+    .lead {
+      max-width: 38rem;
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+    .doors {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 36px;
+    }
+    .door {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 230px;
+      padding: 18px 18px 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--surface);
+      color: inherit;
+      text-decoration: none;
+    }
+    .door:hover { border-color: #b7b9b4; }
+    .door:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+    .role {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+    }
+    .door h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+    .door p { margin: 0; color: var(--muted); }
+    .open {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      margin-top: auto;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--brand);
+      color: var(--brand-ink);
+      font-weight: 650;
+      line-height: 1.2;
+    }
+    @media (max-width: 800px) {
+      h1 { font-size: 32px; }
+      .doors { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Клуб</p>
+    <h1>Три рабочих места</h1>
+    <p class="lead">Клиент ведёт свой день. Тренер готовится к человеку. Администратор держит смену и клуб. Примерные данные остаются в этом браузере.</p>
+    <div class="doors">
+      <a class="door" href="client.html">
+        <p class="role">Клиент</p>
+        <h2>Дневник</h2>
+        <p>Сегодня, тренировка, прогресс и то, с чем прийти к тренеру.</p>
+        <span class="open">Открыть</span>
+      </a>
+      <a class="door" href="coach.html">
+        <p class="role">Тренер</p>
+        <h2>Поток</h2>
+        <p>Кто сегодня, с чем выходить к человеку и чем закрыть неделю.</p>
+        <span class="open">Открыть</span>
+      </a>
+      <a class="door" href="admin.html">
+        <p class="role">Администратор</p>
+        <h2>Клуб</h2>
+        <p>Смена, журнал и люди — место, с которого клуб ведут.</p>
+        <span class="open">Открыть</span>
+      </a>
+    </div>
+  </main>
+</body>
+</html>
