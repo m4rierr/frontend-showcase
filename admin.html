@@ -287,7 +287,10 @@ input.is-error{border-color:var(--alert)}
 .banner .meta{display:block}
 
 /* телефонные слои по умолчанию скрыты */
-.mhead,.tabbar,.fab{display:none}
+.mhead,.tabbar,.fab,a.mback{display:none}
+a.mback{align-items:center;justify-content:center;width:var(--h-control);min-height:var(--h-control);border-radius:var(--r-pill);color:var(--ink-soft);text-decoration:none;flex:none}
+@media (hover:hover){a.mback:hover{background:var(--hover);color:var(--ink)}}
+a.mback:active{background:var(--press)}
 
 /* ——— идёт тренировка: плавающая стеклянная полоса ——— */
 .livebar{
@@ -903,6 +906,7 @@ details.more[open]>.field{margin-top:var(--s-2)}
  .main{padding:0 var(--s-5) calc(164px + env(safe-area-inset-bottom))}
  .has-live .main{padding-bottom:calc(184px + env(safe-area-inset-bottom))}
  .mhead{display:flex;align-items:center;gap:var(--s-3);position:sticky;top:var(--s-2);z-index:20;margin:var(--s-2) calc(var(--s-2) * -1) var(--s-4);padding:var(--s-2);border-radius:var(--r-panel)}
+ .mhead a.mback{display:inline-flex}
  .mhead .mark{width:32px;height:32px}
  .mhead b{flex:1;font-size:var(--t-body);font-weight:var(--w-bold)}
  .tabbar{
@@ -2376,11 +2380,11 @@ function frameShell({brand,routes,me,top='',scene,fab=null,head='',live='',cls='
  const links=tab=>routes.map(r=>`<a href="#/${r.key}" class="${r.on?'is-on':''}"${r.on?' aria-current="page"':''}>${I(r.icon,tab?22:20)}<span>${r.label}</span></a>`).join('');
  return `<div class="shell${cls?' '+cls:''}">
  <aside class="side"><div class="brand"><span class="mark">${I(brand.icon,20)}</span><div><b>Клуб</b><span class="caption">${esc(brand.role)} · ${esc(brand.caption)}</span></div></div>
-  <nav class="nav" aria-label="Разделы">${links(false)}</nav>
+  <nav class="nav" aria-label="Разделы"><a href="index.html">${I('back',20)}<span>Клуб</span></a>${links(false)}</nav>
   <div class="sidefoot"><div class="me"><span class="avatar">${esc(initials(me.name))}</span><div class="grow"><b>${esc(me.name||'Без имени')}</b><span class="caption">${esc(me.caption||'')}</span></div></div>
   <div class="btnrow">${B(I(dark?'sun':'moon',18),'theme-toggle','','icon ghost',`aria-label="${tt}"`)}${B(I('settings',18)+'<span>Настройки</span>','settings','','ghost')}</div></div></aside>
  <main class="main" id="main">
-  <header class="mhead glass"><span class="mark">${I(brand.icon,18)}</span><b>${esc(brand.role)}</b>
+  <header class="mhead glass"><a class="mback" href="index.html" aria-label="К клубу">${I('back',20)}</a><span class="mark">${I(brand.icon,18)}</span><b>${esc(brand.role)}</b>
    ${head}${B(I(dark?'sun':'moon',20),'theme-toggle','','icon ghost',`aria-label="${tt}"`)}${B(I('settings',20),'settings','','icon ghost','aria-label="Настройки"')}</header>
   ${top}${scene}
  </main>
