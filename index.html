@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="Клуб — четыре рабочих места: клиент, тренер, администратор, управляющий.">
+  <meta name="description" content="Клуб — три рабочих места: клиент, тренер, администратор.">
   <meta name="theme-color" content="#ECECEA" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0B0C0E" media="(prefers-color-scheme: dark)">
   <title>Клуб</title>
@@ -68,7 +68,7 @@
     .shead .kicker { margin-bottom: var(--s-1); }
     .shead .kicker:first-letter { text-transform: uppercase; }
     .sub { color: var(--muted); margin-top: var(--s-1); max-width: 40rem; }
-    .doors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-6); }
+    .doors { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-6); }
     .panel {
       display: flex; flex-direction: column; gap: var(--s-3); min-height: 220px;
       padding: var(--s-6); text-decoration: none; color: inherit;
@@ -85,7 +85,7 @@
     .panel p { color: var(--muted); }
     .go { display: inline-flex; align-items: center; gap: var(--s-2); margin-top: auto; min-height: 24px; font-weight: var(--w-medium); }
     .go span:not(.icon) { display: inline-flex; align-items: center; line-height: 1.2; min-height: 24px; }
-    @media (max-width: 700px) {
+    @media (max-width: 900px) {
       .doors { grid-template-columns: 1fr; }
       .main { padding: var(--s-6) var(--s-4) var(--s-8); }
     }
@@ -97,10 +97,10 @@
       <header class="shead">
         <div class="brand">
           <span class="mark" aria-hidden="true">К</span>
-          <span><b>Клуб</b><span class="kicker">Четыре места</span></span>
+          <span><b>Клуб</b><span class="kicker">Три места</span></span>
         </div>
-        <h1>Четыре рабочих места</h1>
-        <p class="sub">Клиент ведёт свой день. Тренер готовится к человеку. Администратор держит смену и клуб. Управляющий смотрит месяц, загрузку и удержание.</p>
+        <h1>Три рабочих места</h1>
+        <p class="sub">Клиент ведёт свой день. Тренер готовится к человеку. Администратор держит смену и клуб.</p>
       </header>
       <div class="doors">
         <a class="panel" href="client.html">
@@ -128,15 +128,6 @@
           </div>
           <h2>Пульт</h2>
           <p>Смена, журнал и люди — место, с которого клуб ведут.</p>
-          <span class="go"><span>Открыть</span><span class="icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 5.5 6.5 6.5-6.5 6.5"/></svg></span></span>
-        </a>
-        <a class="panel" href="manager.html">
-          <div class="phead">
-            <span class="icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5h16"/><path d="M6.5 16V11M11 16V7M15.5 16v-5.5M20 16V5"/></svg></span>
-            <span class="role">Управляющий</span>
-          </div>
-          <h2>Месяц</h2>
-          <p>Месяц, загрузка тренеров и удержание людей.</p>
           <span class="go"><span>Открыть</span><span class="icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 5.5 6.5 6.5-6.5 6.5"/></svg></span></span>
         </a>
       </div>
