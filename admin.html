@@ -1081,7 +1081,6 @@ details.more[open]>.field{margin-top:var(--s-2)}
 .row.is-archived .rt{color:var(--muted)}
 .trow.is-done .rt{color:var(--muted)}
 .trow.is-skipped .rt{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line-strong)}
-.qrow .qico{color:var(--warn)}
 .qrow .btnrow{flex:none}
 .daysep{padding:var(--s-3) var(--s-2) var(--s-1);font-size:var(--t-meta);color:var(--muted)}
 .daysep b{font-weight:var(--w-medium)}
@@ -1099,7 +1098,6 @@ details.more[open]>.field{margin-top:var(--s-2)}
 .aprog.gauge{width:72px;flex:none}
 .aprog.gauge.hot i{background:var(--warn)}
 .remind{border-left:3px solid var(--rcv,var(--warn))}
-.remind .qico{color:var(--warn);background:var(--warn-veil)}
 .remind p .meta{display:block}
 .learncard .meta.done{color:var(--ok);display:flex;align-items:center;gap:var(--s-1)}
 .gsteps{margin:var(--s-2) 0 0;padding-left:var(--s-5);display:flex;flex-direction:column;gap:var(--s-2);line-height:1.45}
@@ -1212,6 +1210,186 @@ details.more[open]>.field{margin-top:var(--s-2)}
 .toolbar>.seg{min-width:0}
 .seg.dseg button{flex:none}
 .stepval span{white-space:nowrap}
+
+/* ——— Знаки: визуальная грамматика («Карточки прибора», 12.10.2026) ———
+   Один экран — один главный вопрос, и ответ на него стоит знаком в первом экране.
+   Эмблема — лицо объекта; масса вместо линий; цвет — только состояние:
+   ok — сделано и можно, warn — внимание, alert — держит или пропал, чернила — сейчас,
+   серый — впереди. Словами — только то, что нельзя нарисовать: имена, тексты, причины.
+   Только токены Club; сверх ядра — размеры эмблем 24/32/44/64/96.
+   Блок одинаковый у клиента, тренера и администратора. */
+.emb{--sz:44px;position:relative;flex:none;width:var(--sz);height:var(--sz);border-radius:calc(var(--sz) * .3);display:grid;place-items:center;
+ background:var(--card);color:var(--ink-soft);font-size:calc(var(--sz) * .36);font-weight:var(--w-bold);letter-spacing:-.02em;line-height:1;
+ font-variant-numeric:tabular-nums;text-transform:uppercase;transition:background-color var(--d-move) var(--ease-out),color var(--d-move) var(--ease-out)}
+.emb>svg{width:calc(var(--sz) * .5);height:calc(var(--sz) * .5)}
+.emb.xs{--sz:24px}.emb.s{--sz:32px}.emb.m{--sz:44px}.emb.l{--sz:64px}.emb.xl{--sz:96px}
+.emb.xs>svg{stroke-width:2.2}
+.emb.is-ok{background:var(--ok);color:var(--surface)}
+.emb.is-now{background:var(--accent);color:var(--on-accent)}
+.emb.is-halo{box-shadow:0 0 0 3px var(--canvas),0 0 0 5px var(--accent)}
+.emb.is-ahead{background:transparent;color:var(--faint);box-shadow:inset 0 0 0 1.5px var(--line-strong)}
+.emb.is-empty{background:transparent;color:var(--faint);border:1.5px dashed var(--line-strong)}
+.emb.is-warn{background:var(--warn);color:var(--surface)}
+.emb.is-alert{background:var(--alert);color:var(--surface)}
+.emb.is-calm{background:var(--card-hot);color:var(--ink)}
+.emb .badge{position:absolute;right:-5px;top:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:var(--r-pill);display:grid;place-items:center;
+ background:var(--alert);color:var(--surface);font-size:11px;font-weight:var(--w-bold);box-shadow:0 0 0 2px var(--surface)}
+
+/* Серия — квадрат на событие: сделано залито, впереди — контур, пропуск — пунктир. */
+.slots{display:inline-flex;flex-wrap:wrap;align-items:center;gap:3px;vertical-align:middle}
+.slots i{flex:none;width:12px;height:12px;border-radius:var(--r-mark);box-shadow:inset 0 0 0 1.5px var(--line-strong)}
+.slots i.on{background:var(--ink);box-shadow:none}
+.slots i.ok{background:var(--ok);box-shadow:none}
+.slots i.warn{background:var(--warn);box-shadow:none}
+.slots i.alert{background:var(--alert);box-shadow:none}
+.slots i.skip{box-shadow:none;border:1.5px dashed var(--line-strong)}
+.slots i.now{box-shadow:inset 0 0 0 2px var(--ink)}
+.slots.l{gap:4px}.slots.l i{width:18px;height:18px}
+.slots.xl{gap:6px}.slots.xl i{width:28px;height:28px;border-radius:var(--r-small)}
+.signum{display:inline-flex;align-items:center;gap:var(--s-2);font-variant-numeric:tabular-nums}
+
+/* Заполнение — масса, а не цифра: полоса 8 px, доля — ширина залитой части. */
+.meter{position:relative;display:block;height:8px;min-width:40px;border-radius:var(--r-pill);background:var(--card-hot);overflow:hidden}
+.meter>i{position:absolute;left:0;top:0;bottom:0;border-radius:inherit;background:var(--ink)}
+.meter.ok>i{background:var(--ok)}.meter.warn>i{background:var(--warn)}.meter.alert>i{background:var(--alert)}
+.meter.l{height:12px}
+
+/* Заголовок группы несёт знак, цвет и число — внутри группы состояние словом не повторяется. */
+.gh{display:flex;align-items:center;gap:var(--s-2);min-height:28px;padding:0 var(--s-1);font-size:var(--t-meta);font-weight:var(--w-bold);color:var(--ink)}
+.gh>.gs{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--card-hot);color:var(--ink)}
+.gh>.gs>svg{width:13px;height:13px;stroke-width:2.4}
+.gh .n{margin-left:auto;color:var(--muted);font-weight:var(--w-medium);font-variant-numeric:tabular-nums}
+.gh.is-ok{color:var(--ok)}.gh.is-ok>.gs{background:var(--ok);color:var(--surface)}
+.gh.is-warn{color:var(--warn)}.gh.is-warn>.gs{background:var(--warn);color:var(--surface)}
+.gh.is-alert{color:var(--alert)}.gh.is-alert>.gs{background:var(--alert);color:var(--surface)}
+.gh.is-now>.gs{background:var(--accent);color:var(--on-accent)}
+.ggroup{display:flex;flex-direction:column;gap:var(--s-2)}
+.ggroup+.ggroup{margin-top:var(--s-5)}
+
+/* Полоса состояния слева у строки и плитки: цвет — состояние, слово не нужно. */
+.has-bar{position:relative;overflow:hidden}
+.has-bar::after{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:transparent;pointer-events:none}
+.has-bar.is-ok::after{background:var(--ok)}.has-bar.is-warn::after{background:var(--warn)}
+.has-bar.is-alert::after{background:var(--alert)}.has-bar.is-now::after{background:var(--accent)}
+
+/* Главная карточка — одна на экран: эмблема и ответ крупно, действие рядом. */
+.band{display:flex;flex-direction:column;gap:var(--s-4);padding:var(--s-5);border-radius:var(--r-panel);background:var(--accent);color:var(--on-accent);
+ box-shadow:var(--shadow-float);min-width:0;position:relative}
+.band .bhead{display:flex;align-items:center;gap:var(--s-4);min-width:0}
+.band .bhead>.grow{min-width:0}
+.band .emb{background:var(--on-accent);color:var(--accent)}
+.band .emb.is-ok{background:var(--ok);color:var(--surface)}
+.band .emb.is-warn{background:var(--warn);color:var(--surface)}
+.band .emb.is-alert{background:var(--alert);color:var(--surface)}
+.band .bk{display:block;font-size:var(--t-caption);font-weight:var(--w-medium);text-transform:uppercase;letter-spacing:.06em;opacity:.72}
+.band h2{font-size:var(--t-figure);line-height:1.15;font-weight:var(--w-bold);letter-spacing:-.02em;margin-top:2px;overflow-wrap:anywhere}
+.band .bm{display:block;font-size:var(--t-meta);opacity:.78;margin-top:2px;overflow-wrap:anywhere}
+.band .bfig{display:flex;align-items:center;flex-wrap:wrap;gap:var(--s-2) var(--s-4)}
+.band .bfig b{font-size:var(--t-figure);font-weight:var(--w-bold);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.band .bfig b small{font-size:var(--t-meta);font-weight:var(--w-medium);opacity:.72;letter-spacing:0}
+.band .bacts{display:flex;flex-wrap:wrap;gap:var(--s-2)}
+.band .bacts>*{flex:0 1 auto}
+.band .bfig .meter{flex:1 1 100%}
+@media (max-width:640px){.band .bacts>*{flex:1 1 auto}}
+.band .slots i{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--on-accent) 42%,transparent)}
+.band .slots i.on{background:var(--on-accent);box-shadow:none}
+.band .slots i.ok{background:var(--ok);box-shadow:none}
+.band .slots i.now{box-shadow:inset 0 0 0 2px var(--on-accent)}
+.band .meter{background:color-mix(in srgb,var(--on-accent) 22%,transparent)}
+.band .meter>i{background:var(--on-accent)}
+.band button{min-height:var(--h-row);border-color:color-mix(in srgb,var(--on-accent) 30%,transparent);background:transparent;color:var(--on-accent);font-weight:var(--w-bold)}
+.band button.small{min-height:var(--h-control)}
+.band button.primary{background:var(--on-accent);border-color:var(--on-accent);color:var(--accent)}
+.band button.icon{width:var(--h-control);min-height:var(--h-control);flex:none}
+.band button.is-off{opacity:.55}
+@media (hover:hover){.band button:hover{background:color-mix(in srgb,var(--on-accent) 12%,transparent)}.band button.primary:hover{background:var(--on-accent);opacity:.92}}
+.band button:active{background:color-mix(in srgb,var(--on-accent) 18%,transparent)}
+.band button.primary:active{background:var(--on-accent);opacity:.86}
+.band a.btn{color:var(--on-accent)}
+.band .spark path{stroke:var(--on-accent)}.band .spark circle{fill:var(--on-accent)}
+.band.is-ok{background:var(--ok);color:var(--surface);box-shadow:var(--shadow-rest)}
+.band.is-ok .emb{background:var(--surface);color:var(--ok)}
+.band.is-ok .slots i{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--surface) 55%,transparent)}
+.band.is-ok .slots i:is(.on,.ok){background:var(--surface);box-shadow:none}
+.band.is-calm{background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow-rest)}
+.band.is-calm .emb{background:var(--card);color:var(--ink)}
+.band.is-calm button{border-color:var(--line-strong);color:var(--ink)}
+.band.is-calm button.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.band.is-calm .slots i{box-shadow:inset 0 0 0 1.5px var(--line-strong)}.band.is-calm .slots i.on{background:var(--ink)}
+.band.is-calm .meter{background:var(--card-hot)}.band.is-calm .meter>i{background:var(--ink)}
+.band.is-calm .spark path{stroke:var(--ink)}.band.is-calm .spark circle{fill:var(--ink)}
+
+/* Примерные данные — чип в шапке, а не баннер на шестую часть экрана. */
+.kchip{position:relative;flex:none;display:inline-flex;align-items:center;gap:var(--s-1);min-height:28px;padding:0 var(--s-3) 0 var(--s-2);border-radius:var(--r-pill);border:0;
+ background:var(--warn-veil);color:var(--ink);font-size:var(--t-caption);font-weight:var(--w-medium);white-space:nowrap}
+.kchip>svg{color:var(--warn)}
+.kchip::after{content:"";position:absolute;inset:-8px -2px}
+@media (hover:hover){.kchip:hover{background:var(--warn-veil);box-shadow:inset 0 0 0 1px var(--warn)}}
+.shead .actions{align-items:center}
+
+/* ——— Пульт администратора на знаках ———
+   Шапка одна на всех разделах: где я и чип демо-базы. Главная карточка — ответ на вопрос экрана;
+   занятия и маршрут — квадратами, заполнение — массой; сделано — ok, сейчас — чернилами. */
+.khead{display:flex;align-items:center;flex-wrap:wrap;gap:var(--s-1) var(--s-2);margin-bottom:var(--s-1)}
+.shead .khead .kicker{display:inline-block;margin-bottom:0}
+.tick.is-on{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+.trow.is-skipped .tick{background:var(--warn);border-color:var(--warn);color:var(--surface)}
+.trow.is-skipped .tick svg{transform:none;opacity:1}
+.astatus.is-now{color:var(--ink);background:transparent;box-shadow:inset 0 0 0 1.5px var(--ink)}
+.fill{flex:none;display:flex;align-items:center;gap:var(--s-2);width:128px}
+.fill .meter{flex:1;min-width:24px}
+.fill b{font-size:var(--t-meta);font-weight:var(--w-bold);white-space:nowrap}
+.fill b span{color:var(--muted);font-weight:var(--w-medium)}
+.progline{flex-wrap:wrap;row-gap:var(--s-1)}
+.progline .slots{flex:none;max-width:100%}
+.progline .meta{min-width:0}
+.progline .meta b{font-size:inherit;letter-spacing:0;color:var(--ink)}
+.atiles .tile .slots,.atiles .tile .meter{margin:var(--s-1) 0 2px}
+.atiles .tile .meter{max-width:160px}
+.wev .wfill{display:flex;align-items:center;gap:var(--s-1);width:100%;margin-top:var(--s-1)}
+.wev .wfill .meter{flex:1;min-width:24px;height:6px}
+.wev .wfill .num{font-size:var(--t-caption);color:var(--muted)}
+.wev .warnt{color:var(--warn);font-weight:var(--w-medium)}
+.tfill{display:inline-flex;align-items:center;justify-content:flex-end;gap:var(--s-2);width:100%}
+.tfill .meter{flex:1;max-width:96px}
+.lhead .slots{margin-left:var(--s-1);flex:none;flex-wrap:nowrap}
+.arow .rm,.drow .rm{max-width:100%}
+.banner .meter{margin:var(--s-2) 0;max-width:320px}
+.band .bset{display:inline-flex;align-items:center;gap:var(--s-2);flex-wrap:wrap}
+.band .bset .bm{margin-top:0}
+.band .infobtn{width:28px;height:28px;min-height:28px;margin:-4px 0 -4px var(--s-1);border:0;background:transparent;color:inherit}
+/* лицо человека в справочнике — эмблема 44 с рамкой цвета тренера; архив — пунктиром */
+.drow .avatar{width:44px;height:44px;border-radius:var(--r-control);font-size:var(--t-meta)}
+.drow .avatar.tint{box-shadow:inset 0 0 0 2.5px var(--rcv,transparent)}
+.row.is-archived .avatar{background:transparent;color:var(--faint);box-shadow:none;border:1.5px dashed var(--line-strong)}
+.colhint{text-align:right;padding-right:calc(18px + var(--s-3) + var(--s-2));margin:0 0 var(--s-1)}
+/* месяц смен календарём: день — квадрат, состояние — заливкой */
+.mcalwrap{display:grid;grid-template-columns:minmax(0,520px) minmax(180px,1fr);gap:var(--s-6);align-items:start}
+.mcal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:var(--s-1)}
+.mcal .mh{font-size:var(--t-caption);color:var(--muted);text-align:center;padding-bottom:2px}
+.mcal>i,.mcal>button{height:44px}
+.mcal>button{min-height:0;padding:0;border:0;border-radius:var(--r-small);background:transparent;box-shadow:inset 0 0 0 1.5px var(--line-strong);
+ color:var(--muted);font-size:var(--t-meta);font-weight:var(--w-bold);font-variant-numeric:tabular-nums}
+.mcal>button.ok{background:var(--ok);box-shadow:none;color:var(--surface)}
+.mcal>button.warn{background:var(--warn);box-shadow:none;color:var(--surface)}
+.mcal>button.now{box-shadow:inset 0 0 0 2px var(--ink);color:var(--ink)}
+.mcal>button.skip{box-shadow:none;border:1.5px dashed var(--line-strong);color:var(--faint)}
+.slegend{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-2) var(--s-4);margin:var(--s-3) 0 0}
+.slegend>span{display:inline-flex;align-items:center;gap:var(--s-2)}
+@media (min-width:1100px){
+ .band.wide{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:var(--s-6)}
+}
+/* узкая правая колонка (планшет, небольшой ноутбук): заполнение — числом, название занятия важнее полосы */
+@media (min-width:720px) and (max-width:1359px){
+ .cols>.stack+.stack .arow .fill{width:auto}
+ .cols>.stack+.stack .arow .fill .meter{display:none}
+}
+@media (max-width:719px){
+ .fill{width:88px}
+ .mcalwrap{grid-template-columns:1fr}
+ .mcal>i,.mcal>button{height:40px}
+ .colhint{padding-right:calc(18px + var(--s-3))}
+}
 </style></head><body><div id="app"></div><dialog id="sheet" class="sheet"></dialog><div id="toast" class="toast" role="status" hidden></div><input id="import" type="file" accept="application/json,.json" hidden><script>'use strict'; // строгий режим на всю сборку: ядро идёт первым файлом, поэтому директива действует для всей роли
 /* ——— Ядро · время ———
    Даты строкой YYYY-MM-DD, время дня HH:MM — местные: это день человека, а не момент на сервере.
@@ -2311,7 +2489,13 @@ function applyUndo(s,p){const n=clone(s);
 function B(label,action,id='',cls='',extra=''){return `<button type="button" class="${cls}" data-action="${action}"${id!==''?` data-id="${esc(id)}"`:''} ${extra}>${label}</button>`}
 function empty(icon,title,text,action=''){return `<div class="empty"><div class="eico">${I(icon,22)}</div><h3>${title}</h3>${text?`<p>${text}</p>`:''}${action}</div>`}
 function sceneHead(kicker,title,sub='',actions=''){
- return `<header class="shead"><div class="grow"><div class="kicker">${kicker}</div><h1>${title}</h1>${sub?`<p class="sub">${sub}</p>`:''}</div>${actions?`<div class="actions">${actions}</div>`:''}</header>`}
+ return `<header class="shead"><div class="grow"><div class="khead"><span class="kicker">${kicker}</span>${demoChip()}</div><h1>${title}</h1>${sub?`<p class="sub">${sub}</p>`:''}</div>${actions?`<div class="actions">${actions}</div>`:''}</header>`}
+
+/* Демонстрационная база — чипом в шапке каждого раздела, а не баннером над Пультом:
+   касание объясняет, что это, и даёт начать свою. */
+function demoChip(){return state.demo&&!loadError?B(I('flag',14)+'демо-база','demo-info','','kchip','aria-label="Демонстрационная база — что это и как начать работу"'):''}
+function demoSheet(){openSheet({title:'Демонстрационная база',body:`<p class="confirm">Данные для знакомства: тренеры, сетка и месяц отметок. Начать работу — значит заменить их пустой базой и вести свой клуб.</p>`,
+ extra:B('Начать работу','reset','empty','primary')})}
 function ring(r,size=36,label=''){const rad=(size-5)/2,c=2*Math.PI*rad;
  return `<span class="ringbox${r>=1?' is-done':''}" style="width:${size}px;height:${size}px"><svg class="ring" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true"><circle class="bg" cx="${size/2}" cy="${size/2}" r="${rad}"/><circle class="fg" cx="${size/2}" cy="${size/2}" r="${rad}" stroke-dasharray="${c.toFixed(2)}" stroke-dashoffset="${(c*(1-Math.min(1,r))).toFixed(2)}"/></svg>${label}</span>`}
 
@@ -2393,7 +2577,7 @@ function frameShell({brand,routes,me,top='',scene,fab=null,head='',live='',cls='
  ${fab?B(I(fab[3]||'plus',24),fab[0],fab[1],'fab primary lone',`aria-label="${esc(fab[2])}"`):''}
  </div>`}
 // Полоса «запись не проходит» — одна на все роли.
-function unsavedBanner(what,act=''){return `<div class="banner card unsaved" data-key="unsaved"><span class="qico">${I('flag',18)}</span><div class="grow"><b>${esc(what)} не сохраняется</b><span class="meta">Память браузера заполнена или запись запрещена. Сделанное сейчас живёт только до закрытия страницы — сохраните копию.</span></div>${act}</div>`}
+function unsavedBanner(what,act=''){return `<div class="banner card unsaved" data-key="unsaved">${emb('flag',{size:'s',state:'alert'})}<div class="grow"><b>${esc(what)} не сохраняется</b><span class="meta">Память браузера заполнена или запись запрещена. Сделанное сейчас живёт только до закрытия страницы — сохраните копию.</span></div>${act}</div>`}
 
 /* ——— настройки: одни разделы в одном порядке, один вид строк ———
    Раздел — подпись и группы. Группа — карточка со строками через тонкую линию и короткой
@@ -2695,7 +2879,7 @@ const dot=c=>`<i class="cdot"${rc(c)}></i>`;
 
 // ——— кирпичики разметки (как у клиента и тренера) ———
 function panel(title,body,{tag='',act='',key='',cls=''}={}){return `<section class="panel ${cls}"${key?` data-key="${key}"`:''}><div class="phead"><h2>${title}</h2>${tag!==''?`<span class="ptag">${tag}</span>`:''}${act}</div>${body}</section>`}
-function tiles(items,cls='four'){return `<div class="tiles ${cls} atiles">${items.map(([label,value,sub,tone])=>`<div class="tile${tone?' '+tone:''}"><span class="kicker">${label}</span><b class="num">${esc(value)}</b>${sub?`<span class="meta">${esc(sub)}</span>`:''}</div>`).join('')}</div>`}
+function tiles(items,cls='four'){return `<div class="tiles ${cls} atiles">${items.map(([label,value,sub,tone,sign])=>`<div class="tile${tone?' '+tone:''}"><span class="kicker">${label}</span><b class="num">${esc(value)}</b>${sign||''}${sub?`<span class="meta">${esc(sub)}</span>`:''}</div>`).join('')}</div>`}
 function seg(action,items,cur,cls='',label=''){return `<div class="seg ${cls}" role="tablist"${label?` aria-label="${label}"`:''}>${items.map(([k,v])=>B(v,action,k,k===cur?'is-on':'',`role="tab" aria-selected="${k===cur}"`)).join('')}</div>`}
 const chev=()=>I('chev',18);
 
@@ -2725,6 +2909,30 @@ const roleLabel=t=>D.can(t,'group')&&D.can(t,'personal')?'групповые и 
 const roleValue=t=>D.can(t,'group')&&D.can(t,'personal')?'both':D.can(t,'group')?'group':'personal';
 function trainersFor(role='',selected=''){return state.trainers.filter(t=>(t.active||t.id===selected)&&(!role||D.can(t,role)||t.id===selected)).map(t=>[t.id,t.name+(t.active?'':' (архив)')])}
 function download(content,filename,type){const url=URL.createObjectURL(new Blob([content],{type})),a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)}
+
+/* ——— Знаки: одна функция на знак — одинаковый вид на всех экранах и во всех ролях ———
+   Грамматика из «Карточек прибора»: эмблема — лицо, серия — квадратами, заполнение — массой,
+   состояние — цветом заливки. Функции знают только форму, а не предметную область.
+   Блок одинаковый у клиента, тренера и администратора. */
+// Лицо объекта: значок из набора или одна-две буквы; состояние — заливкой (ok · now · warn · alert · ahead · empty · calm).
+function emb(face,{size='m',state='',label='',badge='',halo=false}={}){
+ const inner=ICONS[face]?I(face,20):esc(String(face||'·').slice(0,2));
+ return `<span class="emb ${size}${state?' is-'+state:''}${halo?' is-halo':''}"${label?` role="img" aria-label="${esc(label)}"`:' aria-hidden="true"'}>${inner}${badge!==''&&badge!==undefined&&badge!==null?`<b class="badge">${esc(badge)}</b>`:''}</span>`}
+// Серия: квадрат на событие. Состояния: 'on' — сделано, 'ok' · 'warn' · 'alert' — по цвету, 'skip' — пропуск, 'now' — сейчас, '' — впереди.
+function slots(states,{size='',label=''}={}){
+ return `<span class="slots${size?' '+size:''}"${label?` role="img" aria-label="${esc(label)}"`:' aria-hidden="true"'}>${states.map(c=>`<i${c?` class="${c}"`:''}></i>`).join('')}</span>`}
+// «Сделано из запланированного» — квадратами и числом рядом; длинная серия сжимается до max квадратов.
+function tally(done,total,{size='',max=14,tone='on',word=''}={}){if(!total)return '';
+ const n=Math.min(total,max),k=Math.min(n,Math.round(done*n/total));
+ return `<span class="signum">${slots(Array.from({length:n},(_,i)=>i<k?tone:''),{size,label:`${done} из ${total}${word?' '+word:''}`})}<span class="num" aria-hidden="true">${done} из ${total}${word?' '+word:''}</span></span>`}
+// Заполнение 0…1 — полосой; тон — состояние, если оно есть.
+function meter(r,{tone='',size=''}={}){const p=Math.max(0,Math.min(1,Number(r)||0));
+ return `<span class="meter${tone?' '+tone:''}${size?' '+size:''}" aria-hidden="true"><i style="width:${Math.round(p*100)}%"></i></span>`}
+// Заголовок группы: знак, слово и число — состояние называется один раз, над группой.
+function gh(state,icon,title,n){return `<div class="gh${state?' is-'+state:''}"><span class="gs">${I(icon,13)}</span><span>${title}</span>${n!==undefined&&n!==null?`<span class="n">${n}</span>`:''}</div>`}
+// Главная карточка экрана: одна, сверху; эмблема, ответ крупно, действие рядом.
+function band({face,state='',kicker='',title='',meta='',fig='',acts='',tone='',cls='',key='band',label=''}){
+ return `<section class="band${tone?' is-'+tone:''}${cls?' '+cls:''}" data-key="${key}"${label?` aria-label="${esc(label)}"`:''}><div class="bhead">${emb(face,{size:'l',state})}<div class="grow">${kicker?`<span class="bk">${kicker}</span>`:''}<h2>${title}</h2>${meta?`<span class="bm">${meta}</span>`:''}</div></div>${fig?`<div class="bfig">${fig}</div>`:''}${acts?`<div class="bacts">${acts}</div>`:''}</section>`}
 
 // ——— тост ———
 
@@ -2774,13 +2982,9 @@ const VOICE={
  pause:            ['Пауза','Пауза'],
  pauseSub:         ['Всё под контролем','Сейчас никто никуда не бежит'],
  nextNone:         ['На сегодня больше нет','Всё на сегодня. Теперь правда всё'],
- attentionSub:     ['занятия за 7 дней + смена','хвосты за неделю и сегодняшняя смена'],
  shiftSub:         ['пунктов закрыто','пунктов закрыто'],
  attentionEmpty:   ['Просроченных действий нет','Ничего не просрочено. Так, стоп. Реально ничего?'],
  attentionEmptySub:['Занятия проверены за последние 7 дней, смена — за сегодня','Проверили неделю занятий и сегодняшнюю смену. Чисто'],
- attentionOne:     ['Одно занятие ждёт отметки','А. Один остался'],
- attentionFew:     ['Несколько занятий ждут отметки','Ну вот. Ещё эти'],
- attentionMany:    ['Много незакрытых занятий','Так. Не смотрим на всё сразу. По одному'],
  personalEmptyToday:['За сегодня ничего не записано','Сегодня без персональных'],
  personalEmptySub: ['Записывайте тренировки в конце дня — кнопка выше','Обычно это заполняют в конце дня. Кнопка выше'],
  baseEmpty:        ['База пуста. Добавьте тренера и настройте маршрут смены.','Пока пусто. Начинаем с людей и маршрута.'],
@@ -2816,8 +3020,6 @@ const VOICE={
  jNoMarks:         ['За этот месяц занятий нет','За месяц — ни одной отметки'],
  jDayEmpty:        ['Занятий нет','На эту дату ничего не стоит'],
  jDayEmptySub:     ['Расписание на эту дату пока пустое','В сетке на этот день пусто'],
- sDoneSub:         ['без замечаний','закрыты как надо'],
- sImportantSub:    [(n)=>'обязательные пункты',(n)=>n?'обязательные. Они не рассосутся':'обязательных открытых нет'],
  dayAllMarked:     ['пунктов закрыто · занятия отмечены','пунктов закрыто. И все занятия с отметками — редкий кадр'],
  shiftEmpty:       ['Открытых пунктов нет','Открытых нет. Всё'],
  shiftEmptySub:    ['Всё, что было на сегодня, закрыто','Всё, что было на сегодня, закрыто. Можно выдохнуть'],
@@ -2838,15 +3040,11 @@ const VOICE={
 
 // Где какая реплика звучит — подписи для конструктора. Ключ здесь = ключ в VOICE.
 const VOICE_WHERE={
- pause:['Пульт','Вместо числа, когда ничего не идёт'],
- pauseSub:['Пульт','Сейчас ничего не идёт'],
+ pause:['Пульт','Пауза между занятиями — над следующим'],
+ pauseSub:['Пульт','Занятия дня прошли и отмечены'],
  nextNone:['Пульт','Занятий на сегодня больше нет'],
- attentionSub:['Пульт','Подпись под числом «Требует внимания»'],
  attentionEmpty:['Пульт','Хвостов нет'],
  attentionEmptySub:['Пульт','Хвостов нет — пояснение'],
- attentionOne:['Пульт','Остался один хвост'],
- attentionFew:['Пульт','Хвостов несколько'],
- attentionMany:['Пульт','Хвостов очень много'],
  dayAllMarked:['Пульт','Все занятия дня отмечены'],
  shiftSub:['Пульт','Подпись под счётом смены'],
  jAllMarked:['Журнал','В периоде всё отмечено'],
@@ -2856,8 +3054,6 @@ const VOICE_WHERE={
  jNoMarks:['Журнал','За месяц ни одной отметки'],
  jDayEmpty:['Журнал','На дату занятий нет'],
  jDayEmptySub:['Журнал','На дату занятий нет — пояснение'],
- sDoneSub:['Смена','Подпись под выполненными'],
- sImportantSub:['Смена','Подпись под важными · {n} — сколько открыто'],
  shiftEmpty:['Смена','Открытых пунктов нет'],
  shiftEmptySub:['Смена','Открытых нет — пояснение'],
  shiftAllRequired:['Смена','Все обязательные закрыты'],
@@ -3142,46 +3338,74 @@ function stepField(label,name,value,step,{unit='',min=0,big=false}={}){
 
 /* ——— «Пульт»: главный экран администратора ———
    Один вопрос роли: кто сейчас в клубе и что не отмечено (И-6).
-   Сверху — напоминание (одно, по очереди) и подсказка знакомства; ниже — числа дня,
-   то, что требует внимания (у каждого пункта — ответ, И-3), ритм дня и своя смена. */
+   Сверху — напоминание (одно, по очереди) и подсказка знакомства; ниже — главная карточка
+   «что сейчас», то, что требует внимания (у каждого пункта — ответ, И-3), ритм дня и своя смена. */
 
-function consoleScene(){const s=state,t=D.today(),hm=D.hm(),mins=D.now().getHours()*60+D.now().getMinutes();
+function consoleScene(){const s=state,t=D.today();
  const all=D.occurrences(s,t,t),groups=all.filter(r=>r.kind==='group'),personal=all.length-groups.length;
- const live=groups.filter(r=>{const [h,m]=r.time.split(':').map(Number);return r.status!=='cancelled'&&h*60+m<=mins&&h*60+m+r.duration>mins});
- const next=groups.find(r=>r.time>hm&&r.status==='planned'),q=D.tasks(s,t),done=q.filter(x=>x.status!=='open').length,a=attention();
+ const q=D.tasks(s,t),a=attention();
  const kicker=D.now().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});
  const sub=[groups.length?`${groups.length} ${plural(groups.length,'групповое','групповых','групповых')}`:'Групповых нет',
-  personal?`${personal} ${plural(personal,'персональная','персональные','персональных')}`:'',a.length?`требует внимания: ${a.length}`:''].filter(Boolean).join(' · ');
+  personal?`${personal} ${plural(personal,'персональная','персональные','персональных')}`:''].filter(Boolean).join(' · ');
  const acts=shows('admin.paste')?B(I('plus',18)+'<span>Посещаемость</span>','paste','group','ghost')+B(I('plus',18)+'<span>Персональные</span>','paste','personal','primary'):B(I('plus',18)+'<span>Тренировка</span>','personal-new','','primary');
  return `<section class="scene">${sceneHead(kicker,greet(),sub,acts)}
  ${banners()}${remindCard()}${guideCard()}
- ${tiles([
-  ['Идёт сейчас',live.length?`${live.length} ${plural(live.length,'занятие','занятия','занятий')}`:say('pause'),live[0]?.title||say('pauseSub')],
-  ['Требует внимания',a.length,a.length?say(a.length===1?'attentionOne':a.length<5?'attentionFew':'attentionMany'):say('attentionSub'),a.length?'warn':''],
-  ['Следующее',next?.time||'—',next?.title||say('nextNone')],
-  ['Смена',`${done} / ${q.length}`,groups.length&&groups.every(r=>r.status!=='planned')?say('dayAllMarked'):say('shiftSub')]])}
- <div class="cols"><div class="stack">${attentionPanel(a)}${rhythmPanel(groups)}</div>
+ <div class="cols"><div class="stack">${consoleBand(groups)}${attentionPanel(a)}${rhythmPanel(groups)}</div>
  <div class="stack">${myShiftPanel(q)}${tomorrowPanel()}</div></div></section>`}
 
-// Полосы над сценой: база не прочиталась, запись не проходит, место кончается, демо-база.
+/* Главный вопрос Пульта — что сейчас в клубе. Ответ — главная карточка: идущее занятие,
+   пауза до следующего или итог прошедшего дня; под ним весь день квадратами.
+   Четыре числа над панелями больше не нужны: «требует внимания» — панелью ниже, смена — справа. */
+function consoleBand(groups){if(!groups.length)return '';
+ const now=D.now().getTime(),hm=D.hm(),start=r=>new Date(r.date+'T'+r.time).getTime();
+ const live=groups.filter(r=>r.status!=='cancelled'&&start(r)<=now&&start(r)+(Number(r.duration)||60)*60000>now);
+ const next=groups.find(r=>r.time>hm&&r.status==='planned'),marked=groups.filter(r=>r.status!=='planned').length;
+ const fig=`${slots(groups.map(occState),{size:'l',label:`групповые дня: отмечено ${marked} из ${groups.length}`})}<span class="bm num" aria-hidden="true">отмечено ${marked} из ${groups.length}</span>`;
+ const who=r=>`${esc(name(r.trainerId))} · ${esc(r.room)} · ${r.capacity} мест`;
+ if(live.length){const r=live[0];
+  return band({face:'play',kicker:`Идёт сейчас · ${esc(r.time)}${live.length>1?` · и ещё ${live.length-1}`:''}`,title:esc(r.title),meta:who(r),fig,acts:B('Открыть занятие','occ',r.id,''),key:'band-now'})}
+ if(next){const first=!groups.some(r=>r.time<=hm||r.status!=='planned');
+  return band({face:'clock',tone:'calm',kicker:`${first?'Первое занятие':esc(say('pause'))+' · дальше'} ${esc(next.time)}`,title:esc(next.title),meta:who(next),fig,key:'band-now'})}
+ const open=groups.filter(r=>occState(r)==='warn').length;
+ return band({face:open?'flag':'check',state:open?'warn':'',tone:open?'':'ok',kicker:esc(say('nextNone')),title:open?`Без отметки: ${open}`:esc(say('pauseSub')),fig,
+  acts:open?B('Отметить в журнале','journal-day',D.today(),'primary'):'',key:'band-now'})}
+
+// Полосы над сценой: база не прочиталась, запись не проходит, место кончается. Демо-база — чипом в шапке.
 function banners(){const out=[];
- if(loadError)out.push(`<div class="banner card warn" data-key="loaderr"><span class="qico">${I('flag',18)}</span><div class="grow"><b>База не прочиталась</b><span class="meta">${esc(loadError)}</span></div>${B('Выгрузить исходную','backup','','small primary')}</div>`);
+ if(loadError)out.push(`<div class="banner card warn" data-key="loaderr">${emb('flag',{size:'s',state:'alert'})}<div class="grow"><b>База не прочиталась</b><span class="meta">${esc(loadError)}</span></div>${B('Выгрузить исходную','backup','','small primary')}</div>`);
  const share=storageShare();
- if(!loadError&&ui.route==='console'&&share>=0.7)out.push(`<div class="banner card" data-key="storage"><span class="qico">${I('download',18)}</span><div class="grow"><b>${share>=0.9?'Место в браузере почти кончилось':'Место в браузере подходит к концу'}</b><span class="meta">Занято ${esc(mb(storageUsed()))} примерно из ${esc(mb(STORAGE_LIMIT))}. Выгрузите файл смены: он и копия, и передача.</span></div>${B('Выгрузить','handoff','','small primary')}</div>`);
- if(state.demo&&!loadError&&ui.route==='console')out.push(`<div class="banner card" data-key="demo"><div class="grow"><b>Демонстрационная база</b><span class="meta">Данные для знакомства: тренеры, сетка и месяц отметок.</span></div>${B('Начать работу','reset','empty','small primary')}</div>`);
+ if(!loadError&&ui.route==='console'&&share>=0.7)out.push(`<div class="banner card" data-key="storage">${emb('download',{size:'s',state:share>=0.9?'alert':'warn'})}<div class="grow"><b>${share>=0.9?'Место в браузере почти кончилось':'Место в браузере подходит к концу'}</b>${meter(share,{tone:share>=0.9?'alert':'warn'})}<span class="meta">Занято ${esc(mb(storageUsed()))} примерно из ${esc(mb(STORAGE_LIMIT))}. Выгрузите файл смены: он и копия, и передача.</span></div>${B('Выгрузить','handoff','','small primary')}</div>`);
  if(ui.just&&ui.route==='console')ui.just=null;
  return out.join('')}
 
 function attentionPanel(a){
  const act=x=>x.source==='shift-close'?B('Закрыть смену','shift-close',x.id,'small primary'):x.source==='task'?B(I('skip',18),'task',x.id,'icon ghost small','aria-label="Не вышло" title="Не вышло"')+B('Выполнено','task-done',x.id,'small primary'):B('Отметить','occ',x.id,'small primary');
- const rows=a.map(x=>`<div class="row qrow" data-key="a${x.id}"><span class="qico">${I(x.source==='occ'?'clock':x.source==='task'?'tasks':'flag',18)}</span><div class="rbody"><span class="rt">${esc(x.title)}</span><span class="rm">${esc(x.detail)}</span></div><div class="btnrow">${act(x)}</div></div>`).join('');
- return panel('Требует внимания',a.length?`<div class="rows">${rows}</div>`:empty('check',say('attentionEmpty'),say('attentionEmptySub')),{tag:a.length||'',key:'attention'})}
+ // Знак пункта — его вид; тон — внимание. Смена, где всё отмечено, — чернилами: осталось одно касание.
+ const rows=a.map(x=>`<div class="row qrow" data-key="a${x.id}">${emb(x.source==='occ'?'clock':x.source==='task'?'tasks':'flag',{size:'s',state:x.source==='shift-close'?'now':'warn'})}<div class="rbody"><span class="rt">${esc(x.title)}</span><span class="rm">${esc(x.detail)}</span></div><div class="btnrow">${act(x)}</div></div>`).join('');
+ const tag=a.length?`<span class="signum">${slots(a.slice(0,12).map(x=>x.source==='shift-close'?'on':'warn'),{label:`требует внимания: ${a.length}`})}<span class="num" aria-hidden="true">${a.length}</span></span>`:'';
+ return panel('Требует внимания',a.length?`<div class="rows">${rows}</div>`:empty('check',say('attentionEmpty'),say('attentionEmptySub')),{tag,key:'attention'})}
 
-function occRow(r,{date=false}={}){
+function occRow(r,{date=false}={}){const st=occState(r);
+ // Справа — состояние знаком: пришедшие — массой из мест и числом; идёт — чернилами;
+ // прошло без отметки — тёплым словом; впереди — без пометки.
+ const right=r.kind==='group'&&r.status==='completed'?occFill(r)
+  :r.kind==='group'&&r.status==='planned'?(st==='warn'?'<span class="astatus is-warn">не отмечено</span>':st==='now'?'<span class="astatus is-now">идёт</span>':'')
+  :r.kind==='personal'&&r.status==='completed'?'':pill(r);
  return `<div class="row arow${r.status==='planned'?' is-open':''}" data-key="o${r.id}"${rc(occColor(r))}><span class="tslot num">${esc(r.time)}</span><i class="abar"></i>
  <button type="button" class="rbody" data-action="occ" data-id="${esc(r.id)}"><span class="rt">${esc(occTitle(r))} ${r.kind==='personal'?'<span class="rtag">персональная</span>':''}</span>
  <span class="rm">${date?esc(dateLabel(r.date))+' · ':''}${dot(trainerColor(r.trainerId))}${esc(name(r.trainerId))} · ${esc(r.room)}${r.note?' · '+esc(r.note):''}</span></button>
- ${r.kind==='personal'&&r.status==='completed'?'':pill(r)}${r.kind==='group'&&r.attendance>r.capacity?'<span class="astatus is-warn">сверх мест</span>':''}${ui.just?.ids?.includes(r.id)?'<span class="astatus is-ok">новое</span>':''}</div>`}
+ ${right}${ui.just?.ids?.includes(r.id)?'<span class="astatus is-ok">новое</span>':''}</div>`}
+
+/* Состояние занятия — одним знаком на всех экранах: проведено — ok, отменено — пунктир,
+   неявка — тёплым; групповое: идёт — чернилами, прошло без отметки — тёплым, впереди — контур.
+   Персональные пишут по факту, поэтому незаписанная персональная — не хвост. */
+function occState(r){const s=r.status;if(s==='completed')return 'ok';if(s==='cancelled')return 'skip';if(s==='no_show')return 'warn';
+ if(r.kind!=='group')return '';
+ const a=new Date(r.date+'T'+r.time).getTime(),b=a+(Number(r.duration)||60)*60000,now=D.now().getTime();
+ return b<=now?'warn':a<=now?'now':''}
+// Заполнение группы: пришло из мест — массой, сверх мест — тёплым; число рядом.
+function occFill(r){const over=r.attendance>r.capacity;
+ return `<span class="fill" role="img" aria-label="Пришло ${r.attendance} из ${r.capacity}${over?', сверх мест':''}">${meter(r.capacity?r.attendance/r.capacity:0,{tone:over?'warn':''})}<b class="num" aria-hidden="true">${r.attendance}<span>/${r.capacity}</span></b></span>`}
 
 function rhythmPanel(groups){return panel('Ритм дня',groups.length?`<div class="rows">${groups.map(r=>occRow(r)).join('')}</div>`:empty('cal','На сегодня групповых занятий нет','Добавьте занятие в сетку — дальше панель сама разложит его по дням.',B('Сетка','go-dir','rules','small ghost')),{act:B('Журнал дня','journal-day',D.today(),'small ghost'),key:'rhythm'})}
 
@@ -3194,11 +3418,15 @@ function taskRow(q){const when=q.recordedAt?new Date(q.recordedAt).toLocaleTimeS
  ${locked?'':B(I(q.status==='open'?'skip':'edit',18),'task',q.key,'icon ghost small',`aria-label="${q.status==='open'?'Не вышло':'Изменить'}" title="${q.status==='open'?'Не вышло':'Изменить'}"`)}</div>`}
 
 let lastTask='';
-function myShiftPanel(q){const done=q.filter(x=>x.status!=='open').length;
+function myShiftPanel(q){const done=q.filter(x=>x.status!=='open').length,t=D.today();
  const just=q.find(x=>x.key===lastTask&&x.status!=='open'),open=q.filter(x=>x.status==='open').slice(0,just?2:3);
  const closed=q.filter(x=>x.status!=='open'&&x.key!==lastTask).sort((a,b)=>String(b.recordedAt||'').localeCompare(String(a.recordedAt||'')));
  const list=(just?[just,...open]:open);const shown=list.concat(closed.slice(0,Math.max(0,3-list.length)));
- return panel('Моя смена',q.length?`<div class="progline"><b class="num">${done}<span> / ${q.length}</span></b><div class="aprog"><i style="width:${Math.round(done/q.length*100)}%"></i></div><span class="meta">${q.length-done?`${q.length-done} ${plural(q.length-done,'пункт','пункта','пунктов')} осталось`:say('shiftAllRequired')}</span></div><div class="rows">${shown.map(taskRow).join('')}</div>`
+ const marked=D.occurrences(state,t,t).filter(r=>r.kind==='group').every(r=>r.status!=='planned');
+ // Маршрут — квадратами: выполнено — ok, не вышло — тёплым, открыто — контур; счёт — рядом.
+ const head=`<div class="progline">${slots(q.map(x=>x.status==='done'?'ok':x.status==='skipped'?'warn':''),{size:'l',label:`маршрут: ${done} из ${q.length} с ответом`})}
+ <span class="meta">${done===q.length?esc(say('shiftAllRequired')):`<b class="num">${done} из ${q.length}</b> ${esc(say(marked?'dayAllMarked':'shiftSub'))}`}</span></div>`;
+ return panel('Моя смена',q.length?`${head}<div class="rows">${shown.map(taskRow).join('')}</div>`
   :empty('tasks','Маршрута на сегодня нет','Опишите маршрут смены в справочнике — панель будет напоминать и считать итоги.',B('Маршрут','go-dir','tasks','small ghost')),{act:B('Вся смена','go','shift','small ghost'),key:'myshift'})}
 
 function tomorrowPanel(){const d=D.add(D.today(),1),n=D.occurrences(state,d,d).length;
@@ -3233,10 +3461,10 @@ function taskMood(q){const n=D.now(),late=n.getHours()*60+n.getMinutes()-(+q.tim
 function remindCard(){const list=pendingReminders();if(!list.length)return '';const x=list[0],left=list.length-1;
  const tail=left?`<span class="meta">${esc(say('remindQueue',left))}</span>`:'';
  if(x.kind==='task'){const q=x.q;
-  return `<div class="qcard card remind" data-key="rm${x.key}"><span class="qico">${I('bell',18)}</span><p class="grow"><b>${esc(q.time)} · ${esc(q.title)}</b> <span class="meta">${esc(taskMood(q))}</span>${tail}</p>
+  return `<div class="qcard card remind" data-key="rm${x.key}">${emb('bell',{size:'s',state:'warn'})}<p class="grow"><b>${esc(q.time)} · ${esc(q.title)}</b> <span class="meta">${esc(taskMood(q))}</span>${tail}</p>
   <div class="btnrow">${B(I('clock',18),'remind-later',x.key,'icon ghost small','aria-label="Позже" title="Позже"')}${B(I('skip',18),'task',q.key,'icon ghost small','aria-label="Не вышло" title="Не вышло"')}${B('Выполнено','task-done',q.key,'small primary')}</div></div>`}
  const r=x.r;
- return `<div class="qcard card remind" data-key="rm${x.key}"${rc(classColor(r))}><span class="qico">${I('bell',18)}</span><p class="grow"><b>${esc(r.time)} · ${esc(r.title)} прошло — сколько человек?</b> <span class="meta">${esc(say('remindOcc'))}</span>${tail}</p>
+ return `<div class="qcard card remind" data-key="rm${x.key}"${rc(classColor(r))}>${emb('bell',{size:'s',state:'warn'})}<p class="grow"><b>${esc(r.time)} · ${esc(r.title)} прошло — сколько человек?</b> <span class="meta">${esc(say('remindOcc'))}</span>${tail}</p>
  <div class="btnrow">${B(I('clock',18),'remind-later',x.key,'icon ghost small','aria-label="Позже" title="Позже"')}${B('Отменено','remind-cancel',r.id,'small ghost')}${B('Отметить','occ',r.id,'small primary')}</div></div>`}
 
 /* ——— Подсказки знакомства ———
@@ -3274,11 +3502,12 @@ const GUIDE=[
 // Шаг про участок, которого нет на этой ступени, пропускается: подсказка не ведёт туда, чего нет на экране.
 function guideIndex(){if(guide.step!==null&&GUIDE[guide.step])return guide.step;return GUIDE.findIndex(g=>!g.check(state)&&(!g.slot||shows(g.slot)))}
 function guideCard(){if(guide.hidden||loadError||guide.later===D.today())return '';
- const i=guideIndex();if(i<0)return '';const g=GUIDE[i],ready=g.check(state),passed=GUIDE.filter(x=>x.check(state)).length;
- return `<div class="learncard card" data-key="guide${g.id}"><div class="lhead"><span class="kicker">Знакомство · шаг ${i+1} из ${GUIDE.length}</span><span class="grow"></span>${B('Позже','learn-later','','small ghost')}${B(I('close',16),'learn-toggle','','icon ghost small','aria-label="Скрыть подсказки"')}</div>
+ const i=guideIndex();if(i<0)return '';const g=GUIDE[i],ready=g.check(state);
+ // Путь знакомства — квадратами: пройдено — ok, этот шаг — чернилами, недоступный на ступени — пунктир.
+ const path=slots(GUIDE.map((x,k)=>x.check(state)?'ok':x.slot&&!shows(x.slot)?'skip':k===i?'now':''),{label:`Знакомство: шаг ${i+1} из ${GUIDE.length}`});
+ return `<div class="learncard card" data-key="guide${g.id}"><div class="lhead"><span class="kicker">Знакомство</span>${path}<span class="grow"></span>${B('Позже','learn-later','','small ghost')}${B(I('close',16),'learn-toggle','','icon ghost small','aria-label="Скрыть подсказки"')}</div>
  <b>${esc(g.title)}</b><p class="meta">${esc(g.text)}</p>${ready?`<p class="meta done">${I('check',14)} ${esc(g.done)}</p>`:''}
- <div class="btnrow">${B('Как это сделать','guide-how',g.id,'small ghost')}${ready?B(i===GUIDE.length-1?'Готово':'Дальше','guide-next','','small primary'):B(esc(g.act),'guide-do',g.id,'small primary')}</div>
- <div class="aprog"><i style="width:${Math.round(passed/GUIDE.length*100)}%"></i></div></div>`}
+ <div class="btnrow">${B('Как это сделать','guide-how',g.id,'small ghost')}${ready?B(i===GUIDE.length-1?'Готово':'Дальше','guide-next','','small primary'):B(esc(g.act),'guide-do',g.id,'small primary')}</div></div>`}
 function guideHow(id){const g=GUIDE.find(x=>x.id===id);if(!g)return;
  // Шаг с окном (выгрузка) открывает его на месте этой шторки; шаг-переход закрывает шторку.
  openSheet({title:g.title,body:`<p class="lead">${esc(g.text)}</p><ol class="gsteps">${g.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol>`,save:()=>guideDo(id),saveLabel:g.act})}
@@ -3303,9 +3532,13 @@ function filterBtn(key,items,cur){const it=items.find(([k])=>k===cur)||items[0];
 // Виды — участки контракта показа: на базовой ступени итогов месяца нет.
 const JV=()=>[['day','День'],['week','Неделя'],['totals','Итоги']].filter(([k])=>shows('admin.journal.'+k));
 function journalScene(){const personal=ui.kind==='personal',[a,b]=range(),rows=D.occurrences(state,a,b).filter(r=>(!ui.trainer||r.trainerId===ui.trainer)&&r.kind===ui.kind),st=D.stats(rows);
+ // Полка — числа со знаками: занятия квадратами (длинный период — массой), заполняемость — массой.
+ // «Без отметки» тёплое, только когда занятие уже прошло: будущее ещё не хвост.
+ const few=rows.length<=28,late=rows.some(r=>r.status==='planned'&&occState(r)==='warn');
  const shelf=personal
-  ?[['Тренировок',rows.length,'в периоде'],['Часы',hours(rows.reduce((x,r)=>x+r.duration,0)),'суммарно'],['Клиентов',new Set(rows.map(x=>x.clientId)).size,'в периоде'],['Тренеров',new Set(rows.map(x=>x.trainerId)).size,'вели занятия']]
-  :[['Занятий',st.total,st.total&&st.open===0?say('jAllMarked'):st.done+' проведено'],['Посещений',st.visits,say('jVisitsSub')],['Заполняемость',st.rate===null?'—':st.rate+'%',say('jRateSub')],['Без отметки',st.open,say('jOpenSub',st.cancelled),st.open?'warn':'']];
+  ?[['Тренировок',rows.length,'в периоде','',rows.length&&few?slots(rows.map(occState)):''],['Часы',hours(rows.reduce((x,r)=>x+r.duration,0)),'суммарно'],['Клиентов',new Set(rows.map(x=>x.clientId)).size,'в периоде'],['Тренеров',new Set(rows.map(x=>x.trainerId)).size,'вели занятия']]
+  :[['Занятий',st.total,st.total&&st.open===0?say('jAllMarked'):st.done+' проведено','',!st.total?'':few?slots(rows.map(occState)):meter(st.done/st.total,{tone:'ok'})],['Посещений',st.visits,say('jVisitsSub')],
+   ['Заполняемость',st.rate===null?'—':st.rate+'%',say('jRateSub'),'',st.rate===null?'':meter(st.rate/100,{size:'l'})],['Без отметки',st.open,say('jOpenSub',st.cancelled),late?'warn':'']];
  const trainerItems=[['','Все тренеры'],...state.trainers.filter(t=>D.can(t,ui.kind)||t.id===ui.trainer).map(t=>[t.id,t.name])];
  const acts=ui.jv==='totals'?(shows('admin.export')?B(I('download',18)+'<span>Таблица</span>','export','','ghost'):''):!shows('admin.paste')?'':personal?B(I('plus',18)+'<span>Персональные</span>','paste','personal','primary'):B(I('plus',18)+'<span>Посещаемость</span>','paste','group','primary');
  return `<section class="scene">${sceneHead('Расписание и факты','Журнал','',acts)}
@@ -3319,9 +3552,14 @@ function dayPanel(rows){const s=state;
  return panel(esc(D.fmtDay(ui.date)),rows.length?`<div class="rows">${rows.map(r=>occRow(r)).join('')}</div>`:empty('cal',say('jDayEmpty'),say('jDayEmptySub')),{tag:rows.length||'',act:ui.kind==='personal'?B(I('plus',16)+'Тренировка','personal-new','','small ghost'):'',key:'jday'})}
 
 function weekGrid(rows,start){const t=D.today();
+ // Карточка занятия: пришедшие — массой и числом, прошло без отметки — тёплым словом,
+ // впереди и проведённая персональная — без пометки; отмена и неявка — словом домена.
+ const sign=x=>x.kind==='group'&&x.status==='completed'?`<span class="wfill" role="img" aria-label="Пришло ${x.attendance} из ${x.capacity}">${meter(x.capacity?x.attendance/x.capacity:0,{tone:x.attendance>x.capacity?'warn':''})}<span class="num" aria-hidden="true">${x.attendance}/${x.capacity}</span></span>`
+  :x.status==='planned'?(occState(x)==='warn'?'<span class="meta warnt">не отмечено</span>':'')
+  :x.status==='completed'?'':`<span class="meta">${esc(statusLabel(x))}</span>`;
  return `<section class="panel wpanel" data-key="jweek"><div class="wgrid">${Array.from({length:7},(_,i)=>{const d=D.add(start,i),day=rows.filter(x=>x.date===d);
   return `<div class="wcol${d===t?' is-today':''}"><button type="button" class="whead" data-action="journal-day" data-id="${d}"><span class="kicker">${esc(dayLabel(d))}</span><b>${esc(D.fmtShort(d))}</b></button>
-  ${day.map(x=>`<button type="button" class="wev${x.status==='planned'?' is-open':''}${x.status==='cancelled'?' is-off':''}" data-action="occ" data-id="${esc(x.id)}"${rc(occColor(x))}><span class="num">${esc(x.time)}</span><b>${esc(occTitle(x))}</b><span class="meta">${esc(name(x.trainerId))}</span><span class="meta">${esc(statusLabel(x))}</span></button>`).join('')||'<span class="wnone meta">—</span>'}</div>`}).join('')}</div></section>`}
+  ${day.map(x=>`<button type="button" class="wev${x.status==='planned'?' is-open':''}${x.status==='cancelled'?' is-off':''}" data-action="occ" data-id="${esc(x.id)}"${rc(occColor(x))}><span class="num">${esc(x.time)}</span><b>${esc(occTitle(x))}</b><span class="meta">${esc(name(x.trainerId))}</span>${sign(x)}</button>`).join('')||'<span class="wnone meta">—</span>'}</div>`}).join('')}</div></section>`}
 
 function monthBars(days,nums,label){const t=D.today();
  return CHART.bars(days.map((d,i)=>({v:nums[i],x:i===0||(i+1)%5===0?String(i+1):'',tip:D.fmtShort(d),now:d===t})),{h:140,label,empty:'За месяц пусто'})}
@@ -3347,7 +3585,8 @@ function totalsPanels(rows,a,b){const days=[];for(let d=a;d<=b;d=D.add(d,1))days
   return panel('Проведено по дням',monthBars(days,days.map(d=>rows.filter(x=>x.date===d&&x.status==='completed').length),'Проведено по дням'),{key:'jbars'})
    +panel('По тренерам',table(['Тренер','Тренировок','Часы','Клиентов'],byT,'Персональных в периоде нет'),{key:'jbyt'})
    +panel('По клиентам',table(['Клиент','Тренировок','Часы','Тренер'],byC,'Персональных в периоде нет'),{key:'jbyc'})}
- const byT=state.trainers.map(t=>{const s=D.stats(rows.filter(x=>x.trainerId===t.id));return s.total?`<tr><td>${esc(t.name)}</td><td class="num">${s.done}</td><td class="num">${hours(s.minutes)}</td><td class="num">${s.visits}</td><td class="num">${s.rate===null?'—':s.rate+'%'}</td></tr>`:''}).filter(Boolean);
+ // Заполняемость тренера — массой рядом с процентом: сравнение видно, не читая колонку.
+ const byT=state.trainers.map(t=>{const s=D.stats(rows.filter(x=>x.trainerId===t.id));return s.total?`<tr><td>${esc(t.name)}</td><td class="num">${s.done}</td><td class="num">${hours(s.minutes)}</td><td class="num">${s.visits}</td><td class="num">${s.rate===null?'—':`<span class="tfill">${meter(s.rate/100)}<span>${s.rate}%</span></span>`}</td></tr>`:''}).filter(Boolean);
  return panel('Посещения по дням',monthBars(days,days.map(d=>D.stats(rows.filter(x=>x.date===d)).visits),'Посещения по дням'),{key:'jbars'})
   +panel('По тренерам',table(['Тренер','Проведено','Часы','Посещения','Заполняемость'],byT,'Тренеров в справочнике нет'),{key:'jbyt'})}
 
@@ -3364,30 +3603,54 @@ function shiftScene(){const q=D.tasks(state,ui.date);
  ${dateNav()}
  ${ui.sv==='totals'?shiftTotals():shiftDay(q)}</section>`}
 
-function shiftDay(q){const done=q.filter(x=>x.status==='done').length,skipped=q.filter(x=>x.status==='skipped').length,important=q.filter(t=>t.required&&t.status==='open').length;
+function shiftDay(q){
  const blocks=[['open','Открытие клуба'],['day','В течение дня'],['close','Закрытие клуба']].map(([k,label])=>{const items=q.filter(t=>t.block===k&&(!ui.onlyOpen||t.status==='open'));
   return panel(label,items.length?`<div class="rows">${items.map(taskRow).join('')}</div>`:empty('tasks',ui.onlyOpen?say('shiftEmpty'):'Пунктов на эту дату нет',ui.onlyOpen?say('shiftEmptySub'):''),{tag:items.length||'',key:'b'+k})}).join('');
- return tiles([['Закрыто пунктов',`${done+skipped} / ${q.length}`,q.length&&done+skipped===q.length?say('shiftAllRequired'):q.length-done-skipped===1?say('shiftOne'):'на выбранную дату'],
-  ['Выполнено',done,say('sDoneSub')],['Важных открыто',important,say('sImportantSub',important),important?'warn':''],['Не вышло',skipped,'с указанной причиной']])
-  +`<div class="cols"><div class="stack">${blocks}</div><div class="stack">${closePanel(ui.date)}</div></div>`}
+ // Справа — сводка закрытой смены или групповые дня: их отмечают до закрытия.
+ const groups=D.occurrences(state,ui.date,ui.date).filter(r=>r.kind==='group');
+ const right=closePanel(ui.date)||(groups.length?panel('Групповые дня',`<div class="rows">${groups.map(r=>occRow(r)).join('')}</div>`,{tag:groups.length,act:B('Журнал дня','journal-day',ui.date,'small ghost'),key:'sgroups'}):'');
+ return shiftBand(q,ui.date)+(right?`<div class="cols"><div class="stack">${blocks}</div><div class="stack">${right}</div></div>`:`<div class="stack">${blocks}</div>`)}
 
-/* Закрытие смены: что осталось без ответа — или кнопка; закрытая — её сводка. */
-function closePanel(date){const c=state.closed&&state.closed[date];
- if(c)return panel('Смена закрыта',`<p class="meta">${I('check',14)} ${esc(dateLabel(date))} · ${esc(new Date(c.at).toTimeString().slice(0,5))}${c.by?' · '+esc(c.by):''}</p><pre class="review">${esc(c.report)}</pre>
-  <p class="caption footnote">Закрытый день не меняется: сводка — та, что ушла следующему администратору.</p>`,{tag:'закрыта',key:'close'});
+/* Главный вопрос Смены — можно ли закрыть день. Ответ — главная карточка: маршрут и групповые
+   квадратами, кнопка закрытия, а рядом с выключенной кнопкой — что мешает.
+   Четыре числа над сменой больше не нужны: их показывают квадраты. */
+function shiftBand(q,date){const c=state.closed&&state.closed[date],groups=D.occurrences(state,date,date).filter(r=>r.kind==='group');
+ const answered=q.filter(x=>x.status!=='open').length,open=q.length-answered,marked=groups.filter(r=>r.status!=='planned').length;
+ const set=(word,states,label)=>states.length?`<span class="bset"><span class="bm" aria-hidden="true">${word}</span>${slots(states,{size:'l',label})}</span>`:'';
+ const fig=set('маршрут',q.map(x=>x.status==='done'?'ok':x.status==='skipped'?'warn':''),`маршрут: ${answered} из ${q.length} с ответом`)
+  +set('групповые',groups.map(occState),`групповые: отмечено ${marked} из ${groups.length}`);
+ const kicker=`Смена · ${esc(dateLabel(date))}`;
+ if(c)return band({face:'check',tone:'ok',kicker,title:'Закрыта',meta:`${esc(new Date(c.at).toTimeString().slice(0,5))}${c.by?' · '+esc(c.by):''}`,fig,key:'band-shift',cls:'wide'});
+ if(date>D.today())return band({face:'cal',tone:'calm',kicker,title:'Ещё впереди',meta:'Будущую смену не закрывают',fig,key:'band-shift',cls:'wide'});
  const st=D.closeState(state,date);
- if(date>D.today())return panel('Закрыть смену',`<p class="meta">Этот день ещё не наступил — будущую смену не закрывают.</p>`,{tag:'впереди',key:'close'});
- const r=D.dayReview(state,date);
- const body=`<div class="tiles"><div class="tile"><span class="kicker">Групповые</span><b class="num">${r.groups.done+r.groups.cancelled}<span> / ${r.groups.total}</span></b><span class="meta">отмечено</span></div>
-  <div class="tile"><span class="kicker">Маршрут</span><b class="num">${r.tasks.done+r.tasks.skipped}<span> / ${r.tasks.total}</span></b><span class="meta">с ответом</span></div></div>
-  <div class="dfoot"><span class="meta grow">${st.ok?`Всё отмечено${infoBtn('После закрытия день не меняется, а его сводка уходит следующему администратору.')}`:esc(st.why)}</span>${B('Закрыть смену','shift-close',date,'primary'+(st.ok?'':' is-off'))}</div>`;
- return panel('Закрыть смену',body,{tag:'открыта',key:'close'})}
+ const title=!q.length?'Маршрута нет':!open?esc(say('shiftAllRequired')):open===1?esc(say('shiftOne')):`${answered} из ${q.length} с ответом`;
+ // Нечего закрывать — спокойная карточка: тёмная зовёт к делу, а дела нет.
+ return band({face:'tasks',tone:!q.length&&!groups.length?'calm':'',kicker,title,meta:st.ok?`Всё отмечено — можно закрывать${infoBtn('После закрытия день не меняется, а его сводка уходит следующему администратору.')}`:esc(st.why),fig,
+  acts:B('Закрыть смену','shift-close',date,'primary'+(st.ok?'':' is-off')),key:'band-shift',cls:'wide'})}
+
+/* Сводка закрытой смены — та, что ушла дальше. Открытую и будущую смену называет главная карточка. */
+function closePanel(date){const c=state.closed&&state.closed[date];
+ if(!c)return '';
+ return panel('Сводка смены',`<pre class="review">${esc(c.report)}</pre>
+  <p class="caption footnote">Закрытый день не меняется: сводка — та, что ушла следующему администратору.</p>`,{tag:'закрыта',key:'close'})}
 
 function shiftTotals(){const [a,b]=range('totals'),facts=Object.values(state.shiftFacts).filter(f=>f.date>=a&&f.date<=b&&f.status!=='open'),dates=[...new Set(facts.map(f=>f.date))].sort();
  const done=facts.filter(f=>f.status==='done').length,closedDays=Object.keys(state.closed||{}).filter(d=>d>=a&&d<=b).length;
  const rows=dates.map(d=>{const fs=facts.filter(f=>f.date===d);return `<tr><td>${esc(dateLabel(d))}${state.closed?.[d]?` <span class="astatus is-ok">закрыта</span>`:''}</td><td class="num">${fs.filter(f=>f.status==='done').length}</td><td class="num">${fs.filter(f=>f.status==='skipped').length}</td><td>${esc(fs.filter(f=>f.reason).map(f=>f.reason).join('; '))||'—'}</td></tr>`});
- return tiles([['Выполнено',done,'за месяц'],['Дней с отметками',dates.length,'смены'],['Смен закрыто',closedDays,'за месяц'],['Не вышло',facts.length-done,'с указанной причиной']])
+ // Главное в итогах — месяц календарём: какие смены закрыты. Числа — рядом, причины — таблицей.
+ return panel('Смены месяца',`<div class="mcalwrap"><div>${monthCal(a,b)}</div>${tiles([['Смен закрыто',closedDays,'за месяц'],['Выполнено',done,'пунктов маршрута'],['Не вышло',facts.length-done,'с указанной причиной',facts.length-done?'warn':''],['Дней с отметками',dates.length,'смены']],'')}</div>`,{key:'smonth'})
   +panel('Итоги смен за месяц',dates.length?table(['Дата','Выполнено','Не вышло','Причины'],rows,''):empty('tasks','За этот месяц отметок смены нет','Пункты маршрута отмечаются на виде «День».'),{key:'stot'})}
+
+/* Месяц смен — календарём: день — квадрат с числом. Закрыта — ok, не закрыта — тёплым,
+   сегодня — чернилами, впереди — контур, нечего закрывать — пунктир. Касание открывает смену дня. */
+const CAL_WORD={ok:'закрыта',warn:'не закрыта',now:'сегодня','':'впереди',skip:'нечего закрывать'};
+function monthCal(a,b){const t=D.today(),cells=[],seen=new Set();
+ for(let i=1;i<D.wd(a);i++)cells.push('<i aria-hidden="true"></i>');
+ for(let d=a;d<=b;d=D.add(d,1)){const st=state.closed?.[d]?'ok':d>t?'':d===t?'now':(r=>r.groups.total||r.tasks.total||r.personal?'warn':'skip')(D.dayReview(state,d));seen.add(st);
+  cells.push(`<button type="button" class="${st}" data-action="shift-day" data-id="${d}" aria-label="${esc(D.fmtDay(d))}: ${CAL_WORD[st]}"${d===t?' aria-current="date"':''}>${+d.slice(8)}</button>`)}
+ const legend=['ok','warn','now','','skip'].filter(s=>seen.has(s));
+ return `<div class="mcal">${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(x=>`<span class="mh" aria-hidden="true">${x}</span>`).join('')}${cells.join('')}</div>
+ <p class="slegend caption">${legend.map(s=>`<span>${slots([s])}${CAL_WORD[s]}</span>`).join('')}</p>`}
 
 /* ——— «Справочник»: люди и структура ———
    Тренеры, клиенты, сетка, персональные, маршрут. Люди правятся на месте, шаблоны
@@ -3427,14 +3690,15 @@ function peopleList(kind){let list=state[kind].filter(r=>match(kind,r));
  if(kind==='trainers'&&ui.role)list=list.filter(t=>D.can(t,ui.role));
  if(kind==='clients'&&ui.owner)list=list.filter(c=>ui.owner==='none'?!c.trainerId:c.trainerId===ui.owner);
  list=list.slice().sort((a,b)=>(a.active===false)-(b.active===false)||a.name.localeCompare(b.name,'ru'));
- const week=D.occurrences(state,D.today(),D.add(D.today(),6));
- const row=r=>{const color=kind==='trainers'?trainerColor(r.id):r.trainerId?trainerColor(r.trainerId):'';
-  const meta=kind==='trainers'?(()=>{const n=week.filter(x=>x.trainerId===r.id).length;return `${roleLabel(r)} · ${n} ${plural(n,'занятие','занятия','занятий')} за 7 дней`})()
-   :(r.trainerId?`${dot(trainerColor(r.trainerId))}${esc(name(r.trainerId))}`:'Без закрепления')+(r.note?' · '+esc(r.note):'');
+ const week=D.occurrences(state,D.today(),D.add(D.today(),6)),load=t=>week.filter(x=>x.trainerId===t.id).length,top=Math.max(1,...state.trainers.map(load));
+ // Нагрузка тренера — массой на общей шкале за 7 дней, число рядом; лицо — инициалами в рамке цвета тренера.
+ const row=r=>{const color=kind==='trainers'?trainerColor(r.id):r.trainerId?trainerColor(r.trainerId):'',n=kind==='trainers'?load(r):0;
+  const meta=kind==='trainers'?roleLabel(r):(r.trainerId?`${dot(trainerColor(r.trainerId))}${esc(name(r.trainerId))}`:'Без закрепления')+(r.note?' · '+esc(r.note):'');
+  const side=kind==='trainers'&&r.active!==false?`<span class="fill" role="img" aria-label="${n} ${plural(n,'занятие','занятия','занятий')} за 7 дней">${meter(n/top)}<b class="num" aria-hidden="true">${n}</b></span>`:'';
   return `<div class="row drow${r.active===false?' is-archived':''}" data-key="${kind}${r.id}"${color?rc(color):''}><span class="avatar tint">${esc(initials(r.name))}</span>
-  <button type="button" class="rbody" data-action="entity-edit" data-id="${esc(r.id)}" data-kind="${kind}"><span class="rt">${esc(r.name)}${r.active===false?' <span class="rtag">в архиве</span>':''}</span><span class="rm">${meta}</span></button>${chev()}</div>`};
+  <button type="button" class="rbody" data-action="entity-edit" data-id="${esc(r.id)}" data-kind="${kind}"><span class="rt">${esc(r.name)}${r.active===false?' <span class="rtag">в архиве</span>':''}</span><span class="rm">${meta}</span></button>${side}${chev()}</div>`};
  const none=state[kind].length?empty('coach','Никого не нашли','Измените поиск или фильтр.'):empty('coach',kind==='trainers'?'Тренеров пока нет':'Клиентов пока нет',kind==='trainers'?'Тренер — точка, к которой привязано всё остальное.':'Клиенты нужны для персональных тренировок.',B(I('plus',16)+DIR[kind][1],'entity-new',kind,'small primary'));
- return panel(DIR[kind][0],list.length?`<div class="rows">${list.map(row).join('')}</div>`:none,{tag:list.length||'',key:'dl'+kind})}
+ return panel(DIR[kind][0],list.length?`${kind==='trainers'?'<p class="colhint caption">занятий за 7 дней</p>':''}<div class="rows">${list.map(row).join('')}</div>`:none,{tag:list.length||'',key:'dl'+kind})}
 
 const current=list=>list.filter(r=>!r.to||r.to>=D.today());
 function gridList(){const list=current(state.rules).filter(r=>match('rules',r));
@@ -3455,7 +3719,7 @@ function personalList(){const t=D.today(),all=state.sessions.filter(p=>match('pe
  const inWeek=all.filter(p=>p.date>=week&&p.date<=t),inMonth=all.filter(p=>p.date.slice(0,7)===month),todays=all.filter(p=>p.date===t);
  const sorted=all.slice().sort((a,b)=>b.date.localeCompare(a.date)||a.time.localeCompare(b.time)),earlier=sorted.filter(p=>p.date<t).slice(0,40);
  const withDays=arr=>{let day='',out='';for(const p of arr){if(p.date!==day){day=p.date;out+=`<div class="daysep" data-key="ds${day}"><b>${esc(D.fmtDay(day))}</b></div>`}out+=occRow({...p,kind:'personal'})}return out};
- return tiles([['Сегодня',todays.length,plural(todays.length,'тренировка','тренировки','тренировок')],['За 7 дней',inWeek.length,'тренировок'],['За месяц',inMonth.length,hours(inMonth.reduce((a,p)=>a+p.duration,0))+' ч'],['Клиентов',new Set(inMonth.map(p=>p.clientId)).size,'за месяц']])
+ return tiles([['Сегодня',todays.length,plural(todays.length,'тренировка','тренировки','тренировок'),'',todays.length?slots(todays.map(p=>occState({...p,kind:'personal'}))):''],['За 7 дней',inWeek.length,'тренировок'],['За месяц',inMonth.length,hours(inMonth.reduce((a,p)=>a+p.duration,0))+' ч'],['Клиентов',new Set(inMonth.map(p=>p.clientId)).size,'за месяц']])
   +panel('Сегодня',todays.length?`<div class="rows">${todays.map(p=>occRow({...p,kind:'personal'})).join('')}</div>`:empty('clock',say('personalEmptyToday'),say('personalEmptySub')),{tag:todays.length||'',key:'ptoday'})
   +(earlier.length?panel('Раньше',`<div class="rows">${withDays(earlier)}</div>`,{act:B('Журнал','journal-personal','','small ghost'),key:'pearly'}):'')}
 
@@ -4351,6 +4615,8 @@ const ACTIONS={
  'go-dir':id=>{ui.dv=id;go('directory')},
  'journal-day':id=>{ui.date=id;ui.jv='day';go('journal')},
  'journal-personal':()=>{ui.kind='personal';ui.jv='day';go('journal')},
+ 'shift-day':id=>{ui.date=id;ui.sv='day';go('shift')},
+ 'demo-info':()=>demoSheet(),
  jv:id=>{ui.jv=id;render()},
  sv:id=>{ui.sv=id;render()},
  dv:id=>{ui.dv=id;ui.q='';ui.role='';ui.owner='';render()},

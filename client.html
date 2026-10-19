@@ -24,7 +24,7 @@
  --w-regular:450;--w-medium:560;--w-bold:650;
  --font:"Inter","SF Pro Text",-apple-system,BlinkMacSystemFont,"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
  /* форма */
- --r-sheet:28px;--r-panel:24px;--r-card:16px;--r-control:12px;--r-small:8px;--r-pill:999px;
+ --r-sheet:28px;--r-panel:24px;--r-card:16px;--r-control:12px;--r-small:8px;--r-mark:4px;--r-pill:999px;
  --h-compact:32px;--h-control:44px;--h-row:56px;--h-gym:64px;
  /* движение — одна кривая на вход, одна на уход, четыре длительности */
  --ease-out:cubic-bezier(.2,.7,.3,1);--ease-in:cubic-bezier(.4,0,1,1);
@@ -35,9 +35,10 @@
  --ink:#16181B;--ink-soft:#3A3F45;--muted:#5C636B;--faint:#7D838B;
  --line:#16181B17;--line-strong:#16181B2E;
  --accent:#1A1D21;--accent-press:#33383E;--on-accent:#F7F8F9;
+ --mark:#16181B;--mark-soft:#16181B38;
  --ok:#2A7550;--warn:#8F601D;--alert:#B03F37;
  --ok-veil:#2A755017;--warn-veil:#8F601D17;--alert-veil:#B03F3714;
- --press:#16181B14;--hover:#16181B0A;--ring:#16181B33;
+ --press:#16181B14;--hover:#16181B0D;--ring:#16181B1F;
  /* стекло — только у плавающих слоёв */
  --glass:#FAFAF9C7;--glass-edge:#FFFFFFB3;--spec:#FFFFFF;--pop:#FFFFFF;
  --blur:saturate(1.5) blur(24px);
@@ -54,7 +55,7 @@
  --accent:#EEF0F2;--accent-press:#FFFFFF;--on-accent:#121417;
  --ok:#62C28E;--warn:#DDA95D;--alert:#E87B72;
  --ok-veil:#62C28E24;--warn-veil:#DDA95D1F;--alert-veil:#E87B721F;
- --press:#FFFFFF1A;--hover:#FFFFFF0D;--ring:#FFFFFF40;
+ --press:#FFFFFF1A;--hover:#FFFFFF12;--ring:#FFFFFF2B;--mark:#EEF0F2;--mark-soft:#EEF0F240;
  --glass:#1A1C20C7;--glass-edge:#FFFFFF14;--spec:#FFFFFF26;--pop:#1E2125;
  --shadow-rest:0 1px 2px #00000066;--shadow-float:0 16px 40px -12px #000000A6;--backdrop:#000000A6;
  --wash:#FFFFFF08;
@@ -969,6 +970,170 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 @media (max-width:640px){.mpts,.mdots{padding-left:0}.shead .actions [data-action="method-send"]{display:none}}
 .mbtns{margin-top:var(--s-3)}
 .mitem .mbtns,.mpts .mbtns{margin-top:0}
+
+/* ——— Знаки: визуальная грамматика («Карточки прибора», 12.10.2026) ———
+   Один экран — один главный вопрос, и ответ на него стоит знаком в первом экране.
+   Эмблема — лицо объекта; масса вместо линий; цвет — только состояние:
+   ok — сделано и можно, warn — внимание, alert — держит или пропал, чернила — сейчас,
+   серый — впереди. Словами — только то, что нельзя нарисовать: имена, тексты, причины.
+   Только токены Club; сверх ядра — размеры эмблем 24/32/44/64/96.
+   Блок одинаковый у клиента, тренера и администратора. */
+.emb{--sz:44px;position:relative;flex:none;width:var(--sz);height:var(--sz);border-radius:calc(var(--sz) * .3);display:grid;place-items:center;
+ background:var(--card);color:var(--ink-soft);font-size:calc(var(--sz) * .36);font-weight:var(--w-bold);letter-spacing:-.02em;line-height:1;
+ font-variant-numeric:tabular-nums;text-transform:uppercase;transition:background-color var(--d-move) var(--ease-out),color var(--d-move) var(--ease-out)}
+.emb>svg{width:calc(var(--sz) * .5);height:calc(var(--sz) * .5)}
+.emb.xs{--sz:24px}.emb.s{--sz:32px}.emb.m{--sz:44px}.emb.l{--sz:64px}.emb.xl{--sz:96px}
+.emb.xs>svg{stroke-width:2.2}
+.emb.is-ok{background:var(--ok);color:var(--surface)}
+.emb.is-now{background:var(--accent);color:var(--on-accent)}
+.emb.is-halo{box-shadow:0 0 0 3px var(--canvas),0 0 0 5px var(--accent)}
+.emb.is-ahead{background:transparent;color:var(--faint);box-shadow:inset 0 0 0 1.5px var(--line-strong)}
+.emb.is-empty{background:transparent;color:var(--faint);border:1.5px dashed var(--line-strong)}
+.emb.is-warn{background:var(--warn);color:var(--surface)}
+.emb.is-alert{background:var(--alert);color:var(--surface)}
+.emb.is-calm{background:var(--card-hot);color:var(--ink)}
+.emb .badge{position:absolute;right:-5px;top:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:var(--r-pill);display:grid;place-items:center;
+ background:var(--alert);color:var(--surface);font-size:11px;font-weight:var(--w-bold);box-shadow:0 0 0 2px var(--surface)}
+
+/* Серия — квадрат на событие: сделано залито, впереди — контур, пропуск — пунктир. */
+.slots{display:inline-flex;flex-wrap:wrap;align-items:center;gap:3px;vertical-align:middle}
+.slots i{flex:none;width:12px;height:12px;border-radius:var(--r-mark);box-shadow:inset 0 0 0 1.5px var(--line-strong)}
+.slots i.on{background:var(--ink);box-shadow:none}
+.slots i.ok{background:var(--ok);box-shadow:none}
+.slots i.warn{background:var(--warn);box-shadow:none}
+.slots i.alert{background:var(--alert);box-shadow:none}
+.slots i.skip{box-shadow:none;border:1.5px dashed var(--line-strong)}
+.slots i.now{box-shadow:inset 0 0 0 2px var(--ink)}
+.slots.l{gap:4px}.slots.l i{width:18px;height:18px}
+.slots.xl{gap:6px}.slots.xl i{width:28px;height:28px;border-radius:var(--r-small)}
+.signum{display:inline-flex;align-items:center;gap:var(--s-2);font-variant-numeric:tabular-nums}
+
+/* Заполнение — масса, а не цифра: полоса 8 px, доля — ширина залитой части. */
+.meter{position:relative;display:block;height:8px;min-width:40px;border-radius:var(--r-pill);background:var(--card-hot);overflow:hidden}
+.meter>i{position:absolute;left:0;top:0;bottom:0;border-radius:inherit;background:var(--ink)}
+.meter.ok>i{background:var(--ok)}.meter.warn>i{background:var(--warn)}.meter.alert>i{background:var(--alert)}
+.meter.l{height:12px}
+
+/* Заголовок группы несёт знак, цвет и число — внутри группы состояние словом не повторяется. */
+.gh{display:flex;align-items:center;gap:var(--s-2);min-height:28px;padding:0 var(--s-1);font-size:var(--t-meta);font-weight:var(--w-bold);color:var(--ink)}
+.gh>.gs{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--card-hot);color:var(--ink)}
+.gh>.gs>svg{width:13px;height:13px;stroke-width:2.4}
+.gh .n{margin-left:auto;color:var(--muted);font-weight:var(--w-medium);font-variant-numeric:tabular-nums}
+.gh.is-ok{color:var(--ok)}.gh.is-ok>.gs{background:var(--ok);color:var(--surface)}
+.gh.is-warn{color:var(--warn)}.gh.is-warn>.gs{background:var(--warn);color:var(--surface)}
+.gh.is-alert{color:var(--alert)}.gh.is-alert>.gs{background:var(--alert);color:var(--surface)}
+.gh.is-now>.gs{background:var(--accent);color:var(--on-accent)}
+.ggroup{display:flex;flex-direction:column;gap:var(--s-2)}
+.ggroup+.ggroup{margin-top:var(--s-5)}
+
+/* Полоса состояния слева у строки и плитки: цвет — состояние, слово не нужно. */
+.has-bar{position:relative;overflow:hidden}
+.has-bar::after{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:transparent;pointer-events:none}
+.has-bar.is-ok::after{background:var(--ok)}.has-bar.is-warn::after{background:var(--warn)}
+.has-bar.is-alert::after{background:var(--alert)}.has-bar.is-now::after{background:var(--accent)}
+
+/* Главная карточка — одна на экран: эмблема и ответ крупно, действие рядом. */
+.band{display:flex;flex-direction:column;gap:var(--s-4);padding:var(--s-5);border-radius:var(--r-panel);background:var(--accent);color:var(--on-accent);
+ box-shadow:var(--shadow-float);min-width:0;position:relative}
+.band .bhead{display:flex;align-items:center;gap:var(--s-4);min-width:0}
+.band .bhead>.grow{min-width:0}
+.band .emb{background:var(--on-accent);color:var(--accent)}
+.band .emb.is-ok{background:var(--ok);color:var(--surface)}
+.band .emb.is-warn{background:var(--warn);color:var(--surface)}
+.band .emb.is-alert{background:var(--alert);color:var(--surface)}
+.band .bk{display:block;font-size:var(--t-caption);font-weight:var(--w-medium);text-transform:uppercase;letter-spacing:.06em;opacity:.72}
+.band h2{font-size:var(--t-figure);line-height:1.15;font-weight:var(--w-bold);letter-spacing:-.02em;margin-top:2px;overflow-wrap:anywhere}
+.band .bm{display:block;font-size:var(--t-meta);opacity:.78;margin-top:2px;overflow-wrap:anywhere}
+.band .bfig{display:flex;align-items:center;flex-wrap:wrap;gap:var(--s-2) var(--s-4)}
+.band .bfig b{font-size:var(--t-figure);font-weight:var(--w-bold);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.band .bfig b small{font-size:var(--t-meta);font-weight:var(--w-medium);opacity:.72;letter-spacing:0}
+.band .bacts{display:flex;flex-wrap:wrap;gap:var(--s-2)}
+.band .bacts>*{flex:0 1 auto}
+.band .bfig .meter{flex:1 1 100%}
+@media (max-width:640px){.band .bacts>*{flex:1 1 auto}}
+.band .slots i{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--on-accent) 42%,transparent)}
+.band .slots i.on{background:var(--on-accent);box-shadow:none}
+.band .slots i.ok{background:var(--ok);box-shadow:none}
+.band .slots i.now{box-shadow:inset 0 0 0 2px var(--on-accent)}
+.band .meter{background:color-mix(in srgb,var(--on-accent) 22%,transparent)}
+.band .meter>i{background:var(--on-accent)}
+.band button{min-height:var(--h-row);border-color:color-mix(in srgb,var(--on-accent) 30%,transparent);background:transparent;color:var(--on-accent);font-weight:var(--w-bold)}
+.band button.small{min-height:var(--h-control)}
+.band button.primary{background:var(--on-accent);border-color:var(--on-accent);color:var(--accent)}
+.band button.icon{width:var(--h-control);min-height:var(--h-control);flex:none}
+.band button.is-off{opacity:.55}
+@media (hover:hover){.band button:hover{background:color-mix(in srgb,var(--on-accent) 12%,transparent)}.band button.primary:hover{background:var(--on-accent);opacity:.92}}
+.band button:active{background:color-mix(in srgb,var(--on-accent) 18%,transparent)}
+.band button.primary:active{background:var(--on-accent);opacity:.86}
+.band a.btn{color:var(--on-accent)}
+.band .spark path{stroke:var(--on-accent)}.band .spark circle{fill:var(--on-accent)}
+.band.is-ok{background:var(--ok);color:var(--surface);box-shadow:var(--shadow-rest)}
+.band.is-ok .emb{background:var(--surface);color:var(--ok)}
+.band.is-ok .slots i{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--surface) 55%,transparent)}
+.band.is-ok .slots i:is(.on,.ok){background:var(--surface);box-shadow:none}
+.band.is-calm{background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow-rest)}
+.band.is-calm .emb{background:var(--card);color:var(--ink)}
+.band.is-calm button{border-color:var(--line-strong);color:var(--ink)}
+.band.is-calm button.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.band.is-calm .slots i{box-shadow:inset 0 0 0 1.5px var(--line-strong)}.band.is-calm .slots i.on{background:var(--ink)}
+.band.is-calm .meter{background:var(--card-hot)}.band.is-calm .meter>i{background:var(--ink)}
+.band.is-calm .spark path{stroke:var(--ink)}.band.is-calm .spark circle{fill:var(--ink)}
+
+/* Примерные данные — чип в шапке, а не баннер на шестую часть экрана. */
+.kchip{position:relative;flex:none;display:inline-flex;align-items:center;gap:var(--s-1);min-height:28px;padding:0 var(--s-3) 0 var(--s-2);border-radius:var(--r-pill);border:0;
+ background:var(--warn-veil);color:var(--ink);font-size:var(--t-caption);font-weight:var(--w-medium);white-space:nowrap}
+.kchip>svg{color:var(--warn)}
+.kchip::after{content:"";position:absolute;inset:-8px -2px}
+@media (hover:hover){.kchip:hover{background:var(--warn-veil);box-shadow:inset 0 0 0 1px var(--warn)}}
+.shead .actions{align-items:center}
+
+/* ——— Клиент на знаках ———
+   Шапка одна на всех разделах: где я и чип примера; итог — знаком. Лента, неделя и даты
+   рисуют состояние массой: сделано — залито ok, сейчас — чернилами, впереди — контуром. */
+.khead{display:flex;align-items:center;flex-wrap:wrap;gap:var(--s-1) var(--s-2);margin-bottom:var(--s-1)}
+.shead .khead .kicker{display:inline-block;margin-bottom:0}
+.shead .sub .signum{vertical-align:middle}
+.wd i{width:10px;height:10px;border-radius:var(--r-mark)}
+.wd i.done{background:var(--ok)}
+.wd i.plan{background:transparent;box-shadow:inset 0 0 0 1.5px var(--line-strong)}
+.wd i.warn{background:var(--warn)}
+.lead.ico{border-radius:var(--r-control)}
+.lead.ico.on{background:var(--ok);color:var(--surface)}
+.row.is-next .lead.ico:not(.on){background:var(--accent);color:var(--on-accent)}
+.tick.is-on{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+.datebox.done{background:var(--ok)}
+.datebox.done b,.datebox.done span{color:var(--surface)}
+.datebox.today{background:var(--accent)}
+.datebox.today b,.datebox.today span{color:var(--on-accent)}
+.datebox.skip{background:transparent;box-shadow:inset 0 0 0 1.5px var(--line-strong)}
+.datebox.skip b{color:var(--muted)}
+.recmark{flex:none;display:inline-flex;align-items:center;gap:3px;height:24px;padding:0 var(--s-2);border-radius:var(--r-pill);background:var(--ok-veil);color:var(--ok);font-size:var(--t-caption)}
+.recmark b{font-weight:var(--w-bold)}
+.nextrow{flex-direction:row;align-items:center;justify-content:flex-start;gap:var(--s-3);padding:var(--s-1) var(--s-2)}
+.nextrow>.grow{display:flex;flex-direction:column;min-width:0}
+.nextrow .rt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.blocktitle.wtitle{display:flex;align-items:center;justify-content:space-between;gap:var(--s-3)}
+.blocktitle.wtitle .slots i{width:10px;height:10px}
+.sidecoach{display:flex;align-items:center;gap:var(--s-3)}
+.sidecoach b{display:block;font-weight:var(--w-bold)}
+.sidecoach .meta{display:block}
+.qcount{flex:none;display:inline-flex;align-items:center;gap:4px;height:28px;padding:0 var(--s-2);border-radius:var(--r-pill);background:var(--card);font-size:var(--t-caption)}
+.sideweight{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--s-3);margin-bottom:var(--s-1)}
+.sideweight b{font-size:var(--t-title);font-weight:var(--w-bold);letter-spacing:-.03em;line-height:1.1}
+.sideweight b span{font-size:var(--t-meta);color:var(--muted);font-weight:var(--w-medium);letter-spacing:0}
+.exn{border-radius:var(--r-small);background:var(--accent);color:var(--on-accent)}
+.spark path{stroke-width:2.4}
+button.stat.is-empty{gap:var(--s-2)}
+.tile .slots{margin-top:var(--s-1)}
+.tile .recmark{align-self:flex-start;margin-top:var(--s-1)}
+.band .bfig .spark{margin-left:auto}
+.band a.btn{background:transparent;border-color:color-mix(in srgb,var(--on-accent) 30%,transparent)}
+.band a.btn.icon{flex:none}
+.mrow .signum{gap:var(--s-2);font-size:var(--t-caption);color:var(--muted)}
+.mrow .slots i{width:10px;height:10px}
+.ptag .signum{gap:var(--s-2)}
+.ptag .slots i{width:10px;height:10px}
+@media (max-width:1023px){.band .bfig .spark{margin-left:0}}
 </style></head><body><div id="app"></div><dialog id="sheet" class="sheet"></dialog><div id="toast" class="toast" role="status" hidden></div><input id="import" type="file" accept="application/json,.json" hidden><script>/* ——— Домен v2 ———
    Данные клиента и все законы из UX-MECHANISM.md в виде чистых функций.
    Ни одного знания о DOM — файл целиком проверяется в Node (test-domain.cjs).
@@ -1662,6 +1827,30 @@ function ring(r,size=36,label=''){const rad=(size-5)/2,c=2*Math.PI*rad;
  return `<span class="ringbox${r>=1?' is-done':''}" style="width:${size}px;height:${size}px"><svg class="ring" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true"><circle class="bg" cx="${size/2}" cy="${size/2}" r="${rad}"/><circle class="fg" cx="${size/2}" cy="${size/2}" r="${rad}" stroke-dasharray="${c.toFixed(2)}" stroke-dashoffset="${(c*(1-Math.min(1,r))).toFixed(2)}"/></svg>${label}</span>`}
 
 // ——— тост ———
+/* ——— Знаки: одна функция на знак — одинаковый вид на всех экранах и во всех ролях ———
+   Грамматика из «Карточек прибора»: эмблема — лицо, серия — квадратами, заполнение — массой,
+   состояние — цветом заливки. Функции знают только форму, а не предметную область.
+   Блок одинаковый у клиента, тренера и администратора. */
+// Лицо объекта: значок из набора или одна-две буквы; состояние — заливкой (ok · now · warn · alert · ahead · empty · calm).
+function emb(face,{size='m',state='',label='',badge='',halo=false}={}){
+ const inner=ICONS[face]?I(face,20):esc(String(face||'·').slice(0,2));
+ return `<span class="emb ${size}${state?' is-'+state:''}${halo?' is-halo':''}"${label?` role="img" aria-label="${esc(label)}"`:' aria-hidden="true"'}>${inner}${badge!==''&&badge!==undefined&&badge!==null?`<b class="badge">${esc(badge)}</b>`:''}</span>`}
+// Серия: квадрат на событие. Состояния: 'on' — сделано, 'ok' · 'warn' · 'alert' — по цвету, 'skip' — пропуск, 'now' — сейчас, '' — впереди.
+function slots(states,{size='',label=''}={}){
+ return `<span class="slots${size?' '+size:''}"${label?` role="img" aria-label="${esc(label)}"`:' aria-hidden="true"'}>${states.map(c=>`<i${c?` class="${c}"`:''}></i>`).join('')}</span>`}
+// «Сделано из запланированного» — квадратами и числом рядом; длинная серия сжимается до max квадратов.
+function tally(done,total,{size='',max=14,tone='on',word=''}={}){if(!total)return '';
+ const n=Math.min(total,max),k=Math.min(n,Math.round(done*n/total));
+ return `<span class="signum">${slots(Array.from({length:n},(_,i)=>i<k?tone:''),{size,label:`${done} из ${total}${word?' '+word:''}`})}<span class="num" aria-hidden="true">${done} из ${total}${word?' '+word:''}</span></span>`}
+// Заполнение 0…1 — полосой; тон — состояние, если оно есть.
+function meter(r,{tone='',size=''}={}){const p=Math.max(0,Math.min(1,Number(r)||0));
+ return `<span class="meter${tone?' '+tone:''}${size?' '+size:''}" aria-hidden="true"><i style="width:${Math.round(p*100)}%"></i></span>`}
+// Заголовок группы: знак, слово и число — состояние называется один раз, над группой.
+function gh(state,icon,title,n){return `<div class="gh${state?' is-'+state:''}"><span class="gs">${I(icon,13)}</span><span>${title}</span>${n!==undefined&&n!==null?`<span class="n">${n}</span>`:''}</div>`}
+// Главная карточка экрана: одна, сверху; эмблема, ответ крупно, действие рядом.
+function band({face,state='',kicker='',title='',meta='',fig='',acts='',tone='',cls='',key='band',label=''}){
+ return `<section class="band${tone?' is-'+tone:''}${cls?' '+cls:''}" data-key="${key}"${label?` aria-label="${esc(label)}"`:''}><div class="bhead">${emb(face,{size:'l',state})}<div class="grow">${kicker?`<span class="bk">${kicker}</span>`:''}<h2>${title}</h2>${meta?`<span class="bm">${meta}</span>`:''}</div></div>${fig?`<div class="bfig">${fig}</div>`:''}${acts?`<div class="bacts">${acts}</div>`:''}</section>`}
+
 let toastTimer=null;
 /* about — проверка «тост ещё о деле?»: напоминание гаснет, как только его предмет начат,
    отмечен или наступил новый день (render вызывает toastCheck). */
@@ -1866,27 +2055,50 @@ function stepField(label,name,value,step,{unit='',min=0,big=false}={}){
    (отметить можно и прошедший), форму не открывает. */
 
 function sceneHead(kicker,title,sub='',actions=''){
- return `<header class="shead"><div class="grow"><div class="kicker">${kicker}</div><h1>${title}</h1>${sub?`<p class="sub">${sub}</p>`:''}</div>${actions?`<div class="actions">${actions}</div>`:''}</header>`}
+ return `<header class="shead"><div class="grow"><div class="khead"><span class="kicker">${kicker}</span>${demoChip()}</div><h1>${title}</h1>${sub?`<p class="sub">${sub}</p>`:''}</div>${actions?`<div class="actions">${actions}</div>`:''}</header>`}
 
 function todayScene(){
  const s=view(),t=D.today(),day=ui.day,isToday=day===t;
  const items=D.agenda(s,day),late=isToday?D.overdueTodos(s,t):[];
- const doneN=items.filter(x=>itemDone(x,day)).length,wk=items.find(x=>x.kind==='workout'&&x.item.status!=='skipped');
+ const doneN=items.filter(x=>itemDone(x,day)).length;
  const kicker=isToday?D.now().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'}):(day<t?'Прошедший день':'Впереди');
  const title=isToday?`${greet()}${s.profile.name?', '+esc(s.profile.name):''}`:D.fmtDay(day);
- const st=D.weekStats(s),aw=s.workouts.find(w=>w.status==='active');
- // Итог — одна строка и не больше двух фактов (аудит, п. 9): главное про тренировку, потом про день.
- const wkFact=aw?'Идёт тренировка':wk?(wk.item.status==='done'?'Тренировка сделана':`Тренировка в ${wk.item.time}`):'';
- const dayFact=!items.length?(day<t?'В этот день ничего не было':'На этот день ничего не запланировано'):day>t?`запланировано ${items.length}`:`сделано ${doneN} из ${items.length}`;
- const sub=[wkFact,dayFact].filter(Boolean).join(' · ');
+ // Итог дня — знаком: квадрат на дело, сделанное залито; число — рядом. Тренировку называет главная карточка.
+ const sub=!items.length?(day<t?'В этот день ничего не было':'На этот день ничего не запланировано')
+  :day>t?`<span class="signum">${slots(items.slice(0,14).map(()=>''))}<span class="num">запланировано ${items.length}</span></span>`
+  :tally(doneN,items.length,{tone:'ok'});
  return `<section class="scene">${sceneHead(kicker,title,sub,B(I('plus',18)+'Добавить','add','','primary'))}
- ${example?exampleBanner():''}
  ${weekStrip(day)}
  ${isToday?methodCard()+questionCards()+learnCard():''}
- <div class="cols"><div class="stack">${timeline(items,late,day)}</div><div class="stack">${sideToday()}</div></div></section>`}
+ <div class="cols"><div class="stack">${isToday?nowBand(items,day):''}${timeline(items,late,day)}</div><div class="stack">${sideToday()}</div></div></section>`}
 
-function exampleBanner(){if(rehearsal)return `<div class="banner card rehearse"><div class="grow"><b>Репетиция</b><span class="meta">Жмите всё что угодно — ничего не сохраняется.</span></div>${B('Выйти','learn-exit','','primary small')}</div>`;
- return `<div class="banner card"><div class="grow"><b>Это пример</b><span class="meta">Так выглядит дневник через три недели. Он только для просмотра.</span></div>${B('Начать свой','example-exit','','primary small')}</div>`}
+/* Главный вопрос «Сегодня» — что сейчас. Ответ — главная карточка над лентой: идущая
+   тренировка, ближайшее дело или «всё сделано». Лента ниже — весь день по времени. */
+function nowBand(items,day){const s=view(),aw=s.workouts.find(w=>w.status==='active');
+ if(aw){const sets=aw.exercises.flatMap(e=>e.sets.map(q=>q.doneAt?'on':''));
+  return band({face:'journal',kicker:'Идёт тренировка',title:esc(aw.title),meta:`${D.setsDone(aw)} из ${D.setsTotal(aw)} подходов`,
+   fig:sets.length?slots(sets.slice(0,24),{size:'l'}):'',acts:B(I('play',16)+'Продолжить','gym-open',aw.id,'primary'),key:'band-now'})}
+ if(!items.length)return '';
+ const open=items.filter(x=>!itemDone(x,day)&&!(x.kind==='workout'&&x.item.status==='skipped'));
+ if(!open.length)return band({face:'check',tone:'ok',kicker:'Сегодня',title:'Всё сделано',fig:slots(items.slice(0,24).map(()=>'on'),{size:'l'}),key:'band-now'});
+ const x=nextItem(items,day)||open[0],it=x.item,now=D.hm();
+ const when=x.time?(x.time<now?`${x.time} · время прошло`:`${x.time<=D.addMinutes(now,30)?'Сейчас':'Дальше'} · ${x.time}`):'Без времени';
+ if(x.kind==='workout'){const n=it.exercises.length,isT=it.date===D.today();
+  return band({face:'journal',kicker:when,title:esc(it.title),meta:n?`${n} ${plural(n,'упражнение','упражнения','упражнений')}`:'Упражнения ещё не добавлены',
+   acts:(it.status==='planned'&&isT?B(I('play',16)+'Начать','w-start',it.id,'primary'):'')+B('Открыть','w-open',it.id,''),key:'band-now'})}
+ if(x.kind==='todo')return band({face:'tasks',kicker:when,title:esc(it.title),meta:'Дело',acts:B(I('check',16)+'Сделано','todo-tick',it.id,'primary','aria-pressed="false"'),key:'band-now'});
+ const r=D.ruleOn(it,day);
+ if(r.kind==='count'){const v=D.logOf(s,it,day);
+  return band({face:'target',kicker:when,title:esc(it.title),meta:`${fmtN(v)} из ${fmtN(r.target)} ${esc(r.unit)}`,fig:meter(r.target?v/r.target:0,{size:'l'}),
+   acts:B(`${I('plus',16)}${fmtN(r.step)}`,'count-step',it.id,'primary',`data-date="${day}" aria-label="Добавить ${fmtN(r.step)} ${esc(r.unit)}"`)+B('Ввести','count-open',it.id,'',`data-date="${day}"`),key:'band-now'})}
+ if(r.kind==='metric')return band({face:'scale',kicker:when,title:esc(it.title),meta:D.METRICS[r.metric][0],acts:B('Ввести','metric-open',r.metric,'primary',`data-date="${day}"`),key:'band-now'});
+ return band({face:'check',kicker:when,title:esc(it.title),meta:'Привычка',acts:B(I('check',16)+'Отметить','habit-tick',it.id,'primary',`data-date="${day}" aria-pressed="false"`),key:'band-now'})}
+
+function demoChip(){if(!example)return '';
+ return rehearsal?B(I('flag',14)+'репетиция · выйти','learn-exit','','kchip')
+  :B(I('flag',14)+'пример','example-info','','kchip','aria-label="Это пример — что это и как начать свой"')}
+function exampleSheet(){openSheet({title:'Это пример',body:`<p class="confirm">Так выглядит дневник через три недели. Он только для просмотра — свои записи начнутся с чистого листа.</p>`,
+ extra:B('Начать свой','example-exit','','primary'),cancel:true})}
 
 // ——— полоса недели ———
 function weekStrip(day){const s=view(),t=D.today();
@@ -1900,7 +2112,7 @@ function questionCards(){
  const qs=ui.questions.filter(q=>!ui.dismissed.has(q.kind+q.date+(q.id||'')));if(!qs.length)return '';
  // Несколько неотмеченных дней плана — одна карточка, а не стопка (ничего не висит молча, но и не кричит).
  const plans=qs.filter(q=>q.kind==='plan');
- const card=(ico,text,btns,tone='')=>`<div class="qcard card ${tone}"><span class="qico">${I(ico,18)}</span><p class="grow">${text}</p><div class="btnrow">${btns}</div></div>`;
+ const card=(ico,text,btns,tone='')=>`<div class="qcard card ${tone}">${emb(ico,{size:'s',state:tone==='warn'?'warn':'calm'})}<p class="grow">${text}</p><div class="btnrow">${btns}</div></div>`;
  return `<div class="qcards">${qs.map(q=>{
   if(q.kind==='workout')return card('journal',`${D.fmtDay(q.date)} была тренировка «${esc(q.title)}»?`,B('Пропустил','q-skip',q.id,'small ghost')+B('Была — записать','q-log',q.id,'small'),'warn');
   if(q.kind==='plan'){if(plans.length>1)return q===plans[0]?card('journal',`По плану не отмечено: ${plans.map(x=>D.fmtDay(x.date).replace(/,.*/,'')).join(', ')}. Были тренировки?`,B('Пропустил все','q-plans-skip','','small ghost')+B('Разобрать','q-plans','','small'),'warn'):'';
@@ -1973,12 +2185,13 @@ function plainRow(it,meta,date){return `<div class="row is-future" data-key="h${
 // ——— правая колонка: что дальше (неделя со статистикой ушла с главной, §3.2) ———
 function sideToday(){const s=view(),next=D.schedule(s,D.addDays(D.today(),1),6).filter(w=>w.status==='planned').slice(0,4);
  return `<section class="panel"><div class="phead"><h2>Дальше</h2></div>
- ${next.length?`<div class="rows compact">${next.map(w=>`<button type="button" class="nextrow" data-action="w-open" data-id="${w.id}" data-key="n${w.id}"><span class="caption">${D.fmtDay(w.date)}, ${w.time}</span><span class="rt">${esc(w.title)}</span></button>`).join('')}</div>`
+ ${next.length?`<div class="rows compact">${next.map(w=>`<button type="button" class="nextrow" data-action="w-open" data-id="${w.id}" data-key="n${w.id}"><span class="datebox"><b class="num">${Number(w.date.slice(8))}</b><span>${D.WD[D.weekday(w.date)]}</span></span><span class="grow"><span class="rt">${esc(w.title)}</span><span class="caption">${w.time}</span></span></button>`).join('')}</div>`
  :`<p class="meta">Тренировок впереди нет. ${s.plans.length?'':'Задайте дни в плане — тренировки встанут сюда сами.'}</p>${s.plans.length?'':B(I('plus',16)+'План','plan-new','','small')}`}</section>${deskSide(s)}`}
 // Компьютер: вторая колонка не пустует — тренер и последний замер (аудит, п. 51). На телефоне их нет: там это вкладки.
 function deskSide(s){const c=s.coach,qn=s.questions.filter(q=>!q.askedAt).length,wt=D.metricSeries(s,'weight'),last=wt[wt.length-1],dw=D.metricDelta(s,'weight',7);
- const coach=c.name?`<section class="panel deskonly"><div class="phead"><h2>Тренер</h2>${B('Открыть','go','coach','small ghost')}</div><p class="meta">${c.nextMeeting?`Встреча — ${D.fmtDay(c.nextMeeting,{lower:true})}`:'Встреча не назначена'}${qn?` · ${qn} ${plural(qn,'вопрос','вопроса','вопросов')} к встрече`:''}</p></section>`:'';
- const body=last?`<section class="panel deskonly"><div class="phead"><h2>Вес</h2>${B('Замер','metric-open','weight','small ghost')}</div><div class="tiles one"><div class="tile"><b class="num">${fmtN(last.value)}<span> кг</span></b><span class="delta">${D.fmtDay(last.date)}${dw!==null?` · ${dw>0?'+':''}${fmtN(dw)} за неделю`:''}</span></div></div></section>`:'';
+ const coach=c.name?`<section class="panel deskonly"><div class="phead"><h2>Тренер</h2>${B('Открыть','go','coach','small ghost')}</div>
+  <div class="sidecoach">${emb(initials(c.name),{size:'m',state:'calm'})}<div class="grow"><b>${esc(c.name)}</b><span class="meta">${c.nextMeeting?`встреча ${D.fmtDay(c.nextMeeting,{lower:true})}`:'встреча не назначена'}</span></div>${qn?`<span class="qcount" aria-label="${qn} ${plural(qn,'вопрос','вопроса','вопросов')} к встрече">${I('question',14)}<b class="num">${qn}</b></span>`:''}</div></section>`:'';
+ const body=last?`<section class="panel deskonly"><div class="phead"><h2>Вес</h2>${B('Замер','metric-open','weight','small ghost')}</div><div class="sideweight"><b class="num">${fmtN(last.value)}<span> кг</span></b>${spark(wt.slice(-12).map(m=>m.value),{w:140,h:44})}</div><span class="delta">${D.fmtDay(last.date)}${dw!==null?` · ${dw>0?'+':''}${fmtN(dw)} за неделю`:''}</span></section>`:'';
  return coach+body}
 
 
@@ -1998,30 +2211,41 @@ function autoWorkout(s,t){if(!matchMedia('(min-width:1024px)').matches)return nu
 function trainScene(){
  const s=view(),t=D.today(),st=D.weekStats(s),shown=ui.id||autoWorkout(s,t);
  const nextW=D.schedule(s,t,14).find(w=>w.status==='planned');
- const wsub=st.total?`На этой неделе ${st.done} из ${st.total}`:nextW?`Следующая — ${D.fmtDay(nextW.date,{lower:true})}, ${nextW.time}`:'Тренировок пока не запланировано';
+ // Неделя — квадратами: сделанные залиты; «следующая» — на главной карточке, а не словами в шапке.
+ const wsub=st.total?tally(st.done,st.total,{tone:'ok'}):nextW?`Следующая — ${D.fmtDay(nextW.date,{lower:true})}, ${nextW.time}`:'Тренировок пока не запланировано';
  const next=D.schedule(s,t,7).filter(w=>w.status!=='done');
  const past=s.workouts.filter(w=>w.status==='done'||w.status==='skipped'||(w.date<t&&w.status!=='active')).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
  const weeks=[];for(const w of past){const k=D.weekStart(w.date);let g=weeks.find(x=>x.k===k);if(!g)weeks.push(g={k,items:[]});g.items.push(w)}
  const wlabel=k=>k===D.weekStart(t)?'Эта неделя':k===D.addDays(D.weekStart(t),-7)?'Прошлая неделя':`${D.fmtShort(k)} — ${D.fmtShort(D.addDays(k,6))}`;
+ // Главная карточка — на телефоне, где справа нет открытой тренировки: ближайшая тренировка с действием.
+ const hero=!shown&&next.length?nextBand(next[0]):'',list=hero?next.slice(1):next;
  return `<section class="scene">${sceneHead(`Неделя ${D.fmtShort(D.weekStart(t))} — ${D.fmtShort(D.addDays(D.weekStart(t),6))}`,'Тренировки',wsub,B(I('plus',18)+'Тренировка','w-new','','primary'))}
- ${example?exampleBanner():''}
- <div class="cols"><div class="stack">
-  <section class="panel"><div class="phead"><h2>Ближайшие 7 дней</h2></div>
-  ${next.length?`<div class="rows">${next.map(w=>wrow(w)).join('')}</div>`:empty('journal','Впереди пусто','Добавьте тренировку или попросите тренера составить план — он сам встанет в расписание.',B(I('plus',18)+'Тренировка','w-new','','small'))}</section>
+ <div class="cols"><div class="stack">${hero}
+  <section class="panel"><div class="phead"><h2>${hero?'Дальше':'Ближайшие 7 дней'}</h2></div>
+  ${list.length?`<div class="rows">${list.map(w=>wrow(w)).join('')}</div>`:hero?`<p class="meta">Больше тренировок на неделе нет.</p>`:empty('journal','Впереди пусто','Добавьте тренировку или попросите тренера составить план — он сам встанет в расписание.',B(I('plus',18)+'Тренировка','w-new','','small'))}</section>
   <section class="panel"><div class="phead"><h2>История</h2></div>
-  ${weeks.length?weeks.slice(0,ui.weeks||6).map(g=>{const d=g.items.filter(w=>w.status==='done').length;return `<div class="block"><div class="blocktitle">${wlabel(g.k)} · ${d} ${plural(d,'тренировка','тренировки','тренировок')}</div><div class="rows">${g.items.map(w=>wrow(w)).join('')}</div></div>`}).join('')
+  ${weeks.length?weeks.slice(0,ui.weeks||6).map(g=>{const d=g.items.filter(w=>w.status==='done').length;
+   return `<div class="block"><div class="blocktitle wtitle"><span>${wlabel(g.k)}</span>${slots(g.items.map(w=>w.status==='done'?'ok':'skip'),{label:`${d} ${plural(d,'тренировка','тренировки','тренировок')}`})}</div><div class="rows">${g.items.map(w=>wrow(w)).join('')}</div></div>`}).join('')
    +(weeks.length>(ui.weeks||6)?`<div class="pfoot">${B('Показать ещё','more-weeks','','ghost small')}</div>`:''):empty('journal','Истории пока нет','Здесь будут все тренировки по неделям — с рекордами и сравнением.')}</section>
  </div><div class="stack">${shown?workoutDetail(shown):detailHint()}</div></div></section>`}
+
+// Ближайшая тренировка — главной карточкой: когда, что и одно действие.
+function nextBand(w){const t=D.today(),isT=w.date===t,n=w.exercises?w.exercises.length:0;
+ return band({face:String(Number(w.date.slice(8))),kicker:`${isT?'Сегодня':D.fmtDay(w.date)} · ${w.time}${w.virtual?' · по плану':''}`,title:esc(w.title),
+  meta:n?`${n} ${plural(n,'упражнение','упражнения','упражнений')}`:'Упражнения подставятся из плана',
+  acts:(isT&&w.status==='planned'?B(I('play',16)+'Начать','w-start',w.id,'primary'):w.status==='active'?B('Продолжить','gym-open',w.id,'primary'):'')+B('Открыть','w-open',w.id,isT||w.status==='active'?'':'primary'),key:'band-next'})}
 
 function detailHint(){return `<section class="panel detail-empty">${empty('journal','Выберите тренировку','Откройте любую, чтобы посмотреть подходы, рекорды или поправить что-то задним числом.')}</section>`}
 
 function wrow(w){
- const s=view(),t=D.today(),on=(ui.id||autoWorkout(s,t))===w.id;
- const meta=w.virtual?`${w.time} · по плану`:w.status==='done'?[D.duration(w)?`${D.duration(w)} мин`:'',D.volume(w)?kg(D.volume(w)):'',(()=>{const r=D.records(s,w).length;return r?`${r} ${plural(r,'рекорд','рекорда','рекордов')}`:''})()].filter(Boolean).join(' · ')||'Сделано'
+ const s=view(),t=D.today(),on=(ui.id||autoWorkout(s,t))===w.id,recs=w.status==='done'?D.records(s,w).length:0;
+ const meta=w.virtual?`${w.time} · по плану`:w.status==='done'?[D.duration(w)?`${D.duration(w)} мин`:'',D.volume(w)?kg(D.volume(w)):''].filter(Boolean).join(' · ')||'Сделано'
   :w.status==='skipped'?'Пропущена':w.status==='active'?'Идёт':w.date<t?'Не закрыта':`${w.time} · ${w.exercises.length} упр.`;
  const act=w.date===t&&(w.status==='planned')?B(I('play',14)+'Начать','w-start',w.id,'primary small'):w.status==='active'?B('Продолжить','gym-open',w.id,'primary small'):'';
- return `<div class="row wrow${on?' is-on':''}${w.status==='skipped'?' is-muted':''}" data-key="${w.id}"><span class="datebox${w.status==='done'?' done':''}"><b class="num">${Number(w.date.slice(8))}</b><span>${D.WD[D.weekday(w.date)]}</span></span>
- <button type="button" class="rbody" data-action="w-open" data-id="${w.id}"><span class="rt">${esc(w.title)}</span><span class="rm${w.status==='planned'&&w.date<t?' warn':''}">${w.date===t?'Сегодня · ':''}${meta}${w.auto?' · закрыта автоматически':''}</span></button>${act}</div>`}
+ // Дата — эмблемой: сделано залито ok, сегодня — чернилами, пропуск — пунктиром. Рекорд — кубком с числом.
+ const dcls=w.status==='done'?' done':w.status==='skipped'?' skip':w.date===t?' today':'';
+ return `<div class="row wrow${on?' is-on':''}${w.status==='skipped'?' is-muted':''}" data-key="${w.id}"><span class="datebox${dcls}"><b class="num">${Number(w.date.slice(8))}</b><span>${D.WD[D.weekday(w.date)]}</span></span>
+ <button type="button" class="rbody" data-action="w-open" data-id="${w.id}"><span class="rt">${esc(w.title)}</span><span class="rm${w.status==='planned'&&w.date<t?' warn':''}">${w.date===t?'Сегодня · ':''}${meta}${w.auto?' · закрыта автоматически':''}</span></button>${recs?`<span class="recmark" aria-label="${recs} ${plural(recs,'рекорд','рекорда','рекордов')}">${I('trophy',14)}<b class="num">${recs}</b></span>`:''}${act}</div>`}
 
 // ——— карточка тренировки ———
 function workoutDetail(id){
@@ -2042,10 +2266,10 @@ function workoutDetail(id){
  <div class="dtop">${B(I('back',20),'go','train','icon ghost backbtn','aria-label="К списку"')}<span class="kicker grow">${D.fmtDay(w.date)} · ${w.time}${w.coach?' · с тренером':''}</span>
   ${B(I('edit',18),'w-edit',w.id,'icon small ghost','aria-label="Изменить"')}${B(I('copy',18),'w-copy',w.id,'icon small ghost','aria-label="Повторить сегодня"')}${B(I('trash',18),'w-del',w.id,'icon small ghost','aria-label="Удалить"')}</div>
  <h2 class="dtitle">${esc(w.title)}</h2>
- <div class="tiles four"><div class="tile"><span class="caption">Подходы</span><b class="num">${D.setsDone(w)}<span> из ${D.setsTotal(w)}</span></b></div>
+ <div class="tiles four"><div class="tile"><span class="caption">Подходы</span><b class="num">${D.setsDone(w)}<span> из ${D.setsTotal(w)}</span></b>${D.setsTotal(w)?slots(w.exercises.flatMap(e=>e.sets.map(q=>q.doneAt?'ok':'')).slice(0,24)):''}</div>
   <div class="tile"><span class="caption">Объём</span><b class="num">${D.volume(w)?kg(D.volume(w)):'—'}</b></div>
   <div class="tile"><span class="caption">Время</span><b class="num">${dur?dur+'<span> мин</span>':'—'}</b></div>
-  <div class="tile"><span class="caption">Рекорды</span><b class="num">${recs.length||'—'}</b></div></div>
+  <div class="tile"><span class="caption">Рекорды</span><b class="num">${recs.length||'—'}</b>${recs.length?`<span class="recmark">${I('trophy',14)}</span>`:''}</div></div>
  <div class="exlist">${w.exercises.map((e,i)=>exCard(w,e,i)).join('')||empty('journal','Упражнений нет','Добавьте первое — подходы и веса будут подсказываться с прошлого раза.')}</div>
  ${B(I('plus',18)+'Упражнение','ex-new',w.id,'addex wide')}
  ${w.note?`<p class="wnote meta">${I('note',14)} ${esc(w.note)}</p>`:''}
@@ -2203,12 +2427,18 @@ function progressScene(){
  const tab=ui.prog;
  const seg=`<div class="seg inline pseg" role="tablist">${[['strength','Сила'],['body','Тело'],['habits','Регулярность']].map(([k,v])=>B(v,'prog',k,tab===k?'is-on':'',`role="tab" aria-selected="${tab===k}"`)).join('')}</div>`;
  const body=tab==='body'?bodyTab():tab==='habits'?habitsTab():strengthTab();
- return `<section class="scene">${sceneHead(view().profile.goal?esc(view().profile.goal):'Движусь ли я','Прогресс','',seg)}${example?exampleBanner():''}${body}</section>`}
+ return `<section class="scene">${sceneHead(view().profile.goal?esc(view().profile.goal):'Движусь ли я','Прогресс','',seg)}${body}</section>`}
 
 // ——— Сила ———
 function strengthTab(){const s=view(),list=D.exerciseList(s);
  if(!list.length)return `<section class="panel">${empty('progress','Силы пока не видно','После первых тренировок с весом здесь появится каждое упражнение: лучший результат и как он растёт по неделям.')}</section>`;
- return `<div class="grid3">${list.map(x=>{const ser=D.strength(s,x.name,8),vals=ser.map(p=>p.value),nz=vals.filter(Boolean),ch=nz.length>1?D.round(nz[nz.length-1]-nz[0],10):null;
+ // Главная карточка — упражнение с самым большим ростом за 8 недель: ответ на «расту ли я» одним взглядом.
+ const rows=list.map(x=>{const ser=D.strength(s,x.name,8),vals=ser.map(p=>p.value),nz=vals.filter(Boolean);return {x,vals,ch:nz.length>1?D.round(nz[nz.length-1]-nz[0],10):null}});
+ const top=rows.filter(r=>r.ch>0).sort((a,b)=>b.ch-a.ch)[0];
+ const hero=top?band({face:'progress',state:'ok',kicker:'Рост за 8 недель',title:esc(top.x.name),
+  meta:`лучшее · ${D.fmtShort(top.x.bestDate)}`,fig:`<b>${top.x.best.weight!=null?`${numText(top.x.best.weight)}<small> кг × ${top.x.best.reps}</small>`:`${top.x.best.reps}<small> повт.</small>`}</b><b>+${fmtN(top.ch)}<small> кг</small></b>${spark(top.vals,{w:160,h:44})}`,
+  acts:B('Подробнее','ex-stat',top.x.name,''),key:'band-str'}):'';
+ return `${hero}<div class="grid3">${rows.map(({x,vals})=>{const nz=vals.filter(Boolean),ch=nz.length>1?D.round(nz[nz.length-1]-nz[0],10):null;
   return `<button type="button" class="panel stat" data-action="ex-stat" data-id="${esc(x.name)}" data-key="x${esc(x.name)}"><span class="kicker">${esc(x.name)}</span><span class="statgo">${I('chev',16)}</span>
   <span class="big num">${x.best.weight!=null?`${numText(x.best.weight)}<small> кг × ${x.best.reps}</small>`:`${x.best.reps}<small> повт.</small>`}</span><span class="caption">Лучшее · ${D.fmtShort(x.bestDate)}</span>
   <span class="statfoot">${(()=>{if(nz.length>=2)return `${spark(vals)}${ch?delta(ch,'кг',{days:'за 8 нед.'}):'<span class="delta">без изменений</span>'}`;
@@ -2223,13 +2453,17 @@ function exStatSheet(name){openSheet({title:esc(name),view:()=>{const s=view(),s
  <div class="rows">${hist.map(({w,e})=>`<div class="row plain"><span class="datebox"><b class="num">${Number(w.date.slice(8))}</b><span>${D.WD[D.weekday(w.date)]}</span></span><div class="grow"><span class="rt">${e.sets.filter(q=>q.doneAt).map(q=>`${numText(q.weight)||'—'}×${numText(q.reps)||'—'}`).join('  ')}</span><span class="rm">${D.fmtDate(w.date)} · ${esc(w.title)}</span></div></div>`).join('')}</div>`}})}
 
 // ——— Тело ———
-function bodyTab(){const s=view();
- const cards=Object.entries(D.METRICS).map(([k,[name,unit]])=>{const l=D.metricSeries(s,k),last=l[l.length-1];
-  if(!last)return `<button type="button" class="panel stat is-empty" data-action="metric-open" data-id="${k}" data-key="m${k}"><span class="kicker">${name}</span><span class="big num faintnum">—</span><span class="caption">Добавить первый замер</span></button>`;
+function bodyTab(){const s=view(),wt=D.metricSeries(s,'weight'),last=wt[wt.length-1];
+ // Главная карточка — вес: последний замер крупно и линия за последние недели.
+ const hero=last?band({face:'scale',tone:'calm',kicker:`Вес · ${D.fmtDay(last.date,{lower:true})}`,title:`${fmtN(last.value)} кг`,
+  meta:(()=>{const d=D.metricDelta(s,'weight',30);return d===null?'первый замер':`${d>0?'+':''}${fmtN(d)} кг за месяц`})(),
+  fig:wt.length>1?spark(wt.slice(-12).map(m=>m.value),{w:220,h:48}):'',acts:B(I('plus',16)+'Замер','metric-open','weight','primary')+B('История','metric-hist','weight',''),key:'band-body'}):'';
+ const cards=Object.entries(D.METRICS).filter(([k])=>!(hero&&k==='weight')).map(([k,[name,unit]])=>{const l=D.metricSeries(s,k),last=l[l.length-1];
+  if(!last)return `<button type="button" class="panel stat is-empty" data-action="metric-open" data-id="${k}" data-key="m${k}">${emb('plus',{size:'s',state:'empty'})}<span class="kicker">${name}</span><span class="caption">Добавить первый замер</span></button>`;
   const d30=D.metricDelta(s,k,30);
   return `<button type="button" class="panel stat" data-action="metric-hist" data-id="${k}" data-key="m${k}"><span class="kicker">${name}</span><span class="statgo">${I('chev',16)}</span><span class="big num">${fmtN(last.value)}<small> ${unit}</small></span><span class="caption">${D.fmtDay(last.date)}</span>
   <span class="statfoot">${spark(l.slice(-12).map(m=>m.value))}${delta(d30,unit,{good:0,days:'за месяц'})}</span></button>`}).join('');
- return `<div class="rowhead"><span class="meta">Замеры тела — раз в неделю, в одно время</span>${B(I('plus',18)+'Замер','metric-open','weight','primary small')}</div><div class="grid2">${cards}</div>`}
+ return `${hero||`<div class="rowhead"><span class="meta">Замеры тела — раз в неделю, в одно время</span>${B(I('plus',18)+'Замер','metric-open','weight','primary small')}</div>`}<div class="grid2">${cards}</div>`}
 
 // Живой список: удалили замер — строка ушла, последний удалённый закрывает шторку.
 function metricHistSheet(kind){const [name,unit]=D.METRICS[kind];
@@ -2273,7 +2507,7 @@ function regularity(){const s=view(),t=D.today(),ws=[];
  for(let i=span;i>=0;i--){const a=D.addDays(D.weekStart(t),-7*i),b=D.addDays(a,6);
   ws.push({a,n:s.workouts.filter(w=>w.status==='done'&&w.date>=a&&w.date<=b).length})}
  const max=Math.max(3,...ws.map(w=>w.n)),st=D.weekStats(s);
- return `<section class="panel regular"><div class="phead"><h2>Тренировки</h2><span class="ptag">на этой неделе ${st.done} из ${st.total||st.done}</span></div>
+ return `<section class="panel regular"><div class="phead"><h2>Тренировки</h2><span class="ptag">${st.total?tally(st.done,st.total,{tone:'ok'}):`на этой неделе ${st.done}`}</span></div>
  <div class="wbars" style="grid-template-columns:repeat(${ws.length},minmax(0,1fr))" aria-label="Тренировок по неделям">${ws.map((w,i)=>`<div class="wbar${i===ws.length-1?' now':''}" title="Неделя с ${D.fmtShort(w.a)}: ${w.n}"><i style="height:${Math.max(6,Math.round(w.n/max*100))}%"></i><span class="caption num">${w.n}</span></div>`).join('')}</div>
  <div class="chartx caption"><span>${ws.length<3?'Ваши первые недели':ws.length===8?'8 недель назад':'Начало дневника'}</span><span>Эта неделя</span></div></section>`}
 
@@ -2285,19 +2519,21 @@ function regularity(){const s=view(),t=D.today(),ws=[];
 
 function coachScene(){const s=view(),c=s.coach;
  const has=c.name||c.phone||c.telegram;
- const card=has?`<section class="panel coachcard"><div class="avatar">${esc(initials(c.name))}</div><div class="grow"><h2>${esc(c.name||'Без имени')}</h2>
-  <span class="meta">${c.nextMeeting?`Встреча: ${D.fmtDay(c.nextMeeting)}`:'Встреча не назначена'}</span></div>
-  <div class="btnrow">${c.phone?`<a class="btn icon" href="tel:${esc(c.phone)}" aria-label="Позвонить">${I('phone',20)}</a>`:''}${c.telegram?`<a class="btn icon" href="https://t.me/${esc(c.telegram)}" target="_blank" rel="noopener" aria-label="Написать в Telegram">${I('send',20)}</a>`:''}${B(I('edit',18),'coach-edit','','icon ghost','aria-label="Изменить"')}</div>${c.nextMeeting?'':`<div class="meetset">${B(I('cal',16)+'Назначить встречу','coach-edit','','small')}</div>`}</section>`
+ // Главная карточка — тренер и встреча: кто он, когда встреча, связаться в одно касание.
+ const card=has?band({face:initials(c.name),kicker:c.nextMeeting?`Встреча ${D.fmtDay(c.nextMeeting,{lower:true})}`:'Встреча не назначена',title:esc(c.name||'Без имени'),
+   meta:[c.phone?esc(c.phone):'',c.telegram?'@'+esc(c.telegram):''].filter(Boolean).join(' · '),
+   acts:`${c.phone?`<a class="btn icon" href="tel:${esc(c.phone)}" aria-label="Позвонить">${I('phone',20)}</a>`:''}${c.telegram?`<a class="btn icon" href="https://t.me/${esc(c.telegram)}" target="_blank" rel="noopener" aria-label="Написать в Telegram">${I('send',20)}</a>`:''}${c.nextMeeting?'':B(I('cal',16)+'Назначить встречу','coach-edit','','primary')}${B(I('edit',18),'coach-edit','','icon','aria-label="Изменить"')}`,key:'band-coach'})
   :`<section class="panel">${empty('coach','Тренер не указан','Добавьте контакт — позвонить и написать можно будет в одно касание.',B(I('plus',18)+'Тренер','coach-edit','','primary small'))}</section>`;
- return `<section class="scene">${sceneHead(c.nextMeeting?`Встреча ${D.fmtDay(c.nextMeeting,{lower:true})}`:'Ваш тренер','Тренер','','')}${example?exampleBanner():''}
+ return `<section class="scene">${sceneHead('Ваш тренер','Тренер','','')}
  <div class="cols"><div class="stack">${card}${meetingPanel()}</div><div class="stack">${methodPanelC()}${plansPanel()}${notesPanel()}</div></div></section>`}
 
 function meetingPanel(){const s=view(),m=D.sinceMeeting(s),c=s.coach;
- const hab=m.habits.map(h=>`<div class="mrow"><span class="grow">${esc(h.title)}</span><b class="num">${h.hit} из ${h.due}</b></div>`).join('');
+ // Привычки к встрече — квадратами: сделанные дни залиты; число — рядом.
+ const hab=m.habits.map(h=>`<div class="mrow"><span class="grow">${esc(h.title)}</span>${tally(h.hit,h.due,{tone:'ok',max:10})}</div>`).join('');
  const qs=s.questions.filter(q=>!q.askedAt);
  return `<section class="panel meet"><div class="phead"><h2>К встрече</h2><span class="ptag">${m.fromStart?'с начала дневника':s.notes.some(n=>n.source==='meeting')?`после встречи ${D.fmtShort(m.from)}`:`с ${D.fmtShort(D.addDays(m.from,1))}`}</span></div>
- ${m.done||m.skipped||m.weight!==null?`<div class="tiles three"><div class="tile"><span class="caption">Тренировки</span><b class="num">${m.done}</b>${m.skipped?`<span class="caption">пропущено ${m.skipped}</span>`:''}</div>
- <div class="tile"><span class="caption">Рекорды</span><b class="num">${m.records.length||'—'}</b></div>
+ ${m.done||m.skipped||m.weight!==null?`<div class="tiles three"><div class="tile"><span class="caption">Тренировки</span><b class="num">${m.done}</b>${m.done+m.skipped?slots([...Array(Math.min(m.done,10)).fill('ok'),...Array(Math.min(m.skipped,10)).fill('skip')]):''}</div>
+ <div class="tile"><span class="caption">Рекорды</span><b class="num">${m.records.length||'—'}</b>${m.records.length?`<span class="recmark">${I('trophy',14)}</span>`:''}</div>
  <div class="tile"><span class="caption">Вес</span><b class="num">${m.weight===null?'—':(m.weight>0?'+':'')+fmtN(m.weight)}<span>${m.weight===null?'':' кг'}</span></b></div></div>`
  :`<p class="meta">Здесь само соберётся всё к встрече: тренировки, рекорды, привычки, вес и заметки после тренировок.</p>`}
  ${m.records.length?`<div class="blocktitle">Рекорды</div><div class="rows compact">${m.records.map(r=>`<div class="mrow">${I('trophy',15)}<span class="grow">${esc(r.name)} <span class="caption">· ${D.fmtShort(r.date)}</span></span><b class="num">${numText(r.weight)} × ${r.reps}</b></div>`).join('')}</div>`:''}
@@ -2330,10 +2566,10 @@ function methodInbox(skipLater=false){if(example)return null;const s=view(),have
   .sort((a,b)=>String(b.at).localeCompare(String(a.at)));
  for(const p of l){const u=M.unpack(p);if(u.ok)return u}return null}
 function methodCard(){const u=methodInbox(true);if(!u)return '';
- return `<div class="qcards" data-key="mcard"><div class="qcard card"><span class="qico">${I('coach',18)}</span><p class="grow">${u.from?esc(u.from):'Тренер'} прислал методику «${esc(u.method.title)}»</p><div class="btnrow mbtns">${B('Позже','method-later',u.at,'small ghost')}${B('Посмотреть','method-view','','small')}</div></div></div>`}
+ return `<div class="qcards" data-key="mcard"><div class="qcard card">${emb('coach',{size:'s',state:'now'})}<p class="grow">${u.from?esc(u.from):'Тренер'} прислал методику «${esc(u.method.title)}»</p><div class="btnrow mbtns">${B('Позже','method-later',u.at,'small ghost')}${B('Посмотреть','method-view','','small')}</div></div></div>`}
 function methodPanelC(){const s=view(),m=s.coach.method,u=methodInbox(),n=m?M.stats(m):null;
  return `<section class="panel" data-key="method"><div class="phead"><h2>Методика</h2>${u?'<span class="ptag mstate is-changed">новая</span>':''}</div>
- ${u?`<div class="qcard card mnew"><span class="qico">${I('coach',18)}</span><p class="grow">Новая методика${u.from?' от '+esc(u.from):''}: «${esc(u.method.title)}»</p><div class="btnrow mbtns">${B('Посмотреть','method-view','','small primary')}</div></div>`:''}
+ ${u?`<div class="qcard card mnew">${emb('coach',{size:'s',state:'now'})}<p class="grow">Новая методика${u.from?' от '+esc(u.from):''}: «${esc(u.method.title)}»</p><div class="btnrow mbtns">${B('Посмотреть','method-view','','small primary')}</div></div>`:''}
  ${m?`<div class="rows"><button type="button" class="row planrow" data-action="method-view" data-key="mopen"><span class="rbody"><span class="rt">${esc(m.title||'Методика')}</span><span class="rm">${n.lines} ${plural(n.lines,'линия','линии','линий')} · от ${esc(s.coach.methodFrom||'тренера')}, ${D.fmtShort(String(s.coach.methodAt).slice(0,10))}</span></span>${I('chev',18)}</button></div>`
   :u?'':`<p class="meta">Тренер пришлёт методику: правила и линии — как двигаться в жиме, тяге, приседе и что держать в каждой фазе.</p>`}
  <div class="btnrow mbtns">${B(I('upload',16)+'Вставить код от тренера','method-paste','','small ghost')}</div></section>`}
@@ -2343,7 +2579,7 @@ function methodSceneC(){const s=view(),u=methodInbox(),m=u?u.method:s.coach.meth
  const back=line?B(I('back',16)+'Методика','m-home','','small ghost backlink'):B(I('back',16)+'Тренер','go','coach','small ghost backlink');
  const sub=u?`Новая${u.from?' · от '+esc(u.from):''} · ещё не принята`:m?`От ${esc(s.coach.methodFrom||'тренера')} · ${D.fmtShort(String(s.coach.methodAt).slice(0,10))}`:'';
  const head=`<header class="shead"><div class="grow"><div class="kicker">${back}</div><h1>${esc(line?M.lineName(line):m?(m.title||'Методика'):'Методика')}</h1>${sub?`<p class="sub">${sub}</p>`:''}</div></header>`;
- const banner=u?`<div class="banner card mnew" data-key="mnew"><span class="qico">${I('coach',18)}</span><div class="grow"><b>Новая методика от тренера</b><span class="meta">${s.coach.method?`Заменит прежнюю «${esc(s.coach.method.title)}» — её можно будет вернуть.`:'Примите — и она останется в дневнике.'}</span></div><div class="btnrow mbtns">${B('Позже','method-later',u.at,'small ghost')}${B('Принять','method-accept','','small primary')}</div></div>`:'';
+ const banner=u?`<div class="banner card mnew" data-key="mnew">${emb('coach',{size:'s',state:'now'})}<div class="grow"><b>Новая методика от тренера</b><span class="meta">${s.coach.method?`Заменит прежнюю «${esc(s.coach.method.title)}» — её можно будет вернуть.`:'Примите — и она останется в дневнике.'}</span></div><div class="btnrow mbtns">${B('Позже','method-later',u.at,'small ghost')}${B('Принять','method-accept','','small primary')}</div></div>`:'';
  if(!m)return `<section class="scene">${head}<section class="panel">${empty('coach','Методики пока нет','Тренер собирает её у себя и отправляет. Если он прислал код — вставьте его.',B(I('upload',16)+'Вставить код','method-paste','','small primary'))}</section></section>`;
  return `<section class="scene">${head}${banner}<div class="mread">${line?methodReadLine(m,line):methodReadHome(m)}</div></section>`}
 
@@ -2365,7 +2601,7 @@ function methodReadHome(m){const pr=m.principles.filter(p=>p.h.trim());
 function methodMark(l){return `<span class="mmark${l.kind==='base'?' is-base':''}" aria-hidden="true">${l.kind==='base'?I('target',16):esc((M.lineName(l)[0]||'·').toUpperCase())}</span>`}
 function methodReadLine(m,l){const b=M.base(m),rs=l.risks.filter(r=>r.must.trim()),ex=l.exercises.filter(e=>e.name.trim());
  return `${l.lead.trim()?`<section class="panel" data-key="mlead${l.id}"><p class="mlead">${esc(l.lead)}</p></section>`:''}
- ${l.kind==='work'&&b?`<button type="button" class="mbase" data-action="m-line" data-id="${b.id}" data-key="mbase"><span class="qico">${I('target',18)}</span><span class="grow"><b>Сначала — ${esc(M.lineName(b))}</b><span class="meta">Общая часть: к ней добавляется то, что ниже</span></span>${I('chev',18)}</button>`:''}
+ ${l.kind==='work'&&b?`<button type="button" class="mbase" data-action="m-line" data-id="${b.id}" data-key="mbase">${emb('target',{size:'s',state:'calm'})}<span class="grow"><b>Сначала — ${esc(M.lineName(b))}</b><span class="meta">Общая часть: к ней добавляется то, что ниже</span></span>${I('chev',18)}</button>`:''}
  <section class="panel" data-key="mcue${l.id}"><div class="phead"><h2>Маршрут внимания</h2><span class="ptag">${l.phases.length} ${plural(l.phases.length,'фаза','фазы','фаз')}</span></div>
  ${l.phases.length?`<ol class="mcue">${l.phases.map((f,i)=>`<li data-key="${f.id}"><div class="mcueh"><span class="mnum">${i+1}</span><b>${esc(f.label)}</b></div><ul class="mdots">${f.points.filter(p=>p.text.trim()).map(p=>`<li data-key="${p.id}">${esc(p.text)}</li>`).join('')}</ul></li>`).join('')}</ol>`:`<p class="meta">Фаз пока нет.</p>`}</section>
  ${rs.length?`<section class="panel" data-key="mrisk${l.id}"><div class="phead"><h2>Что критично</h2></div><div class="mrisks">${rs.map(r=>`<div class="mrisk" data-key="${r.id}"><b>${esc(r.must)}</b>${r.then.trim()?`<span>${esc(r.then)}</span>`:''}</div>`).join('')}</div></section>`:''}
@@ -2782,7 +3018,7 @@ function shell(){
  const showLive=aw&&!onLive&&ui.route!=='today',showFab=!aw&&!inDetail&&ui.route!=='method';
  const live=showLive?`<button type="button" class="livebar glass" data-action="gym-open" data-id="${aw.id}"><span class="pulse" aria-hidden="true"></span><span class="grow"><b>${esc(aw.title)}</b><span class="caption">Идёт · ${D.setsDone(aw)} из ${D.setsTotal(aw)} подходов</span></span><span class="go">Продолжить ${I('chev',16)}</span></button>`:'';
  // Запись не проходит — человек узнаёт об этом сразу и может унести копию (PRODUCT-AUDIT A2).
- const unsaved=ui.unsaved?`<div class="banner card unsaved" data-key="unsaved"><span class="qico">${I('flag',18)}</span><div class="grow"><b>Дневник не сохраняется</b><span class="meta">Память браузера заполнена или запись запрещена. Сделанное сейчас живёт только до закрытия вкладки.</span></div>${B(I('download',16)+'Сохранить копию','export','','small primary')}</div>`:'';
+ const unsaved=ui.unsaved?`<div class="banner card unsaved" data-key="unsaved">${emb('flag',{size:'s',state:'alert'})}<div class="grow"><b>Дневник не сохраняется</b><span class="meta">Память браузера заполнена или запись запрещена. Сделанное сейчас живёт только до закрытия вкладки.</span></div>${B(I('download',16)+'Сохранить копию','export','','small primary')}</div>`:'';
  return `<div class="shell${showLive?' has-live':''}">
  <aside class="side"><div class="brand"><span class="mark">${I('journal',20)}</span><div><b>Дневник</b><span class="caption">тренировки · привычки</span></div></div>
   <nav class="nav" aria-label="Разделы"><a href="index.html">${I('back',20)}<span>Клуб</span></a>${links('nav')}</nav>
@@ -2962,6 +3198,7 @@ const ACTIONS={
  import:()=>$('#import').click(),
  'trash-restore':id=>commit(s=>D.ops.restore(s,id),{toast:'Вернули'}),
  'example-open':()=>{closeSheet();example=D.example();ui.day=D.today();go('today')},
+ 'example-info':()=>exampleSheet(),
  'example-exit':()=>{exitRehearsal(true);example=null;ui.day=D.today();ui.keep.clear();go('today')},
  undo:id=>undo(id),
  // ——— знакомство (09-learn.js) ———
