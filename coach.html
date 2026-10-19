@@ -1026,6 +1026,63 @@ details.more[open]>.field{margin-top:var(--s-2)}
 /* У клиента на телефоне стрелки полосы дней скрыты — ему нужна одна неделя. Тренеру
    в понедельник нужна смена воскресенья: отметить, кто пришёл на выходных. */
 @media (max-width:719px){.weekstrip>button{display:inline-flex;flex:none;min-width:32px;padding:0}.weekstrip .wdays{flex:1;min-width:0}}
+/* ——— Методика тренера (M) ———
+   Общий блок тренера и клиента: сборка методики и её вид у клиента. */
+.shead .backlink{padding-left:0}
+.mlist{display:flex;flex-direction:column;gap:var(--s-3)}
+.mitem{display:flex;flex-direction:column;gap:var(--s-2);padding:var(--s-3);border-radius:var(--r-card);background:var(--card);min-width:0}
+.mitem input,.mitem textarea{background:var(--surface)}
+.mrowin{display:flex;align-items:center;gap:var(--s-2);min-width:0}
+.mrowin>input{flex:1;min-width:0}
+.mnum{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--surface);font-size:var(--t-caption);font-weight:var(--w-bold);font-variant-numeric:tabular-nums}
+.macts{display:flex;flex:none}
+input.strong,textarea.strong{font-weight:var(--w-medium)}
+textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
+.mpts{display:flex;flex-direction:column;gap:var(--s-2);padding-left:34px;min-width:0}
+.mpt{display:flex;align-items:flex-start;gap:var(--s-2);min-width:0}
+.mpt>textarea{flex:1;min-width:0}
+.mdot{flex:none;width:5px;height:5px;border-radius:50%;background:var(--line-strong);margin-top:calc(var(--h-control)/2 - 2px)}
+.mneg{display:flex;gap:6px;align-items:flex-start;padding-left:13px}
+.mneg svg{margin-top:2px}
+.mmark{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--card);font-weight:var(--w-bold);color:var(--ink)}
+.mmark.is-base{background:var(--accent);color:var(--on-accent)}
+.mlrow>.rbody{flex:1;min-width:0}
+.mstate{padding:2px 8px;border-radius:var(--r-pill);background:var(--card)}
+.mstate.is-sent{background:var(--ok-veil);color:var(--ok)}
+.mstate.is-changed,.mstate.is-draft{background:var(--warn-veil);color:var(--warn)}
+.mchks{display:flex;flex-direction:column;gap:var(--s-2)}
+.mchk{display:flex;align-items:flex-start;gap:var(--s-2);font-size:var(--t-meta);color:var(--muted)}
+.mchk svg{margin-top:2px}
+.mchk.is-bad{color:var(--ink)}
+.mchk.is-bad svg{color:var(--alert)}
+.mhero h2{font-size:var(--t-title);margin-top:var(--s-1);overflow-wrap:anywhere}
+.mlead{color:var(--ink-soft);margin-top:var(--s-3);white-space:pre-line;max-width:62ch;overflow-wrap:anywhere}
+.panel>.mlead:first-child{margin-top:0}
+.mprinc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--s-3)}
+.mprinc li{display:flex;gap:var(--s-3);color:var(--ink-soft);overflow-wrap:anywhere}
+.mprinc li svg{margin-top:3px;color:var(--ink)}
+.mprinc b{color:var(--ink);font-weight:var(--w-bold)}
+.mcue{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--s-5)}
+.mcueh{display:flex;align-items:center;gap:var(--s-3)}
+.mcueh .mnum{background:var(--card)}
+.mdots{list-style:none;margin:var(--s-2) 0 0;padding:0 0 0 38px;display:flex;flex-direction:column;gap:var(--s-2)}
+.mdots li{position:relative;padding-left:14px;color:var(--ink-soft);overflow-wrap:anywhere}
+.mdots li::before{content:"";position:absolute;left:0;top:.62em;width:5px;height:5px;border-radius:50%;background:var(--line-strong)}
+.mrisks{display:flex;flex-direction:column;gap:var(--s-4)}
+.mrisk{padding-left:var(--s-3);border-left:2px solid var(--line-strong)}
+.mrisk b{display:block;font-weight:var(--w-bold)}
+.mrisk span{display:block;color:var(--ink-soft);font-size:var(--t-meta);margin-top:2px}
+.mbase{width:100%;text-align:left;border:0;cursor:pointer;color:inherit;font:inherit;display:flex;align-items:center;gap:var(--s-3);padding:var(--s-3) var(--s-4);background:var(--card);border-radius:var(--r-card)}
+.mbase:active{background:var(--press)}
+.mbase .grow b,.mbase .grow .meta{display:block}
+.mbase>.grow{flex:1 1 0;min-width:0;overflow-wrap:anywhere}
+.mnote b{display:block;font-weight:var(--w-medium)}
+.mread{display:flex;flex-direction:column;gap:var(--s-6);max-width:760px}
+.banner.mnew{display:flex;align-items:center;gap:var(--s-3);flex-wrap:wrap}
+.banner.mnew .grow b,.banner.mnew .grow .meta{display:block}
+@media (max-width:640px){.mpts,.mdots{padding-left:0}.shead .actions [data-action="method-send"]{display:none}}
+.mbtns{margin-top:var(--s-3)}
+.mitem .mbtns,.mpts .mbtns{margin-top:0}
 </style></head><body><div id="app"></div><dialog id="sheet" class="sheet"></dialog><div id="toast" class="toast" role="status" hidden></div><input id="import" type="file" accept="application/json,.json" hidden><script>/* ——— Домен v2 ———
    Данные клиента и все законы из UX-MECHANISM.md в виде чистых функций.
    Ни одного знания о DOM — файл целиком проверяется в Node (test-domain.cjs).
@@ -1036,6 +1093,111 @@ details.more[open]>.field{margin-top:var(--s-2)}
    §4.3 Подход засчитан, как только записан (doneAt), без «Завершить».
    §4.4 План ставит расписание: виртуальные тренировки на 7 дней, без дублей.
    §4.5 Серия — у каждой привычки своя. */
+
+/* ——— Методика тренера ———
+   Общий файл тренера и клиента. Тренер собирает методику в карточке клиента
+   и отправляет её — у клиента она появляется в разделе «Тренер».
+
+   Методика — это правила и линии движения: основа (общая часть любой линии)
+   и рабочие линии. У линии — фазы с указаниями, «что критично» и упражнения
+   с припиской про плоскость.
+   Правило формулировок самой методики: указание говорит, что сделать;
+   отрицание — только в «что критично», где описано последствие.
+
+   Пакет — то, что уходит от тренера к клиенту: методика, от кого, кому и когда.
+   «Кому» — имя и дата начала из дневника клиента: своего номера у дневника нет.
+   Ни одного знания о DOM и хранилище: файл целиком проверяется в Node. */
+const M=(()=>{
+ const KIND='xeptra.method',VERSION=1;
+ const uid=p=>p+Math.random().toString(36).slice(2,9);
+ const str=v=>typeof v==='string'?v:'';
+ const has=v=>!!str(v).trim();
+ const norm=s=>str(s).replace(/ё/g,'е').toLowerCase().trim();
+ const KINDS={base:'Основа',work:'Линия'};
+
+ /* Стартовая методика — «Система силы» из дневника тренировки: основа и пять линий. */
+ const SEED={"t":"Система силы","i":"Как мы двигаемся на тренировке. Каждое упражнение относится к одной из линий: внутри линии задача одна, меняется только плоскость. Основа — общая часть, с неё начинается любая линия.","p":[["Линия, а не упражнение.","Внутри линии задача одна, меняется только плоскость. У упражнения остаётся короткая приписка про его плоскость."],["Сначала основа.","Нейтральная спина, напряжённый живот и собранное тело — до того, как снаряд начал двигаться."],["Указание говорит, что сделать.","Отрицание допустимо только в блоке «что критично», где описывается последствие."],["Программа — это потолок.","В тяжёлый день план снижается, выше программы он не поднимается. Прогрессию ставит тренер."]],"l":[["base","Основа","С этого начинается любая линия. Дальше к нему добавляется то, что нужно жиму, тяге, опоре, тазу или кору.",[["Нейтральное положение позвоночника",["Спина сохраняет свои естественные изгибы: небольшой прогиб в пояснице, мягкое округление в грудном отделе, шея — продолжение спины","Рёбра смотрят вниз и стоят ровно над тазом","Таз стоит ровно: тазовые косточки и лобковая кость в одной вертикальной плоскости","Подбородок слегка к себе, взгляд перед собой","Проверка: форма спины одинакова внизу, в середине и вверху движения","В мосту и в упражнениях на кор таз сознательно отводят от этого положения — об этом сказано в самой линии"]],["Напряжённый живот",["Неглубокий вдох в живот и напрячь его так, будто готовишься принять толчок в живот","Напряжение идёт по кругу: спереди, по бокам и в пояснице; живот становится плотным и остаётся на месте","Держится весь подход, дыхание при этом продолжается — выдох приходится на усилие","Профессионально это называют брейсингом — напряжением брюшной стенки"]],["Собранное тело",["Точки опоры выбраны до начала движения и держатся до конца подхода: то, что касается опоры, остаётся прижатым","В исходном положении плечи лежат низко, шея длинная","Тело статически собрано раньше, чем снаряд начал двигаться"]]],[["Спина держит одну и ту же форму под нагрузкой","Когда спина меняет форму под весом, усилие уходит в её удержание, а не в работу мышц: вес растёт, результата нет. И это то место, где поясница быстрее всего устаёт и начинает о себе напоминать."],["Живот напряжён весь подход","Без напряжения корпус проседает, и поясница берёт на себя то, что должны были взять ноги или спина. Вес перестаёт расти, а поясница забивается к третьей серии."],["Точки опоры держатся до конца подхода","Если тело «гуляет», часть усилия уходит в удержание равновесия вместо мышцы. Снаружи это выглядит как подход, внутри работы почти нет."]],[]],["work","Жим","",[["Исходное положение",["Тело имеет жёсткую опору. Лёжа — лопатки, таз и стопы прижаты. Сидя в тренажёре (грудной хаммер) — спина и таз к спинке, стопы в полу. Стоя — стопы и напряжённый живот","Лопатки заняли своё положение и держат его до конца подхода","Предплечье вертикально под снарядом: кисть над локтем, локоть под кистью","Локти идут ближе к корпусу, под снарядом","Кисть и предплечье — одна прямая линия, запястье держится прямым","Живот напряжён, рёбра опущены"]],["Выжимание · рабочая фаза",["Кисть остаётся над локтем всю траекторию","Кисть напряжена, давление распределено по всей ладони","Локти останавливаются чуть раньше полного выпрямления — натяжение сохраняется","Опора, лопатки и форма корпуса остаются теми же, что в исходном"]],["Возврат · уступающая фаза",["Тот же маршрут в обратную сторону, под контролем","Возврат ровно в ту точку, с которой начали","Опора и положение лопаток держатся до конца подхода"]]],[["Кисть стоит над локтем","Как только предплечье наклонилось, часть веса уходит в запястье и плечевой сустав. Жать становится тяжелее при том же весе, а запястье начинает ныть."],["Локти держатся ближе к корпусу","Разведённые в стороны локти ставят плечо в самое невыгодное для сустава положение. Это та самая боль в передней части плеча, которая потом месяцами мешает жать."],["Лопатки остаются на месте","Когда они уезжают вперёд, плечо выкатывается, и работу у грудных забирают передние дельты. Вес на снаряде растёт, грудь остаётся прежней."],["Таз и поясница остаются прижатыми к опоре","Отрыв превращает жим в другое движение с коротким ходом: цифра выше, работы в грудных меньше, поясница грузится зря."]],[["Жим гантелями","Горизонтальная плоскость, свободный вес: лопатки сведены и прижаты к скамье"],["Жим в тренажере","Сидя, грудной хаммер: спина и таз к спинке, сиденье отрегулировано так, чтобы рукояти были на уровне середины груди"],["Жим вверх","Плоскость вертикальная: здесь лопатки уходят вверх и разворачиваются вместе с руками — это их рабочее положение. Рёбра держатся опущенными, корпус стоит вертикально"]]],["work","Тяга","",[["Исходное положение",["Положение зависит от снаряда: стоя со свободным весом, сидя в тренажёре, в наклоне — собираемся при этом всегда одинаково","Нейтральное положение позвоночника, живот напряжён","Взяли снаряд и заняли положение уже с весом: тело статически собрано до начала движения","Плечи чуть уводятся вперёд — лопатки расходятся, это даёт запас амплитуды","Вперёд уходят именно лопатки, грудной отдел при этом сохраняет свою форму","Руки прямые, снаряд натягивает","Кисть держит крепко, запястье прямое: кисть работает как крюк, а тянет спина"]],["Притягивание · рабочая фаза",["Плечи уводятся назад за счёт сведения лопаток — лопатки идут первыми","Примерно на трёх четвертях пути подключаются локти","Локти идут вдоль корпуса: кисть над локтем, локоть под кистью","В конце живот держит напряжение, грудь раскрывается вверх — лопатки доводятся до конца, и нагрузка ложится на широчайшие","Грудь поднимается грудным отделом, поясница остаётся в том же положении, что в исходном"]],["Возврат · уступающая фаза",["Тот же маршрут назад: сначала разгибаются локти, затем лопатки отпускаются вперёд","Корпус остаётся на месте — вес возвращают руки и лопатки","Возврат под контролем, до полного растяжения"]]],[["Лопатки начинают движение раньше рук","Если тянуть сразу локтями, работу забирают бицепс и предплечья. Хват сдаётся раньше спины, и спина до работы так и не доходит."],["Корпус держит один и тот же наклон весь подход","Раскачка подменяет мышцы инерцией. Вес растёт, спина — нет, а поясница получает рывковую нагрузку на каждом повторе."],["Вперёд уходят лопатки, грудной отдел держит форму","Если под весом круглится грудной отдел, растяжение идёт в связки, а не в мышцу. Это главный риск именно в тяге со свободным весом в наклоне."],["В конце движения поднимается грудь","Это самая частая подмена в тяге: вместо того чтобы раскрыть грудь, человек просто прогибается поясницей. Со стороны разница небольшая, а поясница при этом складывается под весом каждый повтор. За тренировку таких повторов набирается сорок-пятьдесят — отсюда и ноющая спина к вечеру."],["Тянут лопатки и спина","Если тянуть кистью и руками, предплечья и бицепс сдаются раньше спины. Хват разжимается, подход кончается — а спина до работы так и не дошла."]],[["Тяга в наклоне","Таз назад, корпус наклонён — этот наклон держится всю серию"],["Вертикальная тяга","Бёдра под валиками, корпус чуть отклонён назад и зафиксирован"],["Горизонтальная тяга","Корпус вертикально, стопы в упоре, рукоять к низу живота"],["Вертикальная тяга / подтягивания","В подтягиваниях опору даёт напряжённый живот: корпус висит одной линией и держит её весь подход"]]],["work","Опора","",[["Исходное положение",["Вес распределён по всей стопе: пятка, основание большого пальца и основание мизинца давят в пол одинаково","Колени мягкие, чуть согнуты","Нейтральное положение позвоночника, живот напряжён","Тело собрано и готово работать до того, как пошло движение"]],["Опускание · уступающая фаза",["Колени идут строго по направлению носков","Работаем в комфортной амплитуде: до параллели бедра с полом, чуть выше — тоже рабочая глубина","Нижняя точка — там, где таз ещё держит своё положение; обычно её и задаёт параллель","Опора на всю стопу сохраняется всю дорогу"]],["Подъём · рабочая фаза",["Колени разгибаются и спина возвращается в нейтральное положение одновременно — это ключевое","Таз и грудь идут вверх с одной скоростью","В верхней точке спина в нейтральном положении, поясница в своём обычном изгибе"]]],[["Колени идут по направлению носков","Колено, ушедшее внутрь, разворачивает нагрузку поперёк сустава: ягодичные выключаются, а колено берёт её боком. Одно такое повторение проходит без следа, а закреплять его подходами уже лишнее."],["Колени и спина разгибаются одновременно","Если таз пошёл раньше корпуса, вес переезжает на поясницу и движение заканчивается спиной. Ноги при этом недополучают работу."],["Опора на всю стопу","Толчок пяткой или уход на носок смещает нагрузку на колено. Таз и бедро работают вполсилы, колено — за двоих."],["Глубина до той точки, где таз держит положение","За этой границей таз подворачивается и поясница круглится под весом. Лишние сантиметры глубины того не стоят."]],[["Выпады","Шаг такой длины, чтобы оба колена согнулись до прямого угла; заднее колено опускается вниз, к полу"],["Присед со штангой","Гриф на трапециях, локти под грифом, запястья прямые"],["Жим ногами","Поясница прижата к спинке весь подход: там, где таз начинает подворачиваться, и есть нижняя точка"]]],["work","Таз","",[["Исходное положение",["Живот напряжён, рёбра опущены","Таз занимает то положение, при котором поясница остаётся спокойной: в мосту это лёгкий подкрут, в румынской — нейтраль","Опора по движению: пятки в мосту, вся стопа в румынской, спинка в тренажёре","Тело собрано до начала движения"]],["Рабочая фаза",["Движение ведут ягодичные: таз выходит вперёд или бедро отводится — работа идёт от таза","Амплитуда полная, но до границы: до выпрямления таза или до натяжения задней поверхности бедра","Поясница сохраняет своё положение всю дорогу","Пауза в крайней точке и дожим"]],["Возврат · уступающая фаза",["Опускание под контролем, натяжение сохраняется","Положение таза и рёбер то же, что в исходном","Внизу остаётся лёгкое натяжение — мышцы держатся включёнными"]]],[["Таз выводят ягодичные","Поясница короче и сильнее в этом движении, поэтому она охотно забирает работу. Итог: поясница забита, ягодичные стоят на месте при растущем весе."],["Рёбра остаются опущенными в верхней точке","Раскрытые рёбра означают, что прогиб ушёл в поясницу. Внешне таз выпрямлен, фактически выпрямлена спина."],["Амплитуда заканчивается там, где таз держит положение","Выше линии в мосту и ниже натяжения в румынской работу берёт спина. Границу задаёт не гибкость, а то, докуда держится положение таза."],["Вес опускается под контролем","Сброшенный вниз вес отнимает самую ценную часть работы — уступающую. Нагрузка падает, а суставы получают удар."]],[["Ягодичный мост","Край скамьи под нижним краем лопаток, голень вертикальна в верхней точке"],["Махи в тренажере",""],["Румынская со штангой","Колени берут сгиб в начале и держат его всю амплитуду; штанга скользит вплотную по бедру"],["Ягодичный мост в тренажере","Упор приходится под нижний край лопаток, голень вертикальна вверху"],["Разведение ног в тренажере","Корпус прижат к спинке весь подход; вес возвращается почти до стойки и останавливается чуть раньше — натяжение сохраняется"],["Мост / румынская тяга","Движение на выбор по самочувствию, вес лёгкий: задача — закрыть неделю и оставить запас"]]],["work","Кор","",[["Исходное положение",["Поясница заняла своё положение — прижата или нейтральна — и дальше его держит","Таз занимает то положение, при котором поясница остаётся спокойной: в планке и мёртвом жуке это лёгкий подкрут","Рёбра опущены, живот напряжён","Дыхание ровное и продолжается весь подход"]],["Рабочая фаза",["Задача — удержать позвоночник в одном положении: это работа на удержание, а движение дают руки и ноги","Амплитуда ровно такая, при которой поясница держится","Темп медленный и ровный, движение ведут мышцы"]],["Критерий остановки",["Как только поясница оторвалась или таз провис — подход закончен","Качество важнее времени и счёта"]]],[["Поясница держит своё положение","Как только она сдвинулась, работу забирает она же — и кор тренируется ровно до этой секунды. Всё, что после, идёт в поясницу."],["Дыхание идёт ровно весь подход","Задержка на фоне напряжения поднимает давление: темнеет в глазах и кружится голова. Дышать ровно важнее, чем достоять до числа."],["Подход заканчивается там, где теряется положение","Три минуты с провисшим тазом тренируют терпение, а не кор. Сорок секунд с удержанием дают больше, чем три минуты «как получится»."]],[["Планка + боковая планка","Локоть строго под плечом, тело в одну линию от головы до пяток. Три минуты — ориентир: подход заканчивается там, где таз перестал держаться"],["Мертвый жук","Опускаются противоположные рука и нога, поясница прижата к полу"],["Русские повороты","Поворот идёт от грудного отдела, таз неподвижен"]]]]};
+ function seed(){return clean({title:SEED.t,intro:SEED.i,principles:SEED.p.map(([h,t])=>({h,t})),
+  lines:SEED.l.map(([kind,title,lead,ph,rk,ex])=>({kind,title,lead,
+   phases:ph.map(([label,pts])=>({label,points:pts.map(text=>({text}))})),
+   risks:rk.map(([must,then])=>({must,then})),exercises:ex.map(([name,note])=>({name,note}))}))})}
+ const blank=()=>({version:VERSION,title:'',intro:'',principles:[],lines:[]});
+ const NEW={
+  principle:()=>({id:uid('mp'),h:'',t:''}),
+  point:()=>({id:uid('mt'),text:''}),
+  phase:()=>({id:uid('mf'),label:'',points:[NEW.point()]}),
+  risk:()=>({id:uid('mr'),must:'',then:''}),
+  exercise:()=>({id:uid('mx'),name:'',note:''}),
+  line:kind=>({id:uid('ml'),kind:kind==='base'?'base':'work',title:'',lead:'',
+   phases:['Исходное положение','Рабочая фаза','Возврат'].map(label=>({...NEW.phase(),label})),risks:[],exercises:[]}),
+ };
+
+ /* Чистка: всё, что пришло (копия, пакет, старая версия), приводится к одной форме.
+    Не методика (нет списка линий) — null. У каждой строки свой id: по нему экран
+    узнаёт строку и не путает поля при перестановке. */
+ function clean(x){if(!x||typeof x!=='object'||!Array.isArray(x.lines))return null;
+  const id=(v,p)=>has(v)?v:uid(p),list=v=>Array.isArray(v)?v.filter(y=>y&&typeof y==='object'):[];
+  return {version:VERSION,title:str(x.title),intro:str(x.intro),
+   principles:list(x.principles).map(p=>({id:id(p.id,'mp'),h:str(p.h),t:str(p.t)})),
+   lines:list(x.lines).map(l=>({id:id(l.id,'ml'),kind:l.kind==='base'?'base':'work',title:str(l.title),lead:str(l.lead),
+    phases:list(l.phases).map(f=>({id:id(f.id,'mf'),label:str(f.label),
+     points:(Array.isArray(f.points)?f.points:[]).map(t=>typeof t==='string'?{id:uid('mt'),text:t}:{id:id(t?.id,'mt'),text:str(t?.text)})})),
+    risks:list(l.risks).map(r=>({id:id(r.id,'mr'),must:str(r.must),then:str(r.then)})),
+    exercises:list(l.exercises).map(e=>({id:id(e.id,'mx'),name:str(e.name),note:str(e.note)}))}))}}
+
+ const lineName=l=>str(l?.title).trim()||(l?.kind==='base'?'Основа':'Линия без названия');
+ const neg=t=>/^(не|нельзя|никогда|избега|без)\s/i.test(str(t).trim()+' ');
+ const filled=list=>list.filter(x=>has(x.text));
+
+ /* Что мешает отправить: клиенту нельзя отдать пустую фазу или линию без названия.
+    go — линия, где это поправить (null — общее). */
+ function errors(m){const out=[];if(!m)return [{t:'Методики нет',go:null}];
+  if(!has(m.title))out.push({t:'Назовите методику',go:null});
+  if(!m.lines.length)out.push({t:'Добавьте хотя бы одну линию',go:null});
+  for(const l of m.lines){const n=`«${lineName(l)}»`;
+   if(!has(l.title))out.push({t:'У линии нет названия',go:l.id});
+   if(!l.phases.length)out.push({t:`${n}: нет ни одной фазы`,go:l.id});
+   l.phases.forEach((f,i)=>{if(!has(f.label))out.push({t:`${n}, фаза ${i+1}: нет названия`,go:l.id});
+    if(!filled(f.points).length)out.push({t:`${n}, фаза ${i+1}: нет ни одного указания`,go:l.id})})}
+  return out}
+ /* Подсказки — не мешают отправить, но говорят, где методика расходится со своими правилами. */
+ function hints(m){const out=[];if(!m)return out;
+  if(m.lines.filter(l=>l.kind==='base').length>1)out.push({t:'Основой отмечено несколько линий — клиенту будет предложена первая',go:null});
+  for(const l of m.lines){const n=`«${lineName(l)}»`;
+   l.phases.forEach((f,i)=>{const k=f.points.filter(p=>neg(p.text)).length;
+    if(k)out.push({t:`${n}, «${str(f.label).trim()||'фаза '+(i+1)}»: ${k===1?'указание начинается':'указания начинаются'} с запрета — лучше сказать, что сделать`,go:l.id})});
+   if(l.kind==='work'&&!l.risks.some(r=>has(r.must)))out.push({t:`${n}: не описано, что критично`,go:l.id});
+   l.risks.forEach((r,i)=>{if(has(r.must)!==has(r.then))out.push({t:`${n}, критично ${i+1}: заполнена одна часть из двух`,go:l.id})})}
+  return out}
+ function stats(m){let points=0,risks=0,exercises=0;
+  for(const l of m?.lines||[]){for(const f of l.phases)points+=filled(f.points).length;risks+=l.risks.filter(r=>has(r.must)).length;exercises+=l.exercises.filter(e=>has(e.name)).length}
+  return {lines:m?.lines.length||0,points,risks,exercises}}
+ const base=m=>m?.lines.find(l=>l.kind==='base')||null;
+ // Подпись содержания: изменилась ли методика после отправки. Сравнивается смысл, а не порядок полей.
+ const sig=m=>JSON.stringify(clean(m)?.lines.map(l=>[l.kind,l.title,l.lead,l.phases.map(f=>[f.label,f.points.map(p=>p.text)]),l.risks.map(r=>[r.must,r.then]),l.exercises.map(e=>[e.name,e.note])])??null)+'|'+JSON.stringify([m?.title,m?.intro,m?.principles?.map(p=>[p.h,p.t])]);
+
+ /* Текстом — для мессенджера: то же, что клиент видит на экране. */
+ function text(m){if(!m)return '';const o=[str(m.title).trim()||'Методика'];
+  if(has(m.intro))o.push('',m.intro.trim());
+  const pr=m.principles.filter(p=>has(p.h));
+  if(pr.length){o.push('','ПРАВИЛА');for(const p of pr)o.push(`• ${p.h.trim()}${has(p.t)?' '+p.t.trim():''}`)}
+  for(const l of m.lines){o.push('',`━━ ${lineName(l).toUpperCase()} ━━`);if(has(l.lead))o.push(l.lead.trim());
+   l.phases.forEach((f,i)=>{o.push('',`${i+1}. ${f.label.trim()}`);for(const p of filled(f.points))o.push(`   • ${p.text.trim()}`)});
+   const rs=l.risks.filter(r=>has(r.must));if(rs.length){o.push('','Что критично:');for(const r of rs)o.push(`   ! ${r.must.trim()}${has(r.then)?' — '+r.then.trim():''}`)}
+   const ex=l.exercises.filter(e=>has(e.name));if(ex.length){o.push('','Упражнения:');for(const e of ex)o.push(`   – ${e.name.trim()}${has(e.note)?': '+e.note.trim():''}`)}}
+  return o.join('\n')}
+
+ // ——— пакет: от тренера к клиенту ———
+ const packet=(m,{from='',to={},at})=>({kind:KIND,version:VERSION,from:str(from),to:{name:str(to.name),started:str(to.started)},at,method:clean(m)});
+ function unpack(x){if(!x||typeof x!=='object'||x.kind!==KIND)return {error:'Это не методика от тренера'};
+  const m=clean(x.method);if(!m)return {error:'Методика в пакете повреждена'};
+  if(errors(m).length)return {error:'Методика в пакете не дособрана: '+errors(m)[0].t};
+  return {ok:true,method:m,from:str(x.from),at:str(x.at),to:{name:str(x.to?.name),started:str(x.to?.started)}}}
+ // Кому адресован: то же имя; дата начала сверяется, когда она есть у обоих.
+ const forMe=(p,profile)=>!!p&&!!norm(p.to?.name)&&norm(p.to.name)===norm(profile?.name)&&(!p.to.started||!profile?.started||p.to.started===profile.started);
+
+ return {KIND,KINDS,seed,blank,NEW,clean,errors,hints,stats,base,sig,text,lineName,neg,packet,unpack,forMe,norm};
+})();
 
 const D=(()=>{
  const VERSION=2;
@@ -1258,7 +1420,7 @@ const D=(()=>{
   need(s.version===VERSION,'Неизвестная версия базы');
   for(const k of ['plans','workouts','habits','todos','metrics','notes','questions','trash','closed'])need(Array.isArray(s[k]),`Нет списка ${k}`);
   need(s.profile&&typeof s.profile.name==='string','Профиль');if(s.profile&&s.profile.startedAt!=null)need(isTime(s.profile.startedAt),'Профиль: время начала');
-  if(s.profile&&s.profile.learn!=null)need(typeof s.profile.learn==='object'&&Object.entries(s.profile.learn).every(([k,v])=>LEARN.some(x=>x.id===k)&&(isDate(v)||v==='skip')),'Знакомство: отметки');need(s.coach&&typeof s.coach==='object','Тренер');
+  if(s.profile&&s.profile.learn!=null)need(typeof s.profile.learn==='object'&&Object.entries(s.profile.learn).every(([k,v])=>LEARN.some(x=>x.id===k)&&(isDate(v)||v==='skip')),'Знакомство: отметки');need(s.coach&&typeof s.coach==='object','Тренер');if(s.coach&&s.coach.method!=null)need(!!M.clean(s.coach.method),'Методика тренера повреждена');
   if(err.length)return err;
   for(const w of s.workouts){id(w,'Тренировка');need(isDate(w.date)&&isTime(w.time),'Тренировка: дата и время');need(typeof w.title==='string'&&w.title.trim(),'Назовите тренировку');
    need(['planned','active','done','skipped'].includes(w.status),'Тренировка: статус');need(Number.isInteger(w.feel)&&w.feel>=0&&w.feel<=5,'Самочувствие');
@@ -1365,6 +1527,9 @@ const D=(()=>{
   // Корзина: удалённое живёт неделю и возвращается на место.
   trash(s,list,id){const i=s[list].findIndex(x=>x.id===id);if(i<0)return null;const [item]=s[list].splice(i,1);s.trash.push({id:uid('x'),list,item,deletedAt:stamp()});return item},
   restore(s,trashId){const i=s.trash.findIndex(x=>x.id===trashId);if(i<0)return false;const [x]=s.trash.splice(i,1);s[x.list].push(x.item);return true},
+  // Методика от тренера (M): приходит пакетом и заменяет прежнюю; дата и автор — из пакета.
+  acceptMethod(s,p){const m=M.clean(p?.method);if(!m||M.errors(m).length)return null;s.coach.method=m;s.coach.methodAt=String(p.at||stamp());s.coach.methodFrom=String(p.from||'');if(!s.coach.name&&p.from)s.coach.name=String(p.from);return true},
+  dropMethod(s){if(!s.coach.method)return false;delete s.coach.method;delete s.coach.methodAt;delete s.coach.methodFrom;return true},
  };
  /* Один вход в операции (ARCH-AUDIT К1, INVARIANT §4): имя + аргументы + кто делает.
     Отсюда же будет работать сервер и другие роли: клиент шлёт имя операции, а не правку данных. */
@@ -1926,7 +2091,7 @@ const CD=(()=>{
     need(!r.until||D.isDate(r.until),'Ответ: дата договорённости')}
    for(const x of c.sessions||[]){need(x.mark in MARKS,'Отметка: неизвестный вид');need(D.isDate(x.date),'Отметка: дата');
     need(typeof x.wid==='string'&&x.wid,'Отметка: занятие')}
-   need(Array.isArray(c.planLog),'Клиент: история плана');need(!c.copyAt||D.isDate(c.copyAt),'Клиент: дата копии');
+   need(Array.isArray(c.planLog),'Клиент: история плана');need(c.method==null||!!M.clean(c.method),'Клиент: методика');need(c.methodSent==null||(typeof c.methodSent.at==='string'&&typeof c.methodSent.sig==='string'),'Клиент: отправка методики');need(!c.copyAt||D.isDate(c.copyAt),'Клиент: дата копии');
    for(const v of c.planLog||[])need(D.isDate(v.from)&&D.isDate(v.to)&&v.from<=v.to&&Array.isArray(v.days),'История плана: версия');
    const e=D.validate(c.record);if(e.length)err.push(`${c.name}: ${e[0]}`)}
   /* Ответы недели ссылаются на клиентов — живых или лежащих в корзине: мягкое удаление
@@ -1938,6 +2103,11 @@ const CD=(()=>{
   if(s.profile.learn!=null)need(typeof s.profile.learn==='object'&&Object.entries(s.profile.learn).every(([k,v])=>LEARN.some(x=>x.id===k)&&(D.isDate(v)||v==='skip')),'Знакомство: отметки');
   const T=th(s);for(const [k,v] of Object.entries(T))need(typeof v==='number'&&v>0&&k in TH,`Порог «${TH_LABEL[k]||k}» — число больше нуля`);
   return err}
+
+ // Методика клиента: нет / не отправлена / у клиента / изменена после отправки.
+ function methodState(c){if(!c.method)return 'none';if(!c.methodSent)return 'draft';return c.methodSent.sig===M.sig(c.method)?'sent':'changed'}
+ // Кому пакет: имя и дата начала так, как они записаны в дневнике клиента (как у копий).
+ const methodTo=c=>({name:c.record.profile?.name||c.name,started:c.record.profile?.started||''});
 
  /* ——— операции ———
     Всё, что меняет данные, живёт здесь: экран только вызывает. Тренер пишет
@@ -2025,6 +2195,12 @@ const CD=(()=>{
   setThreshold(s,key,value){if(!(key in TH))return false;const v=Number(value);if(!(v>0))return false;
    s.profile.thresholds={...th(s),[key]:Math.round(v)};return true},
   setProfile(s,key,value){if(!['name','club'].includes(key))return false;s.profile[key]=String(value).trim();return true},
+  /* Методика (M) — факт тренера: живёт в карточке клиента и пишется сразу.
+     Клиенту уходит только отправкой: правка после неё не трогает то, что у клиента. */
+  setMethod(s,id,m){const c=client(s,id),x=M.clean(m);if(!c||!x)return null;c.method=x;return true},
+  dropMethod(s,id){const c=client(s,id);if(!c||!c.method)return false;delete c.method;delete c.methodSent;return true},
+  // Отправить можно только дособранную: пустая фаза клиенту не поможет.
+  sendMethod(s,id,at){const c=client(s,id);if(!c||!c.method||M.errors(c.method).length||typeof at!=='string')return null;c.methodSent={at,sig:M.sig(c.method)};return true},
  };
  // Один вход в операции — как у клиента: имя, аргументы, кто делает (ARCH: D.apply).
  function apply(s,name,args=[],ctx={}){const op=ops[name];if(!op)return {ok:false,error:`Нет операции ${name}`};
@@ -2109,7 +2285,7 @@ const CD=(()=>{
   s.weeks.push({week:prev,answers:Object.fromEntries(s.clients.slice(0,6).map(c=>[c.id,'work'])),closedAt:null});
   return s}
 
- return {VERSION,TH,TH_LABEL,ANSWERS,STATUS,REACH,MARKS,statusText,empty,migrate,th,client,stepOf,match,CHAPTERS,LEARN,learned,learnAvail,copyCandidates,copyDiff,autoMatch,
+ return {methodState,methodTo,VERSION,TH,TH_LABEL,ANSWERS,STATUS,REACH,MARKS,statusText,empty,migrate,th,client,stepOf,match,CHAPTERS,LEARN,learned,learnAvail,copyCandidates,copyDiff,autoMatch,
   done,lastWorkout,gapDays,sinceDays,firstMonth,lastAnswer,pause,status,why,newAtRisk,plateau,planEdited,planAge,habits,noFeedback,progress,prep,nextSession,
   visits,copyAge,lastReach,activeReach,reachText,sessionMark,recordOn,scheduleOn,unconfirmed,
   shift,weekLoad,weekDate,weekOf,weekClosed,frozen,openWeeks,closeState,weekReview,reviewText,tails,hypothesis,findCopy,validate,ops,apply,studio};
@@ -2143,7 +2319,7 @@ const view=()=>example||state;
 
 /* ui — всё, что знает интерфейс. В данные ничего из этого не попадает. */
 let ui={
- route:'shift',id:null,      // раздел и открытый клиент
+ route:'shift',id:null,mline:null,mview:'edit',      // раздел и открытый клиент
  day:D.today(),              // какой день показывает смена
  week:D.weekStart(D.today()),weekTouched:false, // какая неделя открыта и листал ли её тренер сам
  seg:prefs.seg||'all',       // сегмент списка клиентов
@@ -2589,7 +2765,7 @@ function clientScene(id){const s=view(),c=CD.client(s,id||'');
   <div class="actions">${B(I('send',16)+'Связался','reach-new',c.id,'small')}${B(I('note',16)+'Заметка','note-new',c.id,'small')}${B(I('copy',16)+'К разговору','talk',c.id,'small primary')}</div></header>`;
  return `<section class="scene">${head}
  <div class="cols"><div class="stack">${prepPanel(c,p)}${sessionsPanel(s,c,t)}${habitsPanel(s,c)}${notesPanel(c)}</div>
- <div class="stack">${progressPanel(s,c,pr)}${reachPanel(c,t)}${planPanel(s,c)}</div></div></section>`}
+ <div class="stack">${progressPanel(s,c,pr)}${reachPanel(c,t)}${methodPanel(s,c)}${planPanel(s,c)}</div></div></section>`}
 
 /* Что сделано по сигналу (И-9): ответ тренера с датой. Виден в карточке и уходит в сводку. */
 function reachPanel(c,t){const l=[...(c.reaches||[])].sort((a,b)=>(b.date+b.at).localeCompare(a.date+a.at));
@@ -2642,6 +2818,183 @@ function notesPanel(c){const l=[...(c.notes||[])].reverse();
  return `<section class="panel"><div class="phead"><h2>Мои заметки</h2>${B(I('plus',16),'note-new',c.id,'icon small ghost','aria-label="Новая заметка"')}</div>
  ${l.length?`<div class="rows compact">${l.slice(0,8).map(n=>`<div class="mnote" data-key="${n.id}"><div class="mnhead"><span class="caption">${D.fmtDate(n.date)}</span>${B(I('trash',15),'note-del',n.id,'icon small ghost',`data-c="${c.id}" aria-label="Удалить заметку"`)}</div><p>${esc(n.text)}</p></div>`).join('')}</div>`
  :`<p class="meta">Пусто. Заметка — это то, что нужно помнить к следующему разу: травма, обещание, настроение.</p>`}</section>`}
+
+/* ——— Методика клиента (M) ———
+   Тренер собирает методику прямо в карточке клиента: правила, основа и линии,
+   у линии — фазы с указаниями, что критично и упражнения с припиской.
+   Всё пишется сразу, как остальной дашборд; клиенту уходит только по кнопке
+   «Отправить клиенту» — до этого у него остаётся прежняя версия. */
+const M_STATE={none:'Нет',draft:'Не отправлена',sent:'У клиента',changed:'Изменена'};
+const M_FIRST={principle:'.h',point:'.text',phase:'.label',risk:'.must',exercise:'.name'};
+const M_GONE={principles:'Правило убрано',points:'Указание убрано',phases:'Фаза убрана',risks:'Пункт убран',exercises:'Упражнение убрано',lines:'Линия удалена'};
+// Общий ящик пакетов «тренер → клиент» на этом устройстве: дневник клиента читает его сам.
+const OUTBOX='xeptra.outbox';
+function methodSub(c){const st=CD.methodState(c),at=c.methodSent?D.fmtShort(c.methodSent.at.slice(0,10)):'';
+ return st==='sent'?`у клиента с ${at}`:st==='changed'?`изменена после отправки ${at} — у клиента прежняя`:st==='draft'?'клиент её ещё не видел':'не собрана'}
+
+function methodPanel(s,c){const m=c.method;
+ if(!m)return `<section class="panel" data-key="method"><div class="phead"><h2>Методика</h2></div>
+  <p class="meta">Как клиент двигается на тренировке: правила, основа и линии — жим, тяга, опора. После отправки она появится у клиента в разделе «Тренер».</p>
+  <div class="btnrow mbtns">${B(I('plus',16)+'Собрать методику','method-open',c.id,'small')}</div></section>`;
+ const st=CD.methodState(c),n=M.stats(m);
+ return `<section class="panel" data-key="method"><div class="phead"><h2>Методика</h2><span class="ptag mstate is-${st}">${M_STATE[st]}</span></div>
+  <div class="rows"><button type="button" class="row planrow" data-action="method-open" data-id="${c.id}" data-key="mopen"><span class="rbody"><span class="rt">${esc(m.title.trim()||'Без названия')}</span><span class="rm">${n.lines} ${plural(n.lines,'линия','линии','линий')} · ${n.points} ${plural(n.points,'указание','указания','указаний')}</span></span>${I('chev',18)}</button></div>
+  <p class="caption footnote">${esc(methodSub(c)[0].toUpperCase()+methodSub(c).slice(1))}</p>
+  ${st==='draft'||st==='changed'?`<div class="btnrow mbtns">${B(I('send',16)+'Отправить клиенту','method-send',c.id,'small primary')}</div>`:''}</section>`}
+
+function methodScene(id){const s=view(),c=CD.client(s,id||'');
+ if(!c)return `<section class="scene">${sceneHead('Методика','Клиент не найден','',B('К списку','go','clients','small'))}</section>`;
+ const m=c.method,line=m&&ui.mline?m.lines.find(l=>l.id===ui.mline)||null:null,st=CD.methodState(c),client=ui.mview==='client';
+ const back=line?B(I('back',16)+'Методика','m-home','','small ghost backlink'):B(I('back',16)+esc(c.name),'client-open',c.id,'small ghost backlink');
+ const actions=m?`<div class="seg mini" role="group" aria-label="Вид">${B('Собрать','m-view','edit',client?'':'is-on',`aria-pressed="${!client}"`)}${B('Как у клиента','m-view','client',client?'is-on':'',`aria-pressed="${client}"`)}</div>
+  ${B(I('send',16)+(st==='sent'?'Отправить ещё раз':'Отправить клиенту'),'method-send',c.id,st==='sent'?'small':'small primary')}`:'';
+ const head=`<header class="shead client"><div class="grow"><div class="kicker">${back}</div>
+  <h1>${esc(line?M.lineName(line):m?(m.title.trim()||'Методика'):'Методика')}</h1><p class="sub">${line?`${M.KINDS[line.kind]} · `:''}Клиент: ${esc(c.name)} · ${esc(methodSub(c))}</p></div><div class="actions">${actions}</div></header>`;
+ let body;
+ if(!m)body=`<div class="cols"><div class="stack">${methodStart(s,c)}</div><div class="stack">${methodHow()}</div></div>`;
+ else if(client)body=`<div class="cols"><div class="stack">${line?methodReadLine(m,line):methodReadHome(m)}</div><div class="stack">${methodSendPanel(c)}</div></div>`;
+ else body=`<div class="cols"><div class="stack">${line?methodLineEditor(m,line):methodEditor(m)}</div><div class="stack">${methodCheck(c,line)}${methodSendPanel(c)}</div></div>`;
+ return `<section class="scene">${head}${body}</section>`}
+
+function methodStart(s,c){const others=s.clients.filter(x=>x.id!==c.id&&x.method);
+ const row=(id,t,sub)=>`<button type="button" class="row planrow" data-action="method-start" data-id="${esc(id)}" data-key="ms${esc(id)}"><span class="rbody"><span class="rt">${t}</span><span class="rm">${sub}</span></span>${I('chev',18)}</button>`;
+ return `<section class="panel" data-key="mstart"><div class="phead"><h2>С чего начать</h2></div>
+ <p class="meta">Возьмите основу и поправьте под этого клиента — с нуля писать не нужно.</p>
+ <div class="rows">${row('seed','«Система силы»','Основа и пять линий: жим, тяга, опора, таз, кор — с фазами и что критично')}
+ ${others.map(x=>row(x.id,`Как у ${esc(x.name)}`,`«${esc(x.method.title||'Без названия')}» · ${M.stats(x.method).lines} ${plural(M.stats(x.method).lines,'линия','линии','линий')}`)).join('')}
+ ${row('blank','С чистого листа','Пустая методика: правила и линии добавите сами')}</div></section>`}
+function methodHow(){return `<section class="panel" data-key="mhow"><div class="phead"><h2>Как это устроено</h2></div><ul class="mprinc">
+ <li>${I('list',16)}<span><b>Линия, а не упражнение.</b> Жим, тяга, опора — внутри линии задача одна, меняется только плоскость. Основа — общая часть всех линий.</span></li>
+ <li>${I('journal',16)}<span><b>Фазы и указания.</b> Исходное, рабочая фаза, возврат — и в каждой то, что сделать.</span></li>
+ <li>${I('flag',16)}<span><b>Что критично.</b> Что держится — и что будет, если нет. Здесь говорят о последствиях.</span></li>
+ <li>${I('send',16)}<span><b>Отправить клиенту.</b> Методика появится у него в разделе «Тренер».</span></li></ul></section>`}
+
+// Поле методики: пишется сразу (с паузой на набор); путь — внутри c.method.
+function mIn(path,value,ph,{label='',multi=false,strong=false,aria=''}={}){
+ const a=label?'':` aria-label="${esc(aria||ph)}"`;
+ const inp=multi?`<textarea class="mta${strong?' strong':''}" data-mf="${path}" rows="1" placeholder="${esc(ph)}"${a}>${esc(value)}</textarea>`
+  :`<input class="${strong?'strong':''}" data-mf="${path}" value="${esc(value)}" placeholder="${esc(ph)}"${a} autocomplete="off">`;
+ return label?`<label class="field"><span class="label">${label}</span>${inp}</label>`:inp}
+function mActs(path,i,what){return `<span class="macts">${B(I('up',16),'m-up',path,'icon small ghost',`aria-label="Поднять ${what}"${i===0?' disabled':''}`)}${B(I('close',16),'m-del',path,'icon small ghost',`aria-label="Убрать ${what}"`)}</span>`}
+const mAdd=(path,k,label,cls='small ghost')=>B(I('plus',16)+label,'m-add',path,cls,`data-k="${k}"`);
+
+function methodEditor(m){const hasBase=m.lines.some(l=>l.kind==='base');
+ return `<section class="panel" data-key="me-main"><div class="phead"><h2>Общее</h2></div><div class="fields">
+  ${mIn('title',m.title,'Например, Система силы',{label:'Название',strong:true})}
+  ${mIn('intro',m.intro,'Пара фраз: как устроена методика и с чего начинать',{label:'Вступление',multi:true})}</div></section>
+ <section class="panel" data-key="me-pr"><div class="phead"><h2>Правила</h2><span class="ptag">то, что держится всегда</span></div>
+  ${m.principles.length?`<div class="mlist">${m.principles.map((p,i)=>`<div class="mitem" data-key="${p.id}"><div class="mrowin"><span class="mnum">${i+1}</span>${mIn(`principles.${i}.h`,p.h,'Тезис: Программа — это потолок',{strong:true,aria:`Правило ${i+1}`})}${mActs(`principles.${i}`,i,'правило')}</div>
+   ${mIn(`principles.${i}.t`,p.t,'Пояснение одной-двумя фразами',{multi:true,aria:`Пояснение к правилу ${i+1}`})}</div>`).join('')}</div>`
+   :`<p class="meta">Короткие тезисы, которые клиент прочитает первыми.</p>`}
+  <div class="btnrow mbtns">${mAdd('principles','principle','Правило')}</div></section>
+ <section class="panel" data-key="me-lines"><div class="phead"><h2>Линии</h2><span class="ptag">в том порядке, в каком их читает клиент</span></div>
+  ${m.lines.length?`<div class="rows">${m.lines.map((l,i)=>{const n=M.stats({lines:[l]});
+   return `<div class="row mlrow" data-key="${l.id}">${methodMark(l)}<button type="button" class="rbody" data-action="m-line" data-id="${l.id}"><span class="rt">${esc(M.lineName(l))}</span><span class="rm">${M.KINDS[l.kind]} · ${l.phases.length} ${plural(l.phases.length,'фаза','фазы','фаз')} · ${n.points} ${plural(n.points,'указание','указания','указаний')}</span></button>
+    ${B(I('up',16),'m-up',`lines.${i}`,'icon small ghost',`aria-label="Линию выше"${i===0?' disabled':''}`)}${B(I('chev',18),'m-line',l.id,'icon small ghost','aria-label="Открыть линию"')}</div>`}).join('')}</div>`
+   :empty('list','Линий пока нет','Начните с основы — общей части, с которой начинается любое движение.')}
+  <div class="btnrow mbtns">${hasBase?'':mAdd('lines','base','Основа')}${mAdd('lines','line','Линия',hasBase?'small primary':'small')}</div></section>`}
+
+function methodLineEditor(m,l){const P=`lines.${m.lines.indexOf(l)}`;
+ return `<section class="panel" data-key="le-main"><div class="phead"><h2>Линия</h2>${B(I('trash',16),'m-del',P,'icon small ghost','aria-label="Удалить линию"')}</div><div class="fields">
+  <div class="field"><span class="label">Роль</span><div class="seg" role="radiogroup" aria-label="Роль линии">${['base','work'].map(k=>`<button type="button" role="radio" aria-checked="${l.kind===k}" class="${l.kind===k?'is-on':''}" data-action="m-kind" data-id="${k}">${k==='base'?'Основа — общая часть':'Рабочая линия'}</button>`).join('')}</div></div>
+  ${mIn(P+'.title',l.title,'Например, Жим',{label:'Название',strong:true})}
+  ${mIn(P+'.lead',l.lead,'Одной-двумя фразами: какая задача у линии',{label:'Вступление',multi:true})}</div></section>
+ <section class="panel" data-key="le-ph"><div class="phead"><h2>Маршрут внимания</h2><span class="ptag">фазы по порядку</span></div>
+  ${l.phases.length?`<div class="mlist">${l.phases.map((f,i)=>{const fp=`${P}.phases.${i}`;
+   return `<div class="mitem" data-key="${f.id}"><div class="mrowin"><span class="mnum">${i+1}</span>${mIn(fp+'.label',f.label,'Например, Исходное положение',{strong:true,aria:`Фаза ${i+1}`})}${mActs(fp,i,'фазу')}</div>
+    <div class="mpts">${f.points.map((p,j)=>`<div class="mpt" data-key="${p.id}"><span class="mdot" aria-hidden="true"></span>${mIn(`${fp}.points.${j}.text`,p.text,'Что сделать: «Лопатки заняли своё положение и держат его»',{multi:true,aria:`Фаза ${i+1}, указание ${j+1}`})}${mActs(`${fp}.points.${j}`,j,'указание')}</div>
+     ${M.neg(p.text)?`<p class="hint mneg" data-key="n${p.id}">${I('flag',13)}<span>Начинается с запрета. По правилу методики указание говорит, что сделать, а последствие — в «Что критично».</span></p>`:''}`).join('')}
+     <div class="btnrow mbtns">${mAdd(fp+'.points','point','Указание')}</div></div></div>`}).join('')}</div>`
+   :`<p class="meta">Обычно это исходное положение, рабочая фаза и возврат.</p>`}
+  <div class="btnrow mbtns">${mAdd(P+'.phases','phase','Фаза')}</div></section>
+ <section class="panel" data-key="le-rk"><div class="phead"><h2>Что критично</h2><span class="ptag">что держится → что будет, если нет</span></div>
+  ${l.risks.length?`<div class="mlist">${l.risks.map((r,i)=>{const rp=`${P}.risks.${i}`;
+   return `<div class="mitem" data-key="${r.id}"><div class="mrowin"><span class="mnum">${i+1}</span>${mIn(rp+'.must',r.must,'Что держится: «Кисть стоит над локтем»',{strong:true,aria:`Что держится, пункт ${i+1}`})}${mActs(rp,i,'пункт')}</div>
+    ${mIn(rp+'.then',r.then,'Что будет, если нет: последствие, которое клиент почувствует',{multi:true,aria:`Последствие, пункт ${i+1}`})}</div>`}).join('')}</div>`
+   :`<p class="meta">То, без чего движение теряет смысл, и последствие простыми словами.</p>`}
+  <div class="btnrow mbtns">${mAdd(P+'.risks','risk','Критичный момент')}</div></section>
+ <section class="panel" data-key="le-ex"><div class="phead"><h2>Упражнения линии</h2><span class="ptag">с припиской про плоскость</span></div>
+  ${l.exercises.length?`<div class="mlist">${l.exercises.map((e,i)=>{const ep=`${P}.exercises.${i}`;
+   return `<div class="mitem" data-key="${e.id}"><div class="mrowin"><span class="mnum">${i+1}</span>${mIn(ep+'.name',e.name,'Например, Жим гантелями',{strong:true,aria:`Упражнение ${i+1}`})}${mActs(ep,i,'упражнение')}</div>
+    ${mIn(ep+'.note',e.note,'Приписка: «Горизонтальная плоскость, лопатки прижаты к скамье»',{multi:true,aria:`Приписка к упражнению ${i+1}`})}</div>`}).join('')}</div>`
+   :`<p class="meta">Упражнения, где работает эта линия. Приписка — короткое уточнение именно для этого упражнения.</p>`}
+  <div class="btnrow mbtns">${mAdd(P+'.exercises','exercise','Упражнение')}</div></section>`}
+
+function methodCheck(c,line){let er=M.errors(c.method),hi=M.hints(c.method);
+ if(line){er=er.filter(x=>x.go===line.id);hi=hi.filter(x=>x.go===line.id)}
+ const row=(x,bad)=>`<div class="mchk${bad?' is-bad':''}" data-key="k${esc(x.t)}">${I(bad?'flag':'note',15)}<span class="grow">${esc(x.t)}</span>${x.go&&!line?B('Открыть','m-line',x.go,'small ghost'):''}</div>`;
+ return `<section class="panel" data-key="mcheck"><div class="phead"><h2>Проверка</h2><span class="ptag">${er.length?`${er.length} ${plural(er.length,'мешает','мешают','мешают')} отправить`:'можно отправлять'}</span></div>
+ ${er.length||hi.length?`<div class="mchks">${er.map(x=>row(x,true)).join('')}${hi.map(x=>row(x,false)).join('')}</div>`:`<p class="meta">${line?'В этой линии всё заполнено.':'Названия, фазы и указания на месте.'}</p>`}</section>`}
+
+function methodSendPanel(c){const st=CD.methodState(c);
+ return `<section class="panel" data-key="msend"><div class="phead"><h2>Клиенту</h2><span class="ptag mstate is-${st}">${M_STATE[st]}</span></div>
+ <p class="meta">${st==='sent'?'Клиент видит эту версию в разделе «Тренер».':st==='changed'?'Правки пока видите только вы — клиент увидит их после отправки.':'Методика сохраняется сразу, но клиент её не видит, пока вы не отправите.'}</p>
+ <div class="btnrow mbtns">${B(I('send',16)+(st==='sent'?'Отправить ещё раз':'Отправить клиенту'),'method-send',c.id,st==='sent'?'small':'small primary')}${B(I('copy',16)+'Текстом','method-text',c.id,'small ghost')}</div>
+ <div class="btnrow mbtns">${B(I('trash',15)+'Удалить методику','method-drop',c.id,'small ghost')}</div></section>`}
+
+// ——— правка: путь вида «lines.2.phases.0.points.3.text» внутри методики ———
+const mGet=(m,path)=>path.split('.').reduce((o,k)=>o==null?o:o[k],m);
+function mSet(m,path,v){const k=path.split('.'),last=k.pop(),o=mGet(m,k.join('.'));if(o&&typeof o==='object')o[last]=v}
+function mParent(m,path){const k=path.split('.'),i=Number(k.pop());return {list:mGet(m,k.join('.')),i,name:k[k.length-1]}}
+// Правка методики целиком: копия → правка → операция домена. fn вернула false — ничего не пишем.
+function mEdit(fn,opts={quiet:false}){mFlush();const cid=ui.id;
+ return commit(s=>{const c=CD.client(s,cid);if(!c?.method)return null;const m=clone(c.method);if(fn(m)===false)return null;return CD.ops.setMethod(s,cid,m)},opts)}
+// Набор в полях: пишется пачкой через паузу — одна запись на фразу, а не на букву.
+const mPend=new Map();let mTimer=null,mCid=null;
+function mFlush(){clearTimeout(mTimer);mTimer=null;if(!mPend.size)return;const pend=[...mPend],cid=mCid;mPend.clear();
+ commit(s=>{const c=CD.client(s,cid);if(!c?.method)return null;const m=clone(c.method);for(const [p,v] of pend)mSet(m,p,v);return CD.ops.setMethod(s,cid,m)},{quiet:true,fail:'Не записано: методика изменилась'})}
+function mType(el){mCid=ui.id;mPend.set(el.dataset.mf,el.value);if(el.tagName==='TEXTAREA')mGrow(el);clearTimeout(mTimer);mTimer=setTimeout(()=>{mFlush();render()},450)}
+function mGrow(t){t.style.height='auto';t.style.height=t.scrollHeight+2+'px'}
+// Ширина поменялась (поворот, окно) — поля указаний пересчитывают высоту, иначе текст прячется.
+addEventListener('resize',()=>$$('textarea.mta').forEach(mGrow));
+function mFocus(path){const f=$(`[data-mf="${path}"]`);if(!f)return;f.focus({preventScroll:true});f.scrollIntoView({block:'center',behavior:'smooth'})}
+
+function methodStartWith(id){const s=view(),cid=ui.id;
+ let m=id==='seed'?M.seed():id==='blank'?M.clean(M.blank()):null;
+ // Чужую методику берём без её id: у двух клиентов не должно быть общих строк.
+ if(!m){const src=CD.client(s,id)?.method;if(!src)return;m=M.clean(JSON.parse(JSON.stringify(src,(k,v)=>k==='id'?undefined:v)))}
+ if(commit(st=>CD.ops.setMethod(st,cid,m),{toast:id==='blank'?'Чистая методика — добавьте правила и линии':'Методика взята — поправьте под клиента'})){ui.mview='edit';ui.mline=null}}
+
+/* Отправка: в карточке — дата и подпись отправленного; пакет — в общий ящик этого
+   устройства (дневник клиента увидит его сам) и кодом/файлом для другого устройства. */
+let mPacket=null;
+function methodSend(cid){mFlush();const c=CD.client(view(),cid);if(!c)return;
+ if(!c.method){toast('Методики нет — сначала соберите её');return}
+ const er=M.errors(c.method);
+ if(er.length){ui.mview='edit';ui.mline=er[0].go;if(ui.route==='method'&&ui.id===cid)render();else go('method',cid);toast('Не отправлено: '+er[0].t);return}
+ const at=D.stamp();
+ if(!commit(s=>CD.ops.sendMethod(s,cid,at),{quiet:true,fail:'Не отправлено: методика не дособрана'}))return;
+ const cur=CD.client(view(),cid),p=M.packet(cur.method,{from:view().profile.name,to:CD.methodTo(cur),at});
+ let saved=false;if(!example){const box=(readJSON(OUTBOX)||[]).filter(x=>!(x&&x.to&&M.norm(x.to.name)===M.norm(p.to.name)&&(x.to.started||'')===p.to.started));
+  box.push(p);saved=writeJSON(OUTBOX,box.slice(-20))}
+ mPacket=p;render();
+ openSheet({title:'Методика отправлена',body:`<div class="fields">
+  <p>«${esc(p.method.title)}» — клиенту ${esc(cur.name)}.</p>
+  <div class="rows compact"><div class="mrow"><span class="grow">Дневник на этом устройстве</span><b>${saved?'уже ждёт':'не записалось'}</b></div>
+  <div class="mrow"><span class="grow">Кому</span><b>${esc(p.to.name)}${p.to.started?` · с ${D.fmtShort(p.to.started)}`:''}</b></div></div>
+  <p class="meta">Клиент откроет «Тренер» — там будет новая методика и кнопка «Принять». Если он ведёт дневник на своём телефоне, отправьте ему код или файл: он вставит его в «Тренер → Вставить код от тренера».</p>
+  <div class="btnrow mbtns">${B(I('copy',16)+'Скопировать код','method-code','','small primary')}${B(I('download',16)+'Файл','method-file','','small')}</div>
+  <p class="hint">Дневник узнаёт адресата по имени${p.to.started?' и дате начала':''} — так, как клиент записан у себя.</p></div>`})}
+function downloadJSON(obj,name){const blob=new Blob([JSON.stringify(obj)],{type:'application/json'}),a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+
+/* ——— Методика глазами клиента (M) ———
+   Один и тот же вид в дневнике клиента и в «Как у клиента» у тренера:
+   правила, линии, у линии — маршрут внимания по фазам, что критично и упражнения. */
+function methodReadHome(m){const pr=m.principles.filter(p=>p.h.trim());
+ return `<section class="panel mhero" data-key="mhero"><span class="kicker">Методика тренировок</span><h2>${esc(m.title.trim()||'Методика')}</h2>${m.intro.trim()?`<p class="mlead">${esc(m.intro)}</p>`:''}</section>
+ ${pr.length?`<section class="panel" data-key="mprinc"><div class="phead"><h2>Правила</h2></div><ul class="mprinc">${pr.map(p=>`<li data-key="${p.id}">${I('check',16)}<span><b>${esc(p.h)}</b> ${esc(p.t)}</span></li>`).join('')}</ul></section>`:''}
+ <section class="panel" data-key="mlines"><div class="phead"><h2>Линии</h2><span class="ptag">${m.lines.length}</span></div>
+ ${m.lines.length?`<div class="rows">${m.lines.map(l=>`<button type="button" class="row planrow mlrow" data-action="m-line" data-id="${l.id}" data-key="r${l.id}">${methodMark(l)}<span class="rbody"><span class="rt">${esc(M.lineName(l))}</span><span class="rm">${l.lead.trim()?esc(l.lead.length>90?l.lead.slice(0,88)+'…':l.lead):M.KINDS[l.kind]}</span></span>${I('chev',18)}</button>`).join('')}</div>`
+  :`<p class="meta">Линий пока нет.</p>`}</section>`}
+function methodMark(l){return `<span class="mmark${l.kind==='base'?' is-base':''}" aria-hidden="true">${l.kind==='base'?I('target',16):esc((M.lineName(l)[0]||'·').toUpperCase())}</span>`}
+function methodReadLine(m,l){const b=M.base(m),rs=l.risks.filter(r=>r.must.trim()),ex=l.exercises.filter(e=>e.name.trim());
+ return `${l.lead.trim()?`<section class="panel" data-key="mlead${l.id}"><p class="mlead">${esc(l.lead)}</p></section>`:''}
+ ${l.kind==='work'&&b?`<button type="button" class="mbase" data-action="m-line" data-id="${b.id}" data-key="mbase"><span class="qico">${I('target',18)}</span><span class="grow"><b>Сначала — ${esc(M.lineName(b))}</b><span class="meta">Общая часть: к ней добавляется то, что ниже</span></span>${I('chev',18)}</button>`:''}
+ <section class="panel" data-key="mcue${l.id}"><div class="phead"><h2>Маршрут внимания</h2><span class="ptag">${l.phases.length} ${plural(l.phases.length,'фаза','фазы','фаз')}</span></div>
+ ${l.phases.length?`<ol class="mcue">${l.phases.map((f,i)=>`<li data-key="${f.id}"><div class="mcueh"><span class="mnum">${i+1}</span><b>${esc(f.label)}</b></div><ul class="mdots">${f.points.filter(p=>p.text.trim()).map(p=>`<li data-key="${p.id}">${esc(p.text)}</li>`).join('')}</ul></li>`).join('')}</ol>`:`<p class="meta">Фаз пока нет.</p>`}</section>
+ ${rs.length?`<section class="panel" data-key="mrisk${l.id}"><div class="phead"><h2>Что критично</h2></div><div class="mrisks">${rs.map(r=>`<div class="mrisk" data-key="${r.id}"><b>${esc(r.must)}</b>${r.then.trim()?`<span>${esc(r.then)}</span>`:''}</div>`).join('')}</div></section>`:''}
+ ${ex.length?`<section class="panel" data-key="mex${l.id}"><div class="phead"><h2>Упражнения</h2><span class="ptag">приписка — про это упражнение</span></div><div class="rows compact">${ex.map(e=>`<div class="mnote" data-key="${e.id}"><b>${esc(e.name)}</b>${e.note.trim()?`<p>${esc(e.note)}</p>`:''}</div>`).join('')}</div></section>`:''}`}
 
 /* ——— «Неделя»: период тренера и его закрытие ———
    Закрытие — не отчёт, а проход по списку: по каждому клиенту ответ (Т-4).
@@ -3009,22 +3362,22 @@ window.visualViewport?.addEventListener('resize',learnSoon);
    Адреса: #/shift · #/clients · #/client/<id> · #/week */
 
 const ROUTES={shift:['Смена','today'],clients:['Клиенты','coach'],week:['Неделя','journal']};
-const SCENES={shift:shiftScene,clients:clientsScene,week:weekScene,client:()=>clientScene(ui.id)};
+const SCENES={shift:shiftScene,clients:clientsScene,week:weekScene,client:()=>clientScene(ui.id),method:()=>methodScene(ui.id)};
 
 let afterNav=null;
 function go(route,id=null,after=null){const h='#/'+route+(id?'/'+id:'');if(location.hash===h){render();after&&after()}else{afterNav=after;location.hash=h}}
 function readHash(){const [,r,...rest]=(location.hash||'').split('/'),id=rest.join('/')||null;
- const route=r==='client'&&id?'client':ROUTES[r]?r:'shift';
- if(route!==ui.route)onRoute();ui.route=route;ui.id=route==='client'?id:null;
+ const route=r==='client'&&id?'client':r==='method'&&id?'method':ROUTES[r]?r:'shift';
+ if(route!==ui.route)onRoute();ui.route=route;ui.id=route==='client'||route==='method'?id:null;
  /* Закрывают обычно прошлую неделю: если в текущей ещё не было занятий, а прошлая
     не закрыта, «Неделя» открывается на ней. Дальше тренер листает сам. */
  if(route==='week'&&!ui.weekTouched){const t=D.today(),cur=D.weekStart(t),prev=D.addDays(cur,-7),s=view();
   ui.week=(CD.weekReview(s,t).done===0&&s.clients.length&&!CD.weekClosed(s,prev))?prev:cur}}
 
 function shell(){const s=view(),dark=document.documentElement.getAttribute('data-theme')==='dark',p=s.profile;
- const links=cls=>Object.entries(ROUTES).map(([k,[label,icon]])=>`<a href="#/${k}" class="${ui.route===k||(ui.route==='client'&&k==='clients')?'is-on':''}"${ui.route===k?' aria-current="page"':''}>${I(icon,cls==='tab'?22:20)}<span>${label}</span></a>`).join('');
+ const links=cls=>Object.entries(ROUTES).map(([k,[label,icon]])=>`<a href="#/${k}" class="${ui.route===k||((ui.route==='client'||ui.route==='method')&&k==='clients')?'is-on':''}"${ui.route===k?' aria-current="page"':''}>${I(icon,cls==='tab'?22:20)}<span>${label}</span></a>`).join('');
  const unsaved=ui.unsaved?`<div class="banner card unsaved" data-key="unsaved"><span class="qico">${I('flag',18)}</span><div class="grow"><b>Дашборд не сохраняется</b><span class="meta">Память браузера заполнена или запись запрещена. Сделанное сейчас живёт только до закрытия вкладки.</span></div>${B(I('download',16)+'Сохранить копию','export','','small primary')}</div>`:'';
- const fab={shift:['client-add','','Новый клиент'],clients:['client-add','','Новый клиент'],week:['go','shift','К смене'],client:['note-new',ui.id||'','Заметка']}[ui.route];
+ const fab={shift:['client-add','','Новый клиент'],clients:['client-add','','Новый клиент'],week:['go','shift','К смене'],client:['note-new',ui.id||'','Заметка'],method:['method-send',ui.id||'','Отправить клиенту']}[ui.route];
  return `<div class="shell">
  <aside class="side"><div class="brand"><span class="mark">${I('coach',20)}</span><div><b>Тренер</b><span class="caption">смена · клиенты · неделя</span></div></div>
   <nav class="nav" aria-label="Разделы"><a href="index.html">${I('back',20)}<span>Клуб</span></a>${links('nav')}</nav>
@@ -3036,7 +3389,7 @@ function shell(){const s=view(),dark=document.documentElement.getAttribute('data
   ${unsaved}${SCENES[ui.route]()}
  </main>
  <nav class="tabbar glass" aria-label="Разделы">${links('tab')}</nav>
- ${B(I(ui.route==='client'?'note':'plus',24),fab[0],fab[1],'fab primary lone',`aria-label="${fab[2]}"`)}
+ ${B(I(ui.route==='client'?'note':ui.route==='method'?'send':'plus',24),fab[0],fab[1],'fab primary lone',`aria-label="${fab[2]}"`)}
  </div>`}
 
 let lastView='';
@@ -3044,9 +3397,9 @@ function render(){const app=$('#app'),first=!app.firstChild,s=view();
  ui.tails=CD.tails(s); // хвосты считаются заново при каждой отрисовке — как вопросы у клиента
  const html=shell();
  if(first)app.innerHTML=html;else morph(app,html);
- sheetRender();learnAfter();
- document.title=`${ui.route==='client'?'Клиент':ROUTES[ui.route]?.[0]||'Смена'} · Тренер`;
- const v=ui.route+'/'+(ui.route==='client'?ui.id:'');
+ sheetRender();learnAfter();$$('textarea.mta').forEach(mGrow);
+ document.title=`${ui.route==='client'?'Клиент':ui.route==='method'?'Методика':ROUTES[ui.route]?.[0]||'Смена'} · Тренер`;
+ const v=ui.route+'/'+(ui.route==='client'?ui.id:ui.route==='method'?ui.id+'/'+(ui.mline||''):'');
  if(v!==lastView){const sc=$('.scene');if(sc&&!first){sc.classList.remove('enter');void sc.offsetWidth;sc.classList.add('enter')}lastView=v}}
 
 const ACTIONS={
@@ -3087,6 +3440,26 @@ const ACTIONS={
  'plan-edit':(id,el)=>planForm(ui.id,id),
  talk:id=>talkSheet(id),
  'copy-talk':id=>copyText(talkText(view(),CD.client(view(),id)),()=>learnFlag('card.talk')),
+ // ——— методика клиента (M) ———
+ 'method-open':id=>{ui.mline=null;ui.mview='edit';go('method',id)},
+ 'method-start':id=>methodStartWith(id),
+ 'method-send':id=>methodSend(id||ui.id),
+ 'method-text':id=>{mFlush();const m=CD.client(view(),id)?.method;if(m)copyText(M.text(m))},
+ 'method-code':()=>{if(mPacket)copyText(JSON.stringify(mPacket))},
+ 'method-file':()=>{if(mPacket)downloadJSON(mPacket,`metodika-${D.today()}.json`)},
+ 'method-drop':id=>{mFlush();confirmSheet('Удалить методику?','Методика уйдёт из карточки. У клиента останется та версия, что вы отправили раньше.','Удалить',()=>{ui.mline=null;commit(s=>CD.ops.dropMethod(s,id),{toast:'Методика удалена'})})},
+ 'm-view':id=>{mFlush();ui.mview=id;render()},
+ 'm-line':id=>{mFlush();ui.mline=id;render();scrollTo({top:0})},
+ 'm-home':()=>{mFlush();ui.mline=null;render();scrollTo({top:0})},
+ 'm-kind':id=>mEdit(m=>{const l=m.lines.find(x=>x.id===ui.mline);if(!l||l.kind===id)return false;l.kind=id}),
+ 'm-add':(id,el)=>{const k=el.dataset.k;let x=null;
+  if(!mEdit(m=>{const list=mGet(m,id);if(!Array.isArray(list))return false;x=k==='base'||k==='line'?M.NEW.line(k):M.NEW[k]();list.push(x)}))return;
+  const m=CD.client(view(),ui.id).method;
+  if(k==='base'||k==='line'){ui.mline=x.id;render();scrollTo({top:0});mFocus(`lines.${m.lines.findIndex(l=>l.id===x.id)}.title`)}
+  else mFocus(`${id}.${mGet(m,id).length-1}${M_FIRST[k]}`)},
+ 'm-up':id=>mEdit(m=>{const {list,i}=mParent(m,id);if(!Array.isArray(list)||!(i>0))return false;list.splice(i-1,0,list.splice(i,1)[0])}),
+ 'm-del':id=>{const nm=id.split('.').slice(-2)[0];
+  if(mEdit(m=>{const p=mParent(m,id);if(!Array.isArray(p.list)||!p.list[p.i])return false;p.list.splice(p.i,1)},{toast:M_GONE[nm]||'Убрано'})&&nm==='lines'){ui.mline=null;render()}},
  // ——— неделя ———
  'week-shift':id=>{ui.week=D.addDays(ui.week,Number(id));ui.weekTouched=true;render()},
  'week-answer':(id,el)=>{if(commit(s=>CD.ops.answerWeek(s,ui.week,el.dataset.c,id),{fail:'Эта неделя закрыта или ещё не началась'}))learnFlag('week.answer')},
@@ -3141,7 +3514,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('change',e=>{if(e.target.dataset?.set)applySetting(e.target)});
 /* Поиск по клиентам печатается в списке, а не в шторке: строка живёт в ui,
    перерисовка сохраняет фокус и каретку сама (morph не трогает активное поле). */
-document.addEventListener('input',e=>{if(e.target.id==='csearch'){ui.q=e.target.value;render()}
+document.addEventListener('input',e=>{if(e.target.dataset?.mf)mType(e.target);else if(e.target.id==='csearch'){ui.q=e.target.value;render()}
  // Ввод в шторке может сменить цель «Спутника» (поле заполнено → «Сохранить»): метка следует сразу.
  else if(e.target.closest?.('#sheet'))learnSoon()});
 function applySetting(el){commit(s=>CD.ops.setProfile(s,el.dataset.set,el.value),{quiet:true});render()}
@@ -3173,7 +3546,8 @@ function landToday(){const t=D.today();if(prefs.seen&&prefs.seen!==t){if(locatio
 
 function boot(){
  applyTheme();landToday();readHash();render();bindSheet();
- addEventListener('hashchange',()=>{closeSheet();readHash();render();scrollTo({top:0});if(afterNav){const f=afterNav;afterNav=null;setTimeout(f,220)}});
+ addEventListener('hashchange',()=>{mFlush();closeSheet();readHash();render();scrollTo({top:0});if(afterNav){const f=afterNav;afterNav=null;setTimeout(f,220)}});
+ addEventListener('pagehide',mFlush);
  addEventListener('storage',e=>{if((e.key!==KEY&&e.key!==REV)||example)return;if(adoptStored()){render();toast('Обновлено из другой вкладки')}});
  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if(prefs.theme==='system'){applyTheme();render()}});
  let day=D.today();
