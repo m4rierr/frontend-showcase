@@ -992,20 +992,24 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .emb.is-warn{background:var(--warn-fill);color:var(--on-warn)}
 .emb.is-alert{background:var(--alert);color:var(--surface)}
 .emb.is-calm{background:var(--card-hot);color:var(--ink)}
+.emb.is-new{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
 .emb .badge{position:absolute;right:-5px;top:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:var(--r-pill);display:grid;place-items:center;
  background:var(--alert);color:var(--surface);font-size:11px;font-weight:var(--w-bold);box-shadow:0 0 0 2px var(--surface)}
 
-/* Серия — квадрат на событие: сделано залито, впереди — контур, пропуск — пунктир. */
-.slots{display:inline-flex;flex-wrap:wrap;align-items:center;gap:3px;vertical-align:middle}
-.slots i{flex:none;width:12px;height:12px;border-radius:var(--r-mark);box-shadow:inset 0 0 0 1.5px var(--line-strong)}
-.slots i.on{background:var(--ink);box-shadow:none}
-.slots i.ok{background:var(--ok);box-shadow:none}
-.slots i.warn{background:var(--warn-fill);box-shadow:none}
-.slots i.alert{background:var(--alert);box-shadow:none}
-.slots i.skip{box-shadow:none;border:1.5px dashed var(--line-strong)}
-.slots i.now{box-shadow:inset 0 0 0 2px var(--ink)}
-.slots.l{gap:4px}.slots.l i{width:18px;height:18px}
-.slots.xl{gap:6px}.slots.xl i{width:28px;height:28px;border-radius:var(--r-small)}
+/* Серия — тонкая линия, по отрезку на событие; этапы (блоки маршрута, части дня, группы)
+   разделены зазором. Сделано — чернилами, внимание — янтарём, тревога — красным, сейчас — полутоном,
+   впереди — серым, пропуск — штрихом. Линия тихая: не спорит с текстом и числом рядом.
+   Фон меняет только нейтральные тона (--seg-*): цвет состояния один везде. */
+.slots{--seg-off:var(--line-strong);--seg-on:var(--ink);--seg-now:color-mix(in srgb,var(--ink) 45%,transparent);
+ display:inline-flex;align-items:center;gap:2px;vertical-align:middle;max-width:100%}
+.slots i{flex:0 1 auto;width:12px;min-width:3px;height:4px;border-radius:2px;background:var(--seg-off)}
+.slots i:is(.on,.ok){background:var(--seg-on)}
+.slots i.now{background:var(--seg-now)}
+.slots i.warn{background:var(--warn-fill)}
+.slots i.alert{background:var(--alert)}
+.slots i.skip{background:repeating-linear-gradient(135deg,var(--seg-off) 0 2px,transparent 2px 4px)}
+.slots i.cut{margin-left:6px}
+.slots.l{gap:3px}.slots.l i{width:20px;height:5px;border-radius:3px}.slots.l i.cut{margin-left:8px}
 .signum{display:inline-flex;align-items:center;gap:var(--s-2);font-variant-numeric:tabular-nums}
 
 /* Заполнение — масса, а не цифра: полоса 8 px, доля — ширина залитой части. */
@@ -1016,13 +1020,14 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 
 /* Заголовок группы несёт знак, цвет и число — внутри группы состояние словом не повторяется. */
 .gh{display:flex;align-items:center;gap:var(--s-2);min-height:28px;padding:0 var(--s-1);font-size:var(--t-meta);font-weight:var(--w-bold);color:var(--ink)}
-.gh>.gs{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--card-hot);color:var(--ink)}
+.gh>.gs{flex:none;width:22px;height:22px;min-width:0;padding:0;border-radius:50%;display:grid;place-items:center;background:var(--card-hot);color:var(--ink)}
 .gh>.gs>svg{width:13px;height:13px;stroke-width:2.4}
 .gh .n{margin-left:auto;color:var(--muted);font-weight:var(--w-medium);font-variant-numeric:tabular-nums}
 .gh.is-ok{color:var(--ok)}.gh.is-ok>.gs{background:var(--ok);color:var(--surface)}
 .gh.is-warn{color:var(--warn)}.gh.is-warn>.gs{background:var(--warn-fill);color:var(--on-warn)}
 .gh.is-alert{color:var(--alert)}.gh.is-alert>.gs{background:var(--alert);color:var(--surface)}
 .gh.is-now>.gs{background:var(--accent);color:var(--on-accent)}
+.gh.is-new>.gs{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
 .ggroup{display:flex;flex-direction:column;gap:var(--s-2)}
 .ggroup+.ggroup{margin-top:var(--s-5)}
 
@@ -1038,6 +1043,7 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .band .bhead{display:flex;align-items:center;gap:var(--s-4);min-width:0}
 .band .bhead>.grow{min-width:0}
 .band .emb{background:var(--on-accent);color:var(--accent)}
+.band .emb.is-new{box-shadow:none}
 .band .emb.is-ok{background:var(--ok);color:var(--surface)}
 .band .emb.is-warn{background:var(--warn-fill);color:var(--on-warn)}
 .band .emb.is-alert{background:var(--alert);color:var(--surface)}
@@ -1051,10 +1057,7 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .band .bacts>*{flex:0 1 auto}
 .band .bfig .meter{flex:1 1 100%}
 @media (max-width:640px){.band .bacts>*{flex:1 1 auto}}
-.band .slots i{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--on-accent) 42%,transparent)}
-.band .slots i.on{background:var(--on-accent);box-shadow:none}
-.band .slots i.ok{background:var(--ok);box-shadow:none}
-.band .slots i.now{box-shadow:inset 0 0 0 2px var(--on-accent)}
+.band .slots{--seg-off:color-mix(in srgb,var(--on-accent) 26%,transparent);--seg-on:var(--on-accent);--seg-now:color-mix(in srgb,var(--on-accent) 58%,transparent)}
 .band .meter{background:color-mix(in srgb,var(--on-accent) 22%,transparent)}
 .band .meter>i{background:var(--on-accent)}
 .band button{min-height:var(--h-row);border-color:color-mix(in srgb,var(--on-accent) 30%,transparent);background:transparent;color:var(--on-accent);font-weight:var(--w-bold)}
@@ -1069,13 +1072,12 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .band .spark path{stroke:var(--on-accent)}.band .spark circle{fill:var(--on-accent)}
 .band.is-ok{background:var(--ok);color:var(--surface);box-shadow:var(--shadow-rest)}
 .band.is-ok .emb{background:var(--surface);color:var(--ok)}
-.band.is-ok .slots i{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--surface) 55%,transparent)}
-.band.is-ok .slots i:is(.on,.ok){background:var(--surface);box-shadow:none}
+.band.is-ok .slots{--seg-off:color-mix(in srgb,var(--surface) 35%,transparent);--seg-on:var(--surface);--seg-now:color-mix(in srgb,var(--surface) 65%,transparent)}
 .band.is-calm{background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow-rest)}
 .band.is-calm .emb{background:var(--card);color:var(--ink)}
 .band.is-calm button{border-color:var(--line-strong);color:var(--ink)}
 .band.is-calm button.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-.band.is-calm .slots i{box-shadow:inset 0 0 0 1.5px var(--line-strong)}.band.is-calm .slots i.on{background:var(--ink)}
+.band.is-calm .slots{--seg-off:var(--line-strong);--seg-on:var(--ink);--seg-now:color-mix(in srgb,var(--ink) 45%,transparent)}
 .band.is-calm .meter{background:var(--card-hot)}.band.is-calm .meter>i{background:var(--ink)}
 .band.is-calm .spark path{stroke:var(--ink)}.band.is-calm .spark circle{fill:var(--ink)}
 
@@ -1093,9 +1095,9 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .khead{display:flex;align-items:center;flex-wrap:wrap;gap:var(--s-1) var(--s-2);margin-bottom:var(--s-1)}
 .shead .khead .kicker{display:inline-block;margin-bottom:0}
 .shead .sub .signum{vertical-align:middle}
-.wd i{width:10px;height:10px;border-radius:var(--r-mark)}
-.wd i.done{background:var(--ok)}
-.wd i.plan{background:transparent;box-shadow:inset 0 0 0 1.5px var(--line-strong)}
+.wd i{width:14px;height:4px;border-radius:2px}
+.wd i.done{background:var(--ink)}
+.wd i.plan{background:var(--line-strong)}
 .wd i.warn{background:var(--warn-fill)}
 .lead.ico{border-radius:var(--r-control)}
 .lead.ico.on{background:var(--ok);color:var(--surface)}
@@ -1113,7 +1115,6 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .nextrow>.grow{display:flex;flex-direction:column;min-width:0}
 .nextrow .rt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .blocktitle.wtitle{display:flex;align-items:center;justify-content:space-between;gap:var(--s-3)}
-.blocktitle.wtitle .slots i{width:10px;height:10px}
 .sidecoach{display:flex;align-items:center;gap:var(--s-3)}
 .sidecoach b{display:block;font-weight:var(--w-bold)}
 .sidecoach .meta{display:block}
@@ -1130,9 +1131,7 @@ button.stat.is-empty{gap:var(--s-2)}
 .band a.btn{background:transparent;border-color:color-mix(in srgb,var(--on-accent) 30%,transparent)}
 .band a.btn.icon{flex:none}
 .mrow .signum{gap:var(--s-2);font-size:var(--t-caption);color:var(--muted)}
-.mrow .slots i{width:10px;height:10px}
 .ptag .signum{gap:var(--s-2)}
-.ptag .slots i{width:10px;height:10px}
 @media (max-width:1023px){.band .bfig .spark{margin-left:0}}
 </style></head><body><div id="app"></div><dialog id="sheet" class="sheet"></dialog><div id="toast" class="toast" role="status" hidden></div><input id="import" type="file" accept="application/json,.json" hidden><script>/* ——— Домен v2 ———
    Данные клиента и все законы из UX-MECHANISM.md в виде чистых функций.
@@ -1828,17 +1827,20 @@ function ring(r,size=36,label=''){const rad=(size-5)/2,c=2*Math.PI*rad;
 
 // ——— тост ———
 /* ——— Знаки: одна функция на знак — одинаковый вид на всех экранах и во всех ролях ———
-   Грамматика из «Карточек прибора»: эмблема — лицо, серия — квадратами, заполнение — массой,
+   Грамматика из «Карточек прибора»: эмблема — лицо, серия — отрезками, заполнение — массой,
    состояние — цветом заливки. Функции знают только форму, а не предметную область.
    Блок одинаковый у клиента, тренера и администратора. */
 // Лицо объекта: значок из набора или одна-две буквы; состояние — заливкой (ok · now · warn · alert · ahead · empty · calm).
 function emb(face,{size='m',state='',label='',badge='',halo=false}={}){
  const inner=ICONS[face]?I(face,20):esc(String(face||'·').slice(0,2));
  return `<span class="emb ${size}${state?' is-'+state:''}${halo?' is-halo':''}"${label?` role="img" aria-label="${esc(label)}"`:' aria-hidden="true"'}>${inner}${badge!==''&&badge!==undefined&&badge!==null?`<b class="badge">${esc(badge)}</b>`:''}</span>`}
-// Серия: квадрат на событие. Состояния: 'on' — сделано, 'ok' · 'warn' · 'alert' — по цвету, 'skip' — пропуск, 'now' — сейчас, '' — впереди.
-function slots(states,{size='',label=''}={}){
- return `<span class="slots${size?' '+size:''}"${label?` role="img" aria-label="${esc(label)}"`:' aria-hidden="true"'}>${states.map(c=>`<i${c?` class="${c}"`:''}></i>`).join('')}</span>`}
-// «Сделано из запланированного» — квадратами и числом рядом; длинная серия сжимается до max квадратов.
+// Серия: отрезок на событие; stages — длины этапов по порядку, между этапами — зазор.
+// Состояния: 'on' и 'ok' — сделано, 'warn' · 'alert' — по цвету, 'skip' — пропуск, 'now' — сейчас, '' — впереди.
+function slots(states,{size='',label='',stages=null}={}){const cut=new Set();let k=0;for(const n of (stages||[]).slice(0,-1)){k+=n;cut.add(k)}
+ return `<span class="slots${size?' '+size:''}"${label?` role="img" aria-label="${esc(label)}"`:' aria-hidden="true"'}>${states.map((c,i)=>{const cl=[c,cut.has(i)?'cut':''].filter(Boolean).join(' ');return `<i${cl?` class="${cl}"`:''}></i>`}).join('')}</span>`}
+// Этапы серии — длины подряд идущих одинаковых значений: блоки маршрута, части дня, группы клиентов.
+function runs(a){const r=[];a.forEach((v,i)=>{if(i&&a[i-1]===v)r[r.length-1]++;else r.push(1)});return r}
+// «Сделано из запланированного» — отрезками и числом рядом; длинная серия сжимается до max отрезков.
 function tally(done,total,{size='',max=14,tone='on',word=''}={}){if(!total)return '';
  const n=Math.min(total,max),k=Math.min(n,Math.round(done*n/total));
  return `<span class="signum">${slots(Array.from({length:n},(_,i)=>i<k?tone:''),{size,label:`${done} из ${total}${word?' '+word:''}`})}<span class="num" aria-hidden="true">${done} из ${total}${word?' '+word:''}</span></span>`}
@@ -2063,10 +2065,12 @@ function todayScene(){
  const doneN=items.filter(x=>itemDone(x,day)).length;
  const kicker=isToday?D.now().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'}):(day<t?'Прошедший день':'Впереди');
  const title=isToday?`${greet()}${s.profile.name?', '+esc(s.profile.name):''}`:D.fmtDay(day);
- // Итог дня — знаком: квадрат на дело, сделанное залито; число — рядом. Тренировку называет главная карточка.
+ // Итог дня — линией этапов, как лента ниже: утро · день · вечер · в течение дня, по отрезку на дело.
+ // Сделанное — чернилами, ближайшее — полутоном, пропущенная тренировка — штрихом; число — рядом.
+ const PORD={morning:0,day:1,evening:2,any:3},seq=items.slice().sort((a,b)=>PORD[D.part(a.time)]-PORD[D.part(b.time)]),nx=isToday?nextItem(items,day):null;
+ const count=day>t?`запланировано ${items.length}`:`${doneN} из ${items.length}`;
  const sub=!items.length?(day<t?'В этот день ничего не было':'На этот день ничего не запланировано')
-  :day>t?`<span class="signum">${slots(items.slice(0,14).map(()=>''))}<span class="num">запланировано ${items.length}</span></span>`
-  :tally(doneN,items.length,{tone:'ok'});
+  :`<span class="signum">${slots(seq.map(x=>itemDone(x,day)?'on':x.kind==='workout'&&x.item.status==='skipped'?'skip':x===nx?'now':''),{stages:runs(seq.map(x=>D.part(x.time))),label:count})}<span class="num" aria-hidden="true">${count}</span></span>`;
  return `<section class="scene">${sceneHead(kicker,title,sub,B(I('plus',18)+'Добавить','add','','primary'))}
  ${weekStrip(day)}
  ${isToday?methodCard()+questionCards()+learnCard():''}
@@ -2211,7 +2215,7 @@ function autoWorkout(s,t){if(!matchMedia('(min-width:1024px)').matches)return nu
 function trainScene(){
  const s=view(),t=D.today(),st=D.weekStats(s),shown=ui.id||autoWorkout(s,t);
  const nextW=D.schedule(s,t,14).find(w=>w.status==='planned');
- // Неделя — квадратами: сделанные залиты; «следующая» — на главной карточке, а не словами в шапке.
+ // Неделя — отрезками: сделанные — чернилами; «следующая» — на главной карточке, а не словами в шапке.
  const wsub=st.total?tally(st.done,st.total,{tone:'ok'}):nextW?`Следующая — ${D.fmtDay(nextW.date,{lower:true})}, ${nextW.time}`:'Тренировок пока не запланировано';
  const next=D.schedule(s,t,7).filter(w=>w.status!=='done');
  const past=s.workouts.filter(w=>w.status==='done'||w.status==='skipped'||(w.date<t&&w.status!=='active')).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
@@ -2528,7 +2532,7 @@ function coachScene(){const s=view(),c=s.coach;
  <div class="cols"><div class="stack">${card}${meetingPanel()}</div><div class="stack">${methodPanelC()}${plansPanel()}${notesPanel()}</div></div></section>`}
 
 function meetingPanel(){const s=view(),m=D.sinceMeeting(s),c=s.coach;
- // Привычки к встрече — квадратами: сделанные дни залиты; число — рядом.
+ // Привычки к встрече — отрезками: сделанные дни — чернилами; число — рядом.
  const hab=m.habits.map(h=>`<div class="mrow"><span class="grow">${esc(h.title)}</span>${tally(h.hit,h.due,{tone:'ok',max:10})}</div>`).join('');
  const qs=s.questions.filter(q=>!q.askedAt);
  return `<section class="panel meet"><div class="phead"><h2>К встрече</h2><span class="ptag">${m.fromStart?'с начала дневника':s.notes.some(n=>n.source==='meeting')?`после встречи ${D.fmtShort(m.from)}`:`с ${D.fmtShort(D.addDays(m.from,1))}`}</span></div>

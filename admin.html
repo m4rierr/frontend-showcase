@@ -1232,20 +1232,24 @@ details.more[open]>.field{margin-top:var(--s-2)}
 .emb.is-warn{background:var(--warn-fill);color:var(--on-warn)}
 .emb.is-alert{background:var(--alert);color:var(--surface)}
 .emb.is-calm{background:var(--card-hot);color:var(--ink)}
+.emb.is-new{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
 .emb .badge{position:absolute;right:-5px;top:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:var(--r-pill);display:grid;place-items:center;
  background:var(--alert);color:var(--surface);font-size:11px;font-weight:var(--w-bold);box-shadow:0 0 0 2px var(--surface)}
 
-/* Серия — квадрат на событие: сделано залито, впереди — контур, пропуск — пунктир. */
-.slots{display:inline-flex;flex-wrap:wrap;align-items:center;gap:3px;vertical-align:middle}
-.slots i{flex:none;width:12px;height:12px;border-radius:var(--r-mark);box-shadow:inset 0 0 0 1.5px var(--line-strong)}
-.slots i.on{background:var(--ink);box-shadow:none}
-.slots i.ok{background:var(--ok);box-shadow:none}
-.slots i.warn{background:var(--warn-fill);box-shadow:none}
-.slots i.alert{background:var(--alert);box-shadow:none}
-.slots i.skip{box-shadow:none;border:1.5px dashed var(--line-strong)}
-.slots i.now{box-shadow:inset 0 0 0 2px var(--ink)}
-.slots.l{gap:4px}.slots.l i{width:18px;height:18px}
-.slots.xl{gap:6px}.slots.xl i{width:28px;height:28px;border-radius:var(--r-small)}
+/* Серия — тонкая линия, по отрезку на событие; этапы (блоки маршрута, части дня, группы)
+   разделены зазором. Сделано — чернилами, внимание — янтарём, тревога — красным, сейчас — полутоном,
+   впереди — серым, пропуск — штрихом. Линия тихая: не спорит с текстом и числом рядом.
+   Фон меняет только нейтральные тона (--seg-*): цвет состояния один везде. */
+.slots{--seg-off:var(--line-strong);--seg-on:var(--ink);--seg-now:color-mix(in srgb,var(--ink) 45%,transparent);
+ display:inline-flex;align-items:center;gap:2px;vertical-align:middle;max-width:100%}
+.slots i{flex:0 1 auto;width:12px;min-width:3px;height:4px;border-radius:2px;background:var(--seg-off)}
+.slots i:is(.on,.ok){background:var(--seg-on)}
+.slots i.now{background:var(--seg-now)}
+.slots i.warn{background:var(--warn-fill)}
+.slots i.alert{background:var(--alert)}
+.slots i.skip{background:repeating-linear-gradient(135deg,var(--seg-off) 0 2px,transparent 2px 4px)}
+.slots i.cut{margin-left:6px}
+.slots.l{gap:3px}.slots.l i{width:20px;height:5px;border-radius:3px}.slots.l i.cut{margin-left:8px}
 .signum{display:inline-flex;align-items:center;gap:var(--s-2);font-variant-numeric:tabular-nums}
 
 /* Заполнение — масса, а не цифра: полоса 8 px, доля — ширина залитой части. */
@@ -1256,13 +1260,14 @@ details.more[open]>.field{margin-top:var(--s-2)}
 
 /* Заголовок группы несёт знак, цвет и число — внутри группы состояние словом не повторяется. */
 .gh{display:flex;align-items:center;gap:var(--s-2);min-height:28px;padding:0 var(--s-1);font-size:var(--t-meta);font-weight:var(--w-bold);color:var(--ink)}
-.gh>.gs{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--card-hot);color:var(--ink)}
+.gh>.gs{flex:none;width:22px;height:22px;min-width:0;padding:0;border-radius:50%;display:grid;place-items:center;background:var(--card-hot);color:var(--ink)}
 .gh>.gs>svg{width:13px;height:13px;stroke-width:2.4}
 .gh .n{margin-left:auto;color:var(--muted);font-weight:var(--w-medium);font-variant-numeric:tabular-nums}
 .gh.is-ok{color:var(--ok)}.gh.is-ok>.gs{background:var(--ok);color:var(--surface)}
 .gh.is-warn{color:var(--warn)}.gh.is-warn>.gs{background:var(--warn-fill);color:var(--on-warn)}
 .gh.is-alert{color:var(--alert)}.gh.is-alert>.gs{background:var(--alert);color:var(--surface)}
 .gh.is-now>.gs{background:var(--accent);color:var(--on-accent)}
+.gh.is-new>.gs{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
 .ggroup{display:flex;flex-direction:column;gap:var(--s-2)}
 .ggroup+.ggroup{margin-top:var(--s-5)}
 
@@ -1278,6 +1283,7 @@ details.more[open]>.field{margin-top:var(--s-2)}
 .band .bhead{display:flex;align-items:center;gap:var(--s-4);min-width:0}
 .band .bhead>.grow{min-width:0}
 .band .emb{background:var(--on-accent);color:var(--accent)}
+.band .emb.is-new{box-shadow:none}
 .band .emb.is-ok{background:var(--ok);color:var(--surface)}
 .band .emb.is-warn{background:var(--warn-fill);color:var(--on-warn)}
 .band .emb.is-alert{background:var(--alert);color:var(--surface)}
@@ -1291,10 +1297,7 @@ details.more[open]>.field{margin-top:var(--s-2)}
 .band .bacts>*{flex:0 1 auto}
 .band .bfig .meter{flex:1 1 100%}
 @media (max-width:640px){.band .bacts>*{flex:1 1 auto}}
-.band .slots i{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--on-accent) 42%,transparent)}
-.band .slots i.on{background:var(--on-accent);box-shadow:none}
-.band .slots i.ok{background:var(--ok);box-shadow:none}
-.band .slots i.now{box-shadow:inset 0 0 0 2px var(--on-accent)}
+.band .slots{--seg-off:color-mix(in srgb,var(--on-accent) 26%,transparent);--seg-on:var(--on-accent);--seg-now:color-mix(in srgb,var(--on-accent) 58%,transparent)}
 .band .meter{background:color-mix(in srgb,var(--on-accent) 22%,transparent)}
 .band .meter>i{background:var(--on-accent)}
 .band button{min-height:var(--h-row);border-color:color-mix(in srgb,var(--on-accent) 30%,transparent);background:transparent;color:var(--on-accent);font-weight:var(--w-bold)}
@@ -1309,13 +1312,12 @@ details.more[open]>.field{margin-top:var(--s-2)}
 .band .spark path{stroke:var(--on-accent)}.band .spark circle{fill:var(--on-accent)}
 .band.is-ok{background:var(--ok);color:var(--surface);box-shadow:var(--shadow-rest)}
 .band.is-ok .emb{background:var(--surface);color:var(--ok)}
-.band.is-ok .slots i{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--surface) 55%,transparent)}
-.band.is-ok .slots i:is(.on,.ok){background:var(--surface);box-shadow:none}
+.band.is-ok .slots{--seg-off:color-mix(in srgb,var(--surface) 35%,transparent);--seg-on:var(--surface);--seg-now:color-mix(in srgb,var(--surface) 65%,transparent)}
 .band.is-calm{background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow-rest)}
 .band.is-calm .emb{background:var(--card);color:var(--ink)}
 .band.is-calm button{border-color:var(--line-strong);color:var(--ink)}
 .band.is-calm button.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-.band.is-calm .slots i{box-shadow:inset 0 0 0 1.5px var(--line-strong)}.band.is-calm .slots i.on{background:var(--ink)}
+.band.is-calm .slots{--seg-off:var(--line-strong);--seg-on:var(--ink);--seg-now:color-mix(in srgb,var(--ink) 45%,transparent)}
 .band.is-calm .meter{background:var(--card-hot)}.band.is-calm .meter>i{background:var(--ink)}
 .band.is-calm .spark path{stroke:var(--ink)}.band.is-calm .spark circle{fill:var(--ink)}
 
@@ -1329,7 +1331,7 @@ details.more[open]>.field{margin-top:var(--s-2)}
 
 /* ——— Пульт администратора на знаках ———
    Шапка одна на всех разделах: где я и чип демо-базы. Главная карточка — ответ на вопрос экрана;
-   занятия и маршрут — квадратами, заполнение — массой; сделано — ok, сейчас — чернилами. */
+   занятия и маршрут — тонкими отрезками по этапам, заполнение — массой; сделано — чернилами, внимание — янтарём. */
 .khead{display:flex;align-items:center;flex-wrap:wrap;gap:var(--s-1) var(--s-2);margin-bottom:var(--s-1)}
 .shead .khead .kicker{display:inline-block;margin-bottom:0}
 .tick.is-on{background:var(--ok);border-color:var(--ok);color:var(--surface)}
@@ -1352,7 +1354,7 @@ details.more[open]>.field{margin-top:var(--s-2)}
 .wev .warnt{color:var(--warn);font-weight:var(--w-medium)}
 .tfill{display:inline-flex;align-items:center;justify-content:flex-end;gap:var(--s-2);width:100%}
 .tfill .meter{flex:1;max-width:96px}
-.lhead .slots{margin-left:var(--s-1);flex:none;flex-wrap:nowrap}
+.lhead .slots{margin-left:var(--s-1);flex:none;width:96px}
 .arow .rm,.drow .rm{max-width:100%}
 .banner .meter{margin:var(--s-2) 0;max-width:320px}
 .band .bset{display:inline-flex;align-items:center;gap:var(--s-2);flex-wrap:wrap}
@@ -1376,6 +1378,9 @@ details.more[open]>.field{margin-top:var(--s-2)}
 .mcal>button.skip{box-shadow:none;border:1.5px dashed var(--line-strong);color:var(--faint)}
 .slegend{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-2) var(--s-4);margin:var(--s-3) 0 0}
 .slegend>span{display:inline-flex;align-items:center;gap:var(--s-2)}
+.slegend .lg{flex:none;width:12px;height:12px;border-radius:var(--r-mark);box-shadow:inset 0 0 0 1.5px var(--line-strong)}
+.slegend .lg.ok{background:var(--ok);box-shadow:none}.slegend .lg.warn{background:var(--warn-fill);box-shadow:none}
+.slegend .lg.now{box-shadow:inset 0 0 0 2px var(--ink)}.slegend .lg.skip{box-shadow:none;border:1.5px dashed var(--line-strong)}
 @media (min-width:1100px){
  .band.wide{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:var(--s-6)}
 }
@@ -2911,17 +2916,20 @@ function trainersFor(role='',selected=''){return state.trainers.filter(t=>(t.act
 function download(content,filename,type){const url=URL.createObjectURL(new Blob([content],{type})),a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)}
 
 /* ——— Знаки: одна функция на знак — одинаковый вид на всех экранах и во всех ролях ———
-   Грамматика из «Карточек прибора»: эмблема — лицо, серия — квадратами, заполнение — массой,
+   Грамматика из «Карточек прибора»: эмблема — лицо, серия — отрезками, заполнение — массой,
    состояние — цветом заливки. Функции знают только форму, а не предметную область.
    Блок одинаковый у клиента, тренера и администратора. */
 // Лицо объекта: значок из набора или одна-две буквы; состояние — заливкой (ok · now · warn · alert · ahead · empty · calm).
 function emb(face,{size='m',state='',label='',badge='',halo=false}={}){
  const inner=ICONS[face]?I(face,20):esc(String(face||'·').slice(0,2));
  return `<span class="emb ${size}${state?' is-'+state:''}${halo?' is-halo':''}"${label?` role="img" aria-label="${esc(label)}"`:' aria-hidden="true"'}>${inner}${badge!==''&&badge!==undefined&&badge!==null?`<b class="badge">${esc(badge)}</b>`:''}</span>`}
-// Серия: квадрат на событие. Состояния: 'on' — сделано, 'ok' · 'warn' · 'alert' — по цвету, 'skip' — пропуск, 'now' — сейчас, '' — впереди.
-function slots(states,{size='',label=''}={}){
- return `<span class="slots${size?' '+size:''}"${label?` role="img" aria-label="${esc(label)}"`:' aria-hidden="true"'}>${states.map(c=>`<i${c?` class="${c}"`:''}></i>`).join('')}</span>`}
-// «Сделано из запланированного» — квадратами и числом рядом; длинная серия сжимается до max квадратов.
+// Серия: отрезок на событие; stages — длины этапов по порядку, между этапами — зазор.
+// Состояния: 'on' и 'ok' — сделано, 'warn' · 'alert' — по цвету, 'skip' — пропуск, 'now' — сейчас, '' — впереди.
+function slots(states,{size='',label='',stages=null}={}){const cut=new Set();let k=0;for(const n of (stages||[]).slice(0,-1)){k+=n;cut.add(k)}
+ return `<span class="slots${size?' '+size:''}"${label?` role="img" aria-label="${esc(label)}"`:' aria-hidden="true"'}>${states.map((c,i)=>{const cl=[c,cut.has(i)?'cut':''].filter(Boolean).join(' ');return `<i${cl?` class="${cl}"`:''}></i>`}).join('')}</span>`}
+// Этапы серии — длины подряд идущих одинаковых значений: блоки маршрута, части дня, группы клиентов.
+function runs(a){const r=[];a.forEach((v,i)=>{if(i&&a[i-1]===v)r[r.length-1]++;else r.push(1)});return r}
+// «Сделано из запланированного» — отрезками и числом рядом; длинная серия сжимается до max отрезков.
 function tally(done,total,{size='',max=14,tone='on',word=''}={}){if(!total)return '';
  const n=Math.min(total,max),k=Math.min(n,Math.round(done*n/total));
  return `<span class="signum">${slots(Array.from({length:n},(_,i)=>i<k?tone:''),{size,label:`${done} из ${total}${word?' '+word:''}`})}<span class="num" aria-hidden="true">${done} из ${total}${word?' '+word:''}</span></span>`}
@@ -3354,7 +3362,7 @@ function consoleScene(){const s=state,t=D.today();
  <div class="stack">${myShiftPanel(q)}${tomorrowPanel()}</div></div></section>`}
 
 /* Главный вопрос Пульта — что сейчас в клубе. Ответ — главная карточка: идущее занятие,
-   пауза до следующего или итог прошедшего дня; под ним весь день квадратами.
+   пауза до следующего или итог прошедшего дня; под ним весь день отрезками.
    Четыре числа над панелями больше не нужны: «требует внимания» — панелью ниже, смена — справа. */
 function consoleBand(groups){if(!groups.length)return '';
  const now=D.now().getTime(),hm=D.hm(),start=r=>new Date(r.date+'T'+r.time).getTime();
@@ -3423,8 +3431,8 @@ function myShiftPanel(q){const done=q.filter(x=>x.status!=='open').length,t=D.to
  const closed=q.filter(x=>x.status!=='open'&&x.key!==lastTask).sort((a,b)=>String(b.recordedAt||'').localeCompare(String(a.recordedAt||'')));
  const list=(just?[just,...open]:open);const shown=list.concat(closed.slice(0,Math.max(0,3-list.length)));
  const marked=D.occurrences(state,t,t).filter(r=>r.kind==='group').every(r=>r.status!=='planned');
- // Маршрут — квадратами: выполнено — ok, не вышло — тёплым, открыто — контур; счёт — рядом.
- const head=`<div class="progline">${slots(q.map(x=>x.status==='done'?'ok':x.status==='skipped'?'warn':''),{size:'l',label:`маршрут: ${done} из ${q.length} с ответом`})}
+ // Маршрут — отрезками по этапам (открытие · день · закрытие): выполнено — чернилами, не вышло — янтарём, открыто — серым; счёт — рядом.
+ const head=`<div class="progline">${slots(q.map(x=>x.status==='done'?'ok':x.status==='skipped'?'warn':''),{size:'l',stages:runs(q.map(x=>x.block)),label:`маршрут: ${done} из ${q.length} с ответом`})}
  <span class="meta">${done===q.length?esc(say('shiftAllRequired')):`<b class="num">${done} из ${q.length}</b> ${esc(say(marked?'dayAllMarked':'shiftSub'))}`}</span></div>`;
  return panel('Моя смена',q.length?`${head}<div class="rows">${shown.map(taskRow).join('')}</div>`
   :empty('tasks','Маршрута на сегодня нет','Опишите маршрут смены в справочнике — панель будет напоминать и считать итоги.',B('Маршрут','go-dir','tasks','small ghost')),{act:B('Вся смена','go','shift','small ghost'),key:'myshift'})}
@@ -3503,7 +3511,7 @@ const GUIDE=[
 function guideIndex(){if(guide.step!==null&&GUIDE[guide.step])return guide.step;return GUIDE.findIndex(g=>!g.check(state)&&(!g.slot||shows(g.slot)))}
 function guideCard(){if(guide.hidden||loadError||guide.later===D.today())return '';
  const i=guideIndex();if(i<0)return '';const g=GUIDE[i],ready=g.check(state);
- // Путь знакомства — квадратами: пройдено — ok, этот шаг — чернилами, недоступный на ступени — пунктир.
+ // Путь знакомства — отрезками: пройдено — чернилами, этот шаг — полутоном, недоступный на ступени — штрихом.
  const path=slots(GUIDE.map((x,k)=>x.check(state)?'ok':x.slot&&!shows(x.slot)?'skip':k===i?'now':''),{label:`Знакомство: шаг ${i+1} из ${GUIDE.length}`});
  return `<div class="learncard card" data-key="guide${g.id}"><div class="lhead"><span class="kicker">Знакомство</span>${path}<span class="grow"></span>${B('Позже','learn-later','','small ghost')}${B(I('close',16),'learn-toggle','','icon ghost small','aria-label="Скрыть подсказки"')}</div>
  <b>${esc(g.title)}</b><p class="meta">${esc(g.text)}</p>${ready?`<p class="meta done">${I('check',14)} ${esc(g.done)}</p>`:''}
@@ -3532,7 +3540,7 @@ function filterBtn(key,items,cur){const it=items.find(([k])=>k===cur)||items[0];
 // Виды — участки контракта показа: на базовой ступени итогов месяца нет.
 const JV=()=>[['day','День'],['week','Неделя'],['totals','Итоги']].filter(([k])=>shows('admin.journal.'+k));
 function journalScene(){const personal=ui.kind==='personal',[a,b]=range(),rows=D.occurrences(state,a,b).filter(r=>(!ui.trainer||r.trainerId===ui.trainer)&&r.kind===ui.kind),st=D.stats(rows);
- // Полка — числа со знаками: занятия квадратами (длинный период — массой), заполняемость — массой.
+ // Полка — числа со знаками: занятия отрезками (длинный период — массой), заполняемость — массой.
  // «Без отметки» тёплое, только когда занятие уже прошло: будущее ещё не хвост.
  const few=rows.length<=28,late=rows.some(r=>r.status==='planned'&&occState(r)==='warn');
  const shelf=personal
@@ -3612,12 +3620,12 @@ function shiftDay(q){
  return shiftBand(q,ui.date)+(right?`<div class="cols"><div class="stack">${blocks}</div><div class="stack">${right}</div></div>`:`<div class="stack">${blocks}</div>`)}
 
 /* Главный вопрос Смены — можно ли закрыть день. Ответ — главная карточка: маршрут и групповые
-   квадратами, кнопка закрытия, а рядом с выключенной кнопкой — что мешает.
-   Четыре числа над сменой больше не нужны: их показывают квадраты. */
+   отрезками по этапам, кнопка закрытия, а рядом с выключенной кнопкой — что мешает.
+   Четыре числа над сменой больше не нужны: их показывают отрезки. */
 function shiftBand(q,date){const c=state.closed&&state.closed[date],groups=D.occurrences(state,date,date).filter(r=>r.kind==='group');
  const answered=q.filter(x=>x.status!=='open').length,open=q.length-answered,marked=groups.filter(r=>r.status!=='planned').length;
- const set=(word,states,label)=>states.length?`<span class="bset"><span class="bm" aria-hidden="true">${word}</span>${slots(states,{size:'l',label})}</span>`:'';
- const fig=set('маршрут',q.map(x=>x.status==='done'?'ok':x.status==='skipped'?'warn':''),`маршрут: ${answered} из ${q.length} с ответом`)
+ const set=(word,states,label,stages=null)=>states.length?`<span class="bset"><span class="bm" aria-hidden="true">${word}</span>${slots(states,{size:'l',label,stages})}</span>`:'';
+ const fig=set('маршрут',q.map(x=>x.status==='done'?'ok':x.status==='skipped'?'warn':''),`маршрут: ${answered} из ${q.length} с ответом`,runs(q.map(x=>x.block)))
   +set('групповые',groups.map(occState),`групповые: отмечено ${marked} из ${groups.length}`);
  const kicker=`Смена · ${esc(dateLabel(date))}`;
  if(c)return band({face:'check',tone:'ok',kicker,title:'Закрыта',meta:`${esc(new Date(c.at).toTimeString().slice(0,5))}${c.by?' · '+esc(c.by):''}`,fig,key:'band-shift',cls:'wide'});
@@ -3650,7 +3658,7 @@ function monthCal(a,b){const t=D.today(),cells=[],seen=new Set();
   cells.push(`<button type="button" class="${st}" data-action="shift-day" data-id="${d}" aria-label="${esc(D.fmtDay(d))}: ${CAL_WORD[st]}"${d===t?' aria-current="date"':''}>${+d.slice(8)}</button>`)}
  const legend=['ok','warn','now','','skip'].filter(s=>seen.has(s));
  return `<div class="mcal">${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(x=>`<span class="mh" aria-hidden="true">${x}</span>`).join('')}${cells.join('')}</div>
- <p class="slegend caption">${legend.map(s=>`<span>${slots([s])}${CAL_WORD[s]}</span>`).join('')}</p>`}
+ <p class="slegend caption">${legend.map(s=>`<span><i class="lg${s?' '+s:''}" aria-hidden="true"></i>${CAL_WORD[s]}</span>`).join('')}</p>`}
 
 /* ——— «Справочник»: люди и структура ———
    Тренеры, клиенты, сетка, персональные, маршрут. Люди правятся на месте, шаблоны

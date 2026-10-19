@@ -1106,20 +1106,24 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .emb.is-warn{background:var(--warn-fill);color:var(--on-warn)}
 .emb.is-alert{background:var(--alert);color:var(--surface)}
 .emb.is-calm{background:var(--card-hot);color:var(--ink)}
+.emb.is-new{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
 .emb .badge{position:absolute;right:-5px;top:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:var(--r-pill);display:grid;place-items:center;
  background:var(--alert);color:var(--surface);font-size:11px;font-weight:var(--w-bold);box-shadow:0 0 0 2px var(--surface)}
 
-/* Серия — квадрат на событие: сделано залито, впереди — контур, пропуск — пунктир. */
-.slots{display:inline-flex;flex-wrap:wrap;align-items:center;gap:3px;vertical-align:middle}
-.slots i{flex:none;width:12px;height:12px;border-radius:var(--r-mark);box-shadow:inset 0 0 0 1.5px var(--line-strong)}
-.slots i.on{background:var(--ink);box-shadow:none}
-.slots i.ok{background:var(--ok);box-shadow:none}
-.slots i.warn{background:var(--warn-fill);box-shadow:none}
-.slots i.alert{background:var(--alert);box-shadow:none}
-.slots i.skip{box-shadow:none;border:1.5px dashed var(--line-strong)}
-.slots i.now{box-shadow:inset 0 0 0 2px var(--ink)}
-.slots.l{gap:4px}.slots.l i{width:18px;height:18px}
-.slots.xl{gap:6px}.slots.xl i{width:28px;height:28px;border-radius:var(--r-small)}
+/* Серия — тонкая линия, по отрезку на событие; этапы (блоки маршрута, части дня, группы)
+   разделены зазором. Сделано — чернилами, внимание — янтарём, тревога — красным, сейчас — полутоном,
+   впереди — серым, пропуск — штрихом. Линия тихая: не спорит с текстом и числом рядом.
+   Фон меняет только нейтральные тона (--seg-*): цвет состояния один везде. */
+.slots{--seg-off:var(--line-strong);--seg-on:var(--ink);--seg-now:color-mix(in srgb,var(--ink) 45%,transparent);
+ display:inline-flex;align-items:center;gap:2px;vertical-align:middle;max-width:100%}
+.slots i{flex:0 1 auto;width:12px;min-width:3px;height:4px;border-radius:2px;background:var(--seg-off)}
+.slots i:is(.on,.ok){background:var(--seg-on)}
+.slots i.now{background:var(--seg-now)}
+.slots i.warn{background:var(--warn-fill)}
+.slots i.alert{background:var(--alert)}
+.slots i.skip{background:repeating-linear-gradient(135deg,var(--seg-off) 0 2px,transparent 2px 4px)}
+.slots i.cut{margin-left:6px}
+.slots.l{gap:3px}.slots.l i{width:20px;height:5px;border-radius:3px}.slots.l i.cut{margin-left:8px}
 .signum{display:inline-flex;align-items:center;gap:var(--s-2);font-variant-numeric:tabular-nums}
 
 /* Заполнение — масса, а не цифра: полоса 8 px, доля — ширина залитой части. */
@@ -1130,13 +1134,14 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 
 /* Заголовок группы несёт знак, цвет и число — внутри группы состояние словом не повторяется. */
 .gh{display:flex;align-items:center;gap:var(--s-2);min-height:28px;padding:0 var(--s-1);font-size:var(--t-meta);font-weight:var(--w-bold);color:var(--ink)}
-.gh>.gs{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--card-hot);color:var(--ink)}
+.gh>.gs{flex:none;width:22px;height:22px;min-width:0;padding:0;border-radius:50%;display:grid;place-items:center;background:var(--card-hot);color:var(--ink)}
 .gh>.gs>svg{width:13px;height:13px;stroke-width:2.4}
 .gh .n{margin-left:auto;color:var(--muted);font-weight:var(--w-medium);font-variant-numeric:tabular-nums}
 .gh.is-ok{color:var(--ok)}.gh.is-ok>.gs{background:var(--ok);color:var(--surface)}
 .gh.is-warn{color:var(--warn)}.gh.is-warn>.gs{background:var(--warn-fill);color:var(--on-warn)}
 .gh.is-alert{color:var(--alert)}.gh.is-alert>.gs{background:var(--alert);color:var(--surface)}
 .gh.is-now>.gs{background:var(--accent);color:var(--on-accent)}
+.gh.is-new>.gs{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
 .ggroup{display:flex;flex-direction:column;gap:var(--s-2)}
 .ggroup+.ggroup{margin-top:var(--s-5)}
 
@@ -1152,6 +1157,7 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .band .bhead{display:flex;align-items:center;gap:var(--s-4);min-width:0}
 .band .bhead>.grow{min-width:0}
 .band .emb{background:var(--on-accent);color:var(--accent)}
+.band .emb.is-new{box-shadow:none}
 .band .emb.is-ok{background:var(--ok);color:var(--surface)}
 .band .emb.is-warn{background:var(--warn-fill);color:var(--on-warn)}
 .band .emb.is-alert{background:var(--alert);color:var(--surface)}
@@ -1165,10 +1171,7 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .band .bacts>*{flex:0 1 auto}
 .band .bfig .meter{flex:1 1 100%}
 @media (max-width:640px){.band .bacts>*{flex:1 1 auto}}
-.band .slots i{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--on-accent) 42%,transparent)}
-.band .slots i.on{background:var(--on-accent);box-shadow:none}
-.band .slots i.ok{background:var(--ok);box-shadow:none}
-.band .slots i.now{box-shadow:inset 0 0 0 2px var(--on-accent)}
+.band .slots{--seg-off:color-mix(in srgb,var(--on-accent) 26%,transparent);--seg-on:var(--on-accent);--seg-now:color-mix(in srgb,var(--on-accent) 58%,transparent)}
 .band .meter{background:color-mix(in srgb,var(--on-accent) 22%,transparent)}
 .band .meter>i{background:var(--on-accent)}
 .band button{min-height:var(--h-row);border-color:color-mix(in srgb,var(--on-accent) 30%,transparent);background:transparent;color:var(--on-accent);font-weight:var(--w-bold)}
@@ -1183,13 +1186,12 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .band .spark path{stroke:var(--on-accent)}.band .spark circle{fill:var(--on-accent)}
 .band.is-ok{background:var(--ok);color:var(--surface);box-shadow:var(--shadow-rest)}
 .band.is-ok .emb{background:var(--surface);color:var(--ok)}
-.band.is-ok .slots i{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--surface) 55%,transparent)}
-.band.is-ok .slots i:is(.on,.ok){background:var(--surface);box-shadow:none}
+.band.is-ok .slots{--seg-off:color-mix(in srgb,var(--surface) 35%,transparent);--seg-on:var(--surface);--seg-now:color-mix(in srgb,var(--surface) 65%,transparent)}
 .band.is-calm{background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow-rest)}
 .band.is-calm .emb{background:var(--card);color:var(--ink)}
 .band.is-calm button{border-color:var(--line-strong);color:var(--ink)}
 .band.is-calm button.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-.band.is-calm .slots i{box-shadow:inset 0 0 0 1.5px var(--line-strong)}.band.is-calm .slots i.on{background:var(--ink)}
+.band.is-calm .slots{--seg-off:var(--line-strong);--seg-on:var(--ink);--seg-now:color-mix(in srgb,var(--ink) 45%,transparent)}
 .band.is-calm .meter{background:var(--card-hot)}.band.is-calm .meter>i{background:var(--ink)}
 .band.is-calm .spark path{stroke:var(--ink)}.band.is-calm .spark circle{fill:var(--ink)}
 
@@ -1202,14 +1204,15 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .shead .actions{align-items:center}
 
 /* ——— Тренер на знаках ———
-   Состояние клиента — заливка его знака; слово — один раз, над группой. Посещения — квадратами
+   Состояние клиента — заливка его знака; слово — один раз, над группой. Посещения — отрезками
    за 8 недель, ответы недели — цветом выбранного: работаем — ok, разговор — warn, уходит — alert. */
 .khead{display:flex;align-items:center;flex-wrap:wrap;gap:var(--s-1) var(--s-2);margin-bottom:var(--s-1)}
 .shead .khead .kicker{display:inline-block;margin-bottom:0}
 .subsigns{display:inline-flex;flex-wrap:wrap;align-items:center;gap:var(--s-1) var(--s-4)}
 .shead .sub .signum{vertical-align:middle}
-.wd i{width:10px;height:10px;border-radius:var(--r-mark)}
+.wd i{width:14px;height:4px;border-radius:2px}
 .wd i.done{background:var(--ink)}
+.wd i.plan{background:var(--line-strong)}
 .wd i.warn{background:var(--warn-fill)}
 .roster{padding:var(--s-2) var(--s-3)}
 .crside{flex:none;display:flex;align-items:center;gap:var(--s-2)}
@@ -1217,7 +1220,6 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .liftrow .meter{width:96px;flex:none}
 .liftrow b{min-width:72px;text-align:right}
 .mrow .signum{gap:var(--s-2);font-size:var(--t-caption);color:var(--muted)}
-.mrow .slots i{width:10px;height:10px}
 .wkrow .answers{margin-left:56px}
 .answers button.is-on[data-id="work"]{background:var(--ok);color:var(--surface)}
 .answers button.is-on[data-id="talk"]{background:var(--warn-fill);color:var(--on-warn)}
@@ -1229,7 +1231,7 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .tick.is-on{background:var(--ok);border-color:var(--ok);color:var(--surface)}
 @media (max-width:640px){
  .crow>button.icon:last-child{display:none}
- .crside .slots i{width:9px;height:9px}
+ .crside .slots i{width:9px}
  .crside .slots{gap:2px}
  .wkrow .answers{margin-left:0}
  .liftrow .meter{width:56px}
@@ -2584,17 +2586,20 @@ function ring(r,size=36,label=''){const rad=(size-5)/2,c=2*Math.PI*rad;
 
 // ——— тост ———
 /* ——— Знаки: одна функция на знак — одинаковый вид на всех экранах и во всех ролях ———
-   Грамматика из «Карточек прибора»: эмблема — лицо, серия — квадратами, заполнение — массой,
+   Грамматика из «Карточек прибора»: эмблема — лицо, серия — отрезками, заполнение — массой,
    состояние — цветом заливки. Функции знают только форму, а не предметную область.
    Блок одинаковый у клиента, тренера и администратора. */
 // Лицо объекта: значок из набора или одна-две буквы; состояние — заливкой (ok · now · warn · alert · ahead · empty · calm).
 function emb(face,{size='m',state='',label='',badge='',halo=false}={}){
  const inner=ICONS[face]?I(face,20):esc(String(face||'·').slice(0,2));
  return `<span class="emb ${size}${state?' is-'+state:''}${halo?' is-halo':''}"${label?` role="img" aria-label="${esc(label)}"`:' aria-hidden="true"'}>${inner}${badge!==''&&badge!==undefined&&badge!==null?`<b class="badge">${esc(badge)}</b>`:''}</span>`}
-// Серия: квадрат на событие. Состояния: 'on' — сделано, 'ok' · 'warn' · 'alert' — по цвету, 'skip' — пропуск, 'now' — сейчас, '' — впереди.
-function slots(states,{size='',label=''}={}){
- return `<span class="slots${size?' '+size:''}"${label?` role="img" aria-label="${esc(label)}"`:' aria-hidden="true"'}>${states.map(c=>`<i${c?` class="${c}"`:''}></i>`).join('')}</span>`}
-// «Сделано из запланированного» — квадратами и числом рядом; длинная серия сжимается до max квадратов.
+// Серия: отрезок на событие; stages — длины этапов по порядку, между этапами — зазор.
+// Состояния: 'on' и 'ok' — сделано, 'warn' · 'alert' — по цвету, 'skip' — пропуск, 'now' — сейчас, '' — впереди.
+function slots(states,{size='',label='',stages=null}={}){const cut=new Set();let k=0;for(const n of (stages||[]).slice(0,-1)){k+=n;cut.add(k)}
+ return `<span class="slots${size?' '+size:''}"${label?` role="img" aria-label="${esc(label)}"`:' aria-hidden="true"'}>${states.map((c,i)=>{const cl=[c,cut.has(i)?'cut':''].filter(Boolean).join(' ');return `<i${cl?` class="${cl}"`:''}></i>`}).join('')}</span>`}
+// Этапы серии — длины подряд идущих одинаковых значений: блоки маршрута, части дня, группы клиентов.
+function runs(a){const r=[];a.forEach((v,i)=>{if(i&&a[i-1]===v)r[r.length-1]++;else r.push(1)});return r}
+// «Сделано из запланированного» — отрезками и числом рядом; длинная серия сжимается до max отрезков.
 function tally(done,total,{size='',max=14,tone='on',word=''}={}){if(!total)return '';
  const n=Math.min(total,max),k=Math.min(n,Math.round(done*n/total));
  return `<span class="signum">${slots(Array.from({length:n},(_,i)=>i<k?tone:''),{size,label:`${done} из ${total}${word?' '+word:''}`})}<span class="num" aria-hidden="true">${done} из ${total}${word?' '+word:''}</span></span>`}
@@ -2816,8 +2821,9 @@ function shiftScene(){const s=view(),t=D.today(),day=ui.day,isToday=day===t;
  const risk=s.clients.filter(c=>['risk','lost'].includes(CD.status(s,c,t))).length;
  const kicker=isToday?D.now().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'}):D.fmtDay(day);
  const title=isToday?`${greet()}${s.profile.name?', '+esc(s.profile.name):''}`:D.fmtDay(day);
- // Итог — знаками: занятия дня квадратами, «в риске» — тёплыми квадратами; число рядом.
- const sub=[list.length?tally(list.filter(x=>x.status==='done'||x.mark==='held').length,list.length,{tone:'on',word:plural(list.length,'занятие','занятий','занятий')}):'Занятий нет',
+ // Итог — линией этапов: утро · день · вечер, по отрезку на занятие; «в риске» — янтарём; число рядом.
+ const held=list.filter(x=>x.status==='done'||x.mark==='held').length,count=`${held} из ${list.length} ${plural(list.length,'занятие','занятий','занятий')}`;
+ const sub=[list.length?`<span class="signum">${slots(list.map(x=>x.status==='done'||x.mark==='held'?'on':''),{stages:runs(list.map(x=>D.part(x.time))),label:count})}<span class="num" aria-hidden="true">${count}</span></span>`:'Занятий нет',
   risk?`<span class="signum">${slots(Array(Math.min(risk,8)).fill('warn'))}<span class="num">${risk} в риске</span></span>`:''].filter(Boolean).join('');
  return `<section class="scene">${sceneHead(kicker,title,`<span class="subsigns">${sub}</span>`,B(I('plus',18)+'Клиент','client-add','','primary'))}
  ${dayStrip(day)}
@@ -2825,7 +2831,7 @@ function shiftScene(){const s=view(),t=D.today(),day=ui.day,isToday=day===t;
  <div class="cols"><div class="stack">${isToday?shiftBand(list,day)+tailCards():''}${shiftList(list,day)}</div><div class="stack">${sideShift(s)}</div></div></section>`}
 
 /* Главный вопрос смены — кто следующий и что дать. Ответ — главная карточка:
-   ближайшее занятие, первое упражнение с прошлым весом и вся смена квадратами. */
+   ближайшее занятие, первое упражнение с прошлым весом и вся смена отрезками. */
 function shiftBand(list,day){if(!list.length)return '';const s=view(),now=D.hm();
  const state=x=>x.status==='done'||x.mark==='held'?'on':x.mark==='missed'||x.mark==='off'?'skip':'';
  const nx=list.find(x=>x.status==='active')||list.find(x=>x.status!=='done'&&!x.paused&&!x.mark&&(x.time||'99:99')>=now);
@@ -2843,11 +2849,13 @@ function exampleSheet(){openSheet({title:'Пример студии',body:`<p cl
  extra:B('Мои клиенты','example-exit','','primary'),cancel:true})}
 
 /* Состояние клиента — заливкой знака, а не словом в каждой строке:
-   ходит — ok, новичок — чернила, просел — warn, пропал — alert, пауза — спокойно. */
-const ST_STATE={ok:'ok',new:'now',risk:'warn',lost:'alert',pause:'calm'};
-const ST_GROUP={lost:['alert','flame','Пропали'],risk:['warn','flame','Просели'],new:['now','flag','Новички'],ok:['ok','check','Ходят'],pause:['','moonset','На паузе']};
+   ходит — ok, новичок — контуром (путь ещё не сложился), просел — warn, пропал — alert, пауза — спокойно. */
+const ST_STATE={ok:'ok',new:'new',risk:'warn',lost:'alert',pause:'calm'};
+const ST_GROUP={lost:['alert','flame','Пропали'],risk:['warn','flame','Просели'],new:['new','flag','Новички'],ok:['ok','check','Ходят'],pause:['','moonset','На паузе']};
+// Состав потока в линии отрезков: пропали — красным, просели — янтарём, новички — полутоном, ходят — чернилами, пауза — серым.
+const ST_SEG={lost:'alert',risk:'warn',new:'now',ok:'on',pause:''};
 function cemb(s,c,t,size='m'){const st=CD.status(s,c,t);return emb(initials(c.name),{size,state:ST_STATE[st],label:`${c.name}: ${CD.STATUS[st].toLowerCase()}`})}
-// Посещения за 8 недель — квадрат на неделю: была тренировка — залит, не было — контур, до начала — пунктир.
+// Посещения за 8 недель — отрезок на неделю: была тренировка — чернилами, не было — серым, до начала — штрихом.
 function track(c,t=D.today(),size=''){const days=CD.visits(c,t),ws=D.weekStart(t),out=[];
  for(let i=7;i>=0;i--){const a=D.addDays(ws,-7*i),b=D.addDays(a,6);
   if(b<c.since){out.push('skip');continue}
@@ -2937,7 +2945,9 @@ function clientsScene(){const s=view(),t=D.today();
   .sort((a,b)=>CD.gapDays(b,t)-CD.gapDays(a,t)||a.name.localeCompare(b.name));
  // Группы по состоянию: слово, знак и число — над группой; в строке состояние несёт заливка знака.
  const groups=Object.keys(ST_GROUP).map(st=>({st,items:list.filter(c=>CD.status(s,c,t)===st)})).filter(g=>g.items.length);
- return `<section class="scene">${sceneHead('Поток','Клиенты',`<span class="subsigns">${groups.map(g=>`<span class="signum">${slots(g.items.slice(0,12).map(()=>ST_STATE[g.st]==='calm'?'':ST_STATE[g.st]==='now'?'on':ST_STATE[g.st]))}<span class="num">${g.items.length}</span></span>`).join('')}</span>`,seg)}
+ // Состав — одной линией: отрезок на клиента, группы — этапами через зазор. Двоих-троих видно и в группах — линию не рисуем.
+ const comp=list.length>3?`<span class="signum">${slots(groups.flatMap(g=>g.items.map(()=>ST_SEG[g.st])),{stages:groups.map(g=>g.items.length),label:groups.map(g=>`${ST_GROUP[g.st][2].toLowerCase()}: ${g.items.length}`).join(', ')})}<span class="num" aria-hidden="true">${list.length}</span></span>`:'';
+ return `<section class="scene">${sceneHead('Поток','Клиенты',comp,seg)}
  ${s.clients.length>6?search:''}
  ${list.length?groups.map(g=>{const [tone,icon,title]=ST_GROUP[g.st];return `<div class="ggroup" data-key="g${g.st}">${gh(tone,icon,title,g.items.length)}<section class="panel roster"><div class="rows">${g.items.map(c=>clientRow(s,c,t)).join('')}</div></section></div>`}).join('')
   :`<section class="panel">${empty('coach',q?'Никого не нашли':ui.seg==='all'?'Клиентов пока нет':'В этом сегменте пусто',q?`По запросу «${esc(q)}» в этом сегменте никого.`:ui.seg==='all'?'Заведите клиента или откройте пример студии.':'Хорошая новость: здесь никого.',q?B('Очистить поиск','search-clear','','small'):ui.seg==='all'?B(I('plus',18)+'Клиент','client-add','','primary small'):'')}</section>`}
@@ -3006,7 +3016,7 @@ function progressPanel(s,c,pr){
 
 function habitsPanel(s,c){const t=D.today(),list=c.record.habits.filter(h=>!h.archived);
  if(!list.length)return '';
- // Один период на панель: и доля, и строки, и подпись — за одни и те же четыре недели. Дни — квадратами.
+ // Один период на панель: и доля, и строки, и подпись — за одни и те же четыре недели. Дни — отрезками.
  const all=CD.habits(c,28,t);
  return `<section class="panel"><div class="phead"><h2>Между тренировками</h2><span class="ptag">${all.pct===null?'нет дней':`${all.pct}% за 4 недели`}</span></div>
  <div class="rows compact">${list.map(h=>{const r=D.habitStats(c.record,h,D.addDays(t,-27),t),st=D.streak(c.record,h,t);
@@ -3217,7 +3227,7 @@ function weekScene(){const s=view(),week=ui.week,r=CD.weekReview(s,week);
  <div class="cols"><div class="stack">${weekBand(s,r,week)}${weekPanel(s,r,week)}</div><div class="stack">${reviewPanel(s,r,week)}</div></div></section>`}
 
 /* Главный вопрос недели — закрыта ли она и по кому нет ответа. Ответ — главная карточка:
-   квадрат на клиента (ответ есть — залит) и кнопка закрытия рядом. */
+   отрезок на клиента (ответ есть — чернилами) и кнопка закрытия рядом. */
 function weekBand(s,r,week){if(!r.rows.length)return '';
  const closed=r.closed,future=week>D.weekStart(D.today()),cs=CD.closeState(s,week),total=r.rows.length,ans=total-r.unanswered.length;
  const fig=slots(r.rows.map(x=>x.answer?'on':''),{size:'l',label:`ответ есть по ${ans} из ${total}`});
