@@ -421,17 +421,16 @@ a.mback:active{background:var(--press)}
 .nowline::after{content:"";flex:1;height:1.5px;margin-left:var(--s-2);background:var(--ink);border-radius:var(--r-pill)}
 .nowline span{font-size:var(--t-caption);font-weight:var(--w-bold);color:var(--ink)}
 .nowline+.row::before{opacity:0}
-.row.is-next{background:var(--card)}
-.row.is-next::before,.row.is-next+.row::before{opacity:0}
 .row.is-next .rt,.row.wk .rt{font-weight:var(--w-bold)}
 /* Крупно — только ближайшее и только там, где есть ширина: на телефоне название с кнопкой ломалось в две строки (аудит, п. 11). */
-@media (min-width:720px){.row.is-next .rt{font-size:var(--t-heading);letter-spacing:-.01em}}
 .late{color:var(--warn)}
 .tiles.one{grid-template-columns:1fr}
 /* Число внутри панели или шторки — не плашка, а строка с волосной чертой слева (один слой, §15).
    На холсте (сцена) плитка остаётся карточкой. */
 :is(.panel,.sheet) .tile{background:transparent;border-radius:0;padding:var(--s-1) 0 var(--s-1) var(--s-4);border-left:1px solid var(--line-strong)}
 @media (max-width:1023px){.deskonly{display:none}}
+/* на компьютере остальные сигналы стоят панелью справа — карточка «Ещё N» повторяла бы её */
+@media (min-width:1024px){.qcards>.more{display:none}}
 .okword{color:var(--ok)}
 .row.is-future .rt{color:var(--ink-soft)}
 .lead.ico.dim{background:transparent;border:1.5px dashed var(--line-strong);color:var(--faint)}
@@ -565,10 +564,10 @@ button.stat:active{background:var(--card)}
 .hcard{display:flex;flex-direction:column;gap:var(--s-4);padding:var(--s-6)}
 .hhead{display:flex;align-items:flex-start;gap:var(--s-2)}
 .hhead h3{font-weight:var(--w-bold)}
-/* клетка — день, а не полоса: ширина ограничена (аудит, п. 37) */
-.marks{display:grid;grid-template-columns:repeat(7,minmax(0,32px));gap:var(--s-1);justify-content:start}
+/* день — тонкий отрезок в сетке недель, как серии везде; ширина ограничена (аудит, п. 37) */
+.marks{display:grid;grid-template-columns:repeat(7,minmax(0,32px));gap:var(--s-2) var(--s-1);justify-content:start;align-items:center}
 .marks .caption{text-align:center}
-.marks i{height:22px;border-radius:var(--r-small);background:var(--card)}
+.marks i{height:6px;border-radius:3px;background:var(--card)}
 .marks i.none{background:transparent}
 .marks i.done{background:var(--ink)}
 .marks i.miss{background:transparent;box-shadow:inset 0 0 0 1.5px var(--line-strong)}
@@ -619,7 +618,7 @@ a.btn:active{background:var(--card-hot);transform:scale(.96)}
 .meetset{width:100%}
 /* Легенда сетки отметок: те же клетки, что и в сетке */
 .mlegend{display:flex;align-items:center;gap:var(--s-1);flex-wrap:wrap;margin:0}
-.mlegend i{width:12px;height:12px;border-radius:var(--r-small);display:inline-block;margin-left:var(--s-2)}
+.mlegend i{width:12px;height:6px;border-radius:3px;display:inline-block;margin-left:var(--s-2)}
 .mlegend i:first-child{margin-left:0}
 .mlegend i.done{background:var(--ink)}
 .mlegend i.miss{box-shadow:inset 0 0 0 1.5px var(--line-strong)}
@@ -1237,13 +1236,14 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .band.is-calm .meter{background:var(--card-hot)}.band.is-calm .meter>i{background:var(--ink)}
 .band.is-calm .spark path{stroke:var(--ink)}.band.is-calm .spark circle{fill:var(--ink)}
 
-/* Примерные данные — чип в шапке, а не баннер на шестую часть экрана. */
+/* Примерные данные — спокойный чип в шапке, а не баннер на шестую часть экрана.
+   Янтарь остаётся за вниманием; наведение — общая вуаль. */
 .kchip{position:relative;flex:none;display:inline-flex;align-items:center;gap:var(--s-1);min-height:28px;padding:0 var(--s-3) 0 var(--s-2);border-radius:var(--r-pill);border:0;
- background:var(--warn-veil);color:var(--ink);font-size:var(--t-caption);font-weight:var(--w-medium);white-space:nowrap}
-.kchip>svg{color:var(--warn)}
+ background:transparent;box-shadow:inset 0 0 0 1px var(--line-strong);color:var(--ink-soft);font-size:var(--t-caption);font-weight:var(--w-medium);white-space:nowrap}
+.kchip>svg{color:var(--muted)}
 .kchip::after{content:"";position:absolute;inset:-8px -2px}
-@media (hover:hover){.kchip:hover{background:var(--warn-veil);box-shadow:inset 0 0 0 1px var(--warn)}}
 .shead .actions{align-items:center}
+.shead .actions:has(>.pseg){flex-basis:100%;margin-top:var(--s-2)}
 
 /* ——— Тренер на знаках ———
    Состояние клиента — заливка его знака; слово — один раз, над группой. Посещения — отрезками
@@ -2948,7 +2948,7 @@ function tailCards(){const all=ui.tails.filter(x=>!ui.dismissed.has(x.id));if(!a
   return `<div class="qcard card ${x.kind==='gap'?'warn':''}" data-key="t${x.kind}${x.id}">${emb(TAIL_ICON[x.kind]||'flag',{size:'s',state:TAIL_TONE[x.kind]||''})}
   <p class="grow"><b>${esc(x.name)}</b> <span class="meta">${esc(x.why)}${x.more?` · и ещё ${x.more}`:''}</span>${x.reach?`<span class="meta done">${I('check',13)} ${esc(x.reach)}</span>`:''}</p>
   <div class="btnrow">${B('Позже','tail-dismiss',x.id,'small ghost')}${x.kind!=='week'&&x.kind!=='session'?B('Карточка','client-open',x.id,'small ghost'):''}${act}</div></div>`};
- return `<div class="qcards">${shown.map(card).join('')}${rest>0?`<div class="qcard card" data-key="tmore">${emb('list',{size:'s',state:'calm'})}<p class="grow meta">Ещё ${rest} ${plural(rest,'сигнал','сигнала','сигналов')}</p><div class="btnrow">${B('Все клиенты','go','clients','small ghost')}</div></div>`:''}</div>`}
+ return `<div class="qcards">${shown.map(card).join('')}${rest>0?`<div class="qcard card more" data-key="tmore">${emb('list',{size:'s',state:'calm'})}<p class="grow meta">Ещё ${rest} ${plural(rest,'сигнал','сигнала','сигналов')}</p><div class="btnrow">${B('Все клиенты','go','clients','small ghost')}</div></div>`:''}</div>`}
 
 // ——— лента занятий ———
 function shiftList(list,day){const s=view();
@@ -3047,7 +3047,7 @@ function clientScene(id){const s=view(),c=CD.client(s,id||'');
 function reachPanel(c,t){const l=[...(c.reaches||[])].sort((a,b)=>(b.date+b.at).localeCompare(a.date+a.at));
  return `<section class="panel"><div class="phead"><h2>Что сделано</h2>${B(I('plus',16),'reach-new',c.id,'icon small ghost','aria-label="Записать ответ"')}</div>
  ${l.length?`<div class="rows compact">${l.slice(0,6).map(r=>`<div class="row plain rchrow" data-key="${r.id}"><div class="grow"><span class="rt">${CD.REACH[r.kind]} <span class="caption">· ${D.fmtShort(r.date)}</span></span><span class="rm">${r.until?`ждём ${D.fmtShort(r.until)}`:''}${r.until&&r.text?' · ':''}${esc(r.text||'')}</span></div>${B(I('trash',15),'reach-del',r.id,'icon small ghost',`data-c="${c.id}" aria-label="Удалить"`)}</div>`).join('')}</div>`
- :`<p class="meta">Пусто. Сигнал закрывается ответом: написал, позвонил, договорились — тогда он не повторится и попадёт в сводку недели.</p>`}</section>`}
+ :empty('send','Ответов пока нет','Сигнал закрывается ответом: написал, позвонил, договорились — тогда он не повторится и попадёт в сводку недели.')}</section>`}
 
 /* Занятия, которые тренер ещё не отметил: пришёл человек или нет — его факт, не клиента. */
 function sessionsPanel(s,c,t){const un=CD.unconfirmed(s,c,t);if(!un.length)return '';
@@ -3094,7 +3094,7 @@ function planPanel(s,c){const plans=c.record.plans;
 function notesPanel(c){const l=[...(c.notes||[])].reverse();
  return `<section class="panel"><div class="phead"><h2>Мои заметки</h2>${B(I('plus',16),'note-new',c.id,'icon small ghost','aria-label="Новая заметка"')}</div>
  ${l.length?`<div class="rows compact">${l.slice(0,8).map(n=>`<div class="mnote" data-key="${n.id}"><div class="mnhead"><span class="caption">${D.fmtDate(n.date)}</span>${B(I('trash',15),'note-del',n.id,'icon small ghost',`data-c="${c.id}" aria-label="Удалить заметку"`)}</div><p>${esc(n.text)}</p></div>`).join('')}</div>`
- :`<p class="meta">Пусто. Заметка — это то, что нужно помнить к следующему разу: травма, обещание, настроение.</p>`}</section>`}
+ :empty('note','Заметок пока нет','Заметка — это то, что нужно помнить к следующему разу: травма, обещание, настроение.')}</section>`}
 
 /* ——— Методика клиента (M) ———
    Тренер собирает методику прямо в карточке клиента: правила, основа и линии,

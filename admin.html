@@ -439,11 +439,8 @@ a.mback:active{background:var(--press)}
 .nowline::after{content:"";flex:1;height:1.5px;margin-left:var(--s-2);background:var(--ink);border-radius:var(--r-pill)}
 .nowline span{font-size:var(--t-caption);font-weight:var(--w-bold);color:var(--ink)}
 .nowline+.row::before{opacity:0}
-.row.is-next{background:var(--card)}
-.row.is-next::before,.row.is-next+.row::before{opacity:0}
 .row.is-next .rt,.row.wk .rt{font-weight:var(--w-bold)}
 /* Крупно — только ближайшее и только там, где есть ширина: на телефоне название с кнопкой ломалось в две строки (аудит, п. 11). */
-@media (min-width:720px){.row.is-next .rt{font-size:var(--t-heading);letter-spacing:-.01em}}
 .late{color:var(--warn)}
 .tiles.one{grid-template-columns:1fr}
 /* Число внутри панели или шторки — не плашка, а строка с волосной чертой слева (один слой, §15).
@@ -576,14 +573,14 @@ button.stat:active{background:var(--card)}
 .hcard{display:flex;flex-direction:column;gap:var(--s-4);padding:var(--s-6)}
 .hhead{display:flex;align-items:flex-start;gap:var(--s-2)}
 .hhead h3{font-weight:var(--w-bold)}
-/* клетка — день, а не полоса: ширина ограничена (аудит, п. 37) */
-.marks{display:grid;grid-template-columns:repeat(7,minmax(0,26px));gap:var(--s-1) 6px;justify-content:start}
+/* день — тонкий отрезок в сетке недель, как серии везде; ширина ограничена (аудит, п. 37) */
+.marks{display:grid;grid-template-columns:repeat(7,minmax(0,32px));gap:var(--s-2) var(--s-1);justify-content:start;align-items:center}
 .marks .caption{text-align:center}
-.marks i{aspect-ratio:1;border-radius:var(--r-mark);background:var(--card)}
+.marks i{height:6px;border-radius:3px;background:var(--card)}
 .marks i.none{background:transparent}
-.marks i.done{background:var(--mark)}
+.marks i.done{background:var(--ink)}
 .marks i.miss{background:transparent;box-shadow:inset 0 0 0 1.5px var(--line-strong)}
-.marks i.open{background:var(--mark-soft)}
+.marks i.open{background:var(--card-hot)}
 .marks i.today{background:transparent;box-shadow:inset 0 0 0 1.5px var(--ink)}
 .hfoot{display:flex;align-items:center;justify-content:space-between;gap:var(--s-2)}
 .streakbig{display:inline-flex;align-items:center;gap:var(--s-1);font-size:var(--t-meta);color:var(--ink-soft)}
@@ -617,7 +614,7 @@ a.btn:active{background:var(--card-hot);transform:scale(.96)}
 .meetset{width:100%}
 /* Легенда сетки отметок: те же клетки, что и в сетке */
 .mlegend{display:flex;align-items:center;gap:var(--s-1);flex-wrap:wrap;margin:0}
-.mlegend i{width:12px;height:12px;border-radius:var(--r-mark);display:inline-block;margin-left:var(--s-2)}
+.mlegend i{width:12px;height:6px;border-radius:3px;display:inline-block;margin-left:var(--s-2)}
 .mlegend i:first-child{margin-left:0}
 .mlegend i.done{background:var(--mark)}
 .mlegend i.miss{box-shadow:inset 0 0 0 1.5px var(--line-strong)}
@@ -1361,13 +1358,14 @@ details.more[open]>.field{margin-top:var(--s-2)}
 .band.is-calm .meter{background:var(--card-hot)}.band.is-calm .meter>i{background:var(--ink)}
 .band.is-calm .spark path{stroke:var(--ink)}.band.is-calm .spark circle{fill:var(--ink)}
 
-/* Примерные данные — чип в шапке, а не баннер на шестую часть экрана. */
+/* Примерные данные — спокойный чип в шапке, а не баннер на шестую часть экрана.
+   Янтарь остаётся за вниманием; наведение — общая вуаль. */
 .kchip{position:relative;flex:none;display:inline-flex;align-items:center;gap:var(--s-1);min-height:28px;padding:0 var(--s-3) 0 var(--s-2);border-radius:var(--r-pill);border:0;
- background:var(--warn-veil);color:var(--ink);font-size:var(--t-caption);font-weight:var(--w-medium);white-space:nowrap}
-.kchip>svg{color:var(--warn)}
+ background:transparent;box-shadow:inset 0 0 0 1px var(--line-strong);color:var(--ink-soft);font-size:var(--t-caption);font-weight:var(--w-medium);white-space:nowrap}
+.kchip>svg{color:var(--muted)}
 .kchip::after{content:"";position:absolute;inset:-8px -2px}
-@media (hover:hover){.kchip:hover{background:var(--warn-veil);box-shadow:inset 0 0 0 1px var(--warn)}}
 .shead .actions{align-items:center}
+.shead .actions:has(>.pseg){flex-basis:100%;margin-top:var(--s-2)}
 
 /* ——— Пульт администратора на знаках ———
    Шапка одна на всех разделах: где я и чип демо-базы. Главная карточка — ответ на вопрос экрана;
@@ -2608,7 +2606,7 @@ function frameShell({brand,routes,me,top='',scene,fab=null,head='',live='',cls='
  const dark=themeNow()==='dark',tt=dark?'Светлая тема':'Тёмная тема';
  const links=tab=>routes.map(r=>`<a href="#/${r.key}" class="${r.on?'is-on':''}"${r.on?' aria-current="page"':''}>${I(r.icon,tab?22:20)}<span>${r.label}</span></a>`).join('');
  return `<div class="shell${cls?' '+cls:''}">
- <aside class="side"><div class="brand"><span class="mark">${I(brand.icon,20)}</span><div><b>Клуб</b><span class="caption">${esc(brand.role)} · ${esc(brand.caption)}</span></div></div>
+ <aside class="side"><div class="brand"><span class="mark">${I(brand.icon,20)}</span><div><b>Клуб</b><span class="caption">${esc(brand.caption)}</span></div></div>
   <nav class="nav" aria-label="Разделы"><a href="index.html">${I('back',20)}<span>Клуб</span></a>${links(false)}</nav>
   <div class="sidefoot"><div class="me"><span class="avatar">${esc(initials(me.name))}</span><div class="grow"><b>${esc(me.name||'Без имени')}</b><span class="caption">${esc(me.caption||'')}</span></div></div>
   <div class="btnrow">${B(I(dark?'sun':'moon',18),'theme-toggle','','icon ghost',`aria-label="${tt}"`)}${B(I('settings',18)+'<span>Настройки</span>','settings','','ghost')}</div></div></aside>
@@ -3448,8 +3446,8 @@ function attentionPanel(a){
  const act=x=>x.source==='shift-close'?B('Закрыть смену','shift-close',x.id,'small primary'):x.source==='task'?B(I('skip',18),'task',x.id,'icon ghost small','aria-label="Не вышло" title="Не вышло"')+B('Выполнено','task-done',x.id,'small primary'):B('Отметить','occ',x.id,'small primary');
  // Знак пункта — его вид; тон — внимание. Смена, где всё отмечено, — чернилами: осталось одно касание.
  const rows=a.map(x=>`<div class="row qrow" data-key="a${x.id}">${emb(x.source==='occ'?'clock':x.source==='task'?'tasks':'flag',{size:'s',state:x.source==='shift-close'?'now':'warn'})}<div class="rbody"><span class="rt">${esc(x.title)}</span><span class="rm">${esc(x.detail)}</span></div><div class="btnrow">${act(x)}</div></div>`).join('');
- const tag=a.length?`<span class="signum">${slots(a.slice(0,12).map(x=>x.source==='shift-close'?'on':'warn'),{label:`требует внимания: ${a.length}`})}<span class="num" aria-hidden="true">${a.length}</span></span>`:'';
- return panel('Требует внимания',a.length?`<div class="rows">${rows}</div>`:empty('check',say('attentionEmpty'),say('attentionEmptySub')),{tag,key:'attention'})}
+ // Число пунктов — как у остальных панелей; знак внимания несёт каждая строка, отрезки в шапке его повторяли.
+ return panel('Требует внимания',a.length?`<div class="rows">${rows}</div>`:empty('check',say('attentionEmpty'),say('attentionEmptySub')),{tag:a.length||'',key:'attention'})}
 
 function occRow(r,{date=false}={}){const st=occState(r);
  // Справа — состояние знаком: пришедшие — массой из мест и числом; идёт — чернилами;
@@ -3458,8 +3456,8 @@ function occRow(r,{date=false}={}){const st=occState(r);
   :r.kind==='group'&&r.status==='planned'?(st==='warn'?'<span class="astatus is-warn">не отмечено</span>':st==='now'?'<span class="astatus is-now">идёт</span>':'')
   :r.kind==='personal'&&r.status==='completed'?'':pill(r);
  return `<div class="row arow${r.status==='planned'?' is-open':''}" data-key="o${r.id}"${rc(occColor(r))}><span class="tslot num">${esc(r.time)}</span><i class="abar"></i>
- <button type="button" class="rbody" data-action="occ" data-id="${esc(r.id)}"><span class="rt">${esc(occTitle(r))} ${r.kind==='personal'?'<span class="rtag">персональная</span>':''}</span>
- <span class="rm">${date?esc(dateLabel(r.date))+' · ':''}${dot(trainerColor(r.trainerId))}${esc(name(r.trainerId))} · ${esc(r.room)}${r.note?' · '+esc(r.note):''}</span></button>
+ <button type="button" class="rbody" data-action="occ" data-id="${esc(r.id)}"><span class="rt">${esc(occTitle(r))}</span>
+ <span class="rm">${date?esc(dateLabel(r.date))+' · ':''}${esc(name(r.trainerId))} · ${esc(r.room)}${r.note?' · '+esc(r.note):''}</span></button>
  ${right}${ui.just?.ids?.includes(r.id)?'<span class="astatus is-ok">новое</span>':''}</div>`}
 
 /* Состояние занятия — одним знаком на всех экранах: проведено — ok, отменено — пунктир,
@@ -3603,7 +3601,7 @@ function journalScene(){const personal=ui.kind==='personal',[a,b]=range(),rows=D
  const few=rows.length<=28,late=rows.some(r=>r.status==='planned'&&occState(r)==='warn');
  const shelf=personal
   ?[['Тренировок',rows.length,'в периоде','',rows.length&&few?slots(rows.map(occState)):''],['Часы',hours(rows.reduce((x,r)=>x+r.duration,0)),'суммарно'],['Клиентов',new Set(rows.map(x=>x.clientId)).size,'в периоде'],['Тренеров',new Set(rows.map(x=>x.trainerId)).size,'вели занятия']]
-  :[['Занятий',st.total,st.total&&st.open===0?say('jAllMarked'):st.done+' проведено','',!st.total?'':few?slots(rows.map(occState)):meter(st.done/st.total,{tone:'ok'})],['Посещений',st.visits,say('jVisitsSub')],
+  :[['Занятий',st.total,st.total&&st.open===0?say('jAllMarked'):st.done+' проведено','',!st.total?'':few?slots(rows.map(occState)):meter(st.done/st.total)],['Посещений',st.visits,say('jVisitsSub')],
    ['Заполняемость',st.rate===null?'—':st.rate+'%',say('jRateSub'),'',st.rate===null?'':meter(st.rate/100,{size:'l'})],['Без отметки',st.open,say('jOpenSub',st.cancelled),late?'warn':'']];
  const trainerItems=[['','Все тренеры'],...state.trainers.filter(t=>D.can(t,ui.kind)||t.id===ui.trainer).map(t=>[t.id,t.name])];
  const acts=ui.jv==='totals'?(shows('admin.export')?B(I('download',18)+'<span>Таблица</span>','export','','ghost'):''):!shows('admin.paste')?'':personal?B(I('plus',18)+'<span>Персональные</span>','paste','personal','primary'):B(I('plus',18)+'<span>Посещаемость</span>','paste','group','primary');
@@ -3759,7 +3757,7 @@ function peopleList(kind){let list=state[kind].filter(r=>match(kind,r));
  const week=D.occurrences(state,D.today(),D.add(D.today(),6)),load=t=>week.filter(x=>x.trainerId===t.id).length,top=Math.max(1,...state.trainers.map(load));
  // Нагрузка тренера — массой на общей шкале за 7 дней, число рядом; лицо — инициалами в рамке цвета тренера.
  const row=r=>{const color=kind==='trainers'?trainerColor(r.id):r.trainerId?trainerColor(r.trainerId):'',n=kind==='trainers'?load(r):0;
-  const meta=kind==='trainers'?roleLabel(r):(r.trainerId?`${dot(trainerColor(r.trainerId))}${esc(name(r.trainerId))}`:'Без закрепления')+(r.note?' · '+esc(r.note):'');
+  const meta=kind==='trainers'?roleLabel(r):(r.trainerId?esc(name(r.trainerId)):'Без закрепления')+(r.note?' · '+esc(r.note):'');
   const side=kind==='trainers'&&r.active!==false?`<span class="fill" role="img" aria-label="${n} ${plural(n,'занятие','занятия','занятий')} за 7 дней">${meter(n/top)}<b class="num" aria-hidden="true">${n}</b></span>`:'';
   return `<div class="row drow${r.active===false?' is-archived':''}" data-key="${kind}${r.id}"${color?rc(color):''}><span class="avatar tint">${esc(initials(r.name))}</span>
   <button type="button" class="rbody" data-action="entity-edit" data-id="${esc(r.id)}" data-kind="${kind}"><span class="rt">${esc(r.name)}${r.active===false?' <span class="rtag">в архиве</span>':''}</span><span class="rm">${meta}</span></button>${side}${chev()}</div>`};
@@ -3771,7 +3769,7 @@ function gridList(){const list=current(state.rules).filter(r=>match('rules',r));
  const out=WEEKDAYS.map((label,i)=>{const items=list.filter(r=>r.weekday===i+1).sort((a,b)=>a.time.localeCompare(b.time));
   return items.length?panel(label,`<div class="rows">${items.map(r=>`<div class="row arow" data-key="r${r.id}"${rc(classColor(r))}><span class="tslot num">${esc(r.time)}</span><i class="abar"></i>
   <button type="button" class="rbody" data-action="entity-edit" data-id="${esc(r.id)}" data-kind="rules"><span class="rt">${esc(r.title)}${r.from>D.today()?' <span class="rtag">будущая версия</span>':''}</span>
-  <span class="rm">${dot(trainerColor(r.trainerId))}${esc(name(r.trainerId))} · ${r.capacity} мест · ${r.duration} мин · ${esc(r.room)} · с ${esc(D.fmtShort(r.from))}</span></button>${chev()}</div>`).join('')}</div>`,{tag:items.length,key:'g'+i}):''}).join('');
+  <span class="rm">${esc(name(r.trainerId))} · ${r.capacity} мест · ${r.duration} мин · ${esc(r.room)} · с ${esc(D.fmtShort(r.from))}</span></button>${chev()}</div>`).join('')}</div>`,{tag:items.length,key:'g'+i}):''}).join('');
  return out||panel('Групповая сетка',empty('cal','Занятий в сетке нет','Одна строка — один день недели. Добавьте занятие кнопкой вверху.'),{key:'gnone'})}
 
 function routeList(){const list=current(state.tasks).filter(r=>match('tasks',r)),short=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];

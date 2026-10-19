@@ -421,11 +421,8 @@ a.mback:active{background:var(--press)}
 .nowline::after{content:"";flex:1;height:1.5px;margin-left:var(--s-2);background:var(--ink);border-radius:var(--r-pill)}
 .nowline span{font-size:var(--t-caption);font-weight:var(--w-bold);color:var(--ink)}
 .nowline+.row::before{opacity:0}
-.row.is-next{background:var(--card)}
-.row.is-next::before,.row.is-next+.row::before{opacity:0}
 .row.is-next .rt,.row.wk .rt{font-weight:var(--w-bold)}
 /* Крупно — только ближайшее и только там, где есть ширина: на телефоне название с кнопкой ломалось в две строки (аудит, п. 11). */
-@media (min-width:720px){.row.is-next .rt{font-size:var(--t-heading);letter-spacing:-.01em}}
 .late{color:var(--warn)}
 .tiles.one{grid-template-columns:1fr}
 /* Число внутри панели или шторки — не плашка, а строка с волосной чертой слева (один слой, §15).
@@ -564,10 +561,10 @@ button.stat:active{background:var(--card)}
 .hcard{display:flex;flex-direction:column;gap:var(--s-4);padding:var(--s-6)}
 .hhead{display:flex;align-items:flex-start;gap:var(--s-2)}
 .hhead h3{font-weight:var(--w-bold)}
-/* клетка — день, а не полоса: ширина ограничена (аудит, п. 37) */
-.marks{display:grid;grid-template-columns:repeat(7,minmax(0,32px));gap:var(--s-1);justify-content:start}
+/* день — тонкий отрезок в сетке недель, как серии везде; ширина ограничена (аудит, п. 37) */
+.marks{display:grid;grid-template-columns:repeat(7,minmax(0,32px));gap:var(--s-2) var(--s-1);justify-content:start;align-items:center}
 .marks .caption{text-align:center}
-.marks i{height:22px;border-radius:var(--r-small);background:var(--card)}
+.marks i{height:6px;border-radius:3px;background:var(--card)}
 .marks i.none{background:transparent}
 .marks i.done{background:var(--ink)}
 .marks i.miss{background:transparent;box-shadow:inset 0 0 0 1.5px var(--line-strong)}
@@ -618,7 +615,8 @@ a.btn:active{background:var(--card-hot);transform:scale(.96)}
 .meetset{width:100%}
 /* Легенда сетки отметок: те же клетки, что и в сетке */
 .mlegend{display:flex;align-items:center;gap:var(--s-1);flex-wrap:wrap;margin:0}
-.mlegend i{width:12px;height:12px;border-radius:var(--r-small);display:inline-block;margin-left:var(--s-2)}
+.rowlead{display:flex;flex-direction:column;gap:var(--s-1);min-width:0}
+.mlegend i{width:12px;height:6px;border-radius:3px;display:inline-block;margin-left:var(--s-2)}
 .mlegend i:first-child{margin-left:0}
 .mlegend i.done{background:var(--ink)}
 .mlegend i.miss{box-shadow:inset 0 0 0 1.5px var(--line-strong)}
@@ -1117,13 +1115,14 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .band.is-calm .meter{background:var(--card-hot)}.band.is-calm .meter>i{background:var(--ink)}
 .band.is-calm .spark path{stroke:var(--ink)}.band.is-calm .spark circle{fill:var(--ink)}
 
-/* Примерные данные — чип в шапке, а не баннер на шестую часть экрана. */
+/* Примерные данные — спокойный чип в шапке, а не баннер на шестую часть экрана.
+   Янтарь остаётся за вниманием; наведение — общая вуаль. */
 .kchip{position:relative;flex:none;display:inline-flex;align-items:center;gap:var(--s-1);min-height:28px;padding:0 var(--s-3) 0 var(--s-2);border-radius:var(--r-pill);border:0;
- background:var(--warn-veil);color:var(--ink);font-size:var(--t-caption);font-weight:var(--w-medium);white-space:nowrap}
-.kchip>svg{color:var(--warn)}
+ background:transparent;box-shadow:inset 0 0 0 1px var(--line-strong);color:var(--ink-soft);font-size:var(--t-caption);font-weight:var(--w-medium);white-space:nowrap}
+.kchip>svg{color:var(--muted)}
 .kchip::after{content:"";position:absolute;inset:-8px -2px}
-@media (hover:hover){.kchip:hover{background:var(--warn-veil);box-shadow:inset 0 0 0 1px var(--warn)}}
 .shead .actions{align-items:center}
+.shead .actions:has(>.pseg){flex-basis:100%;margin-top:var(--s-2)}
 
 /* ——— Клиент на знаках ———
    Шапка одна на всех разделах: где я и чип примера; итог — знаком. Лента, неделя и даты
@@ -1150,7 +1149,6 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .nextrow{flex-direction:row;align-items:center;justify-content:flex-start;gap:var(--s-3);padding:var(--s-1) var(--s-2)}
 .nextrow>.grow{display:flex;flex-direction:column;min-width:0}
 .nextrow .rt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.blocktitle.wtitle{display:flex;align-items:center;justify-content:space-between;gap:var(--s-3)}
 .sidecoach{display:flex;align-items:center;gap:var(--s-3)}
 .sidecoach b{display:block;font-weight:var(--w-bold)}
 .sidecoach .meta{display:block}
@@ -1163,12 +1161,10 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 button.stat.is-empty{gap:var(--s-2)}
 .tile .slots{margin-top:var(--s-1)}
 .tile .recmark{align-self:flex-start;margin-top:var(--s-1)}
-.band .bfig .spark{margin-left:auto}
 .band a.btn{background:transparent;border-color:color-mix(in srgb,var(--on-accent) 30%,transparent)}
 .band a.btn.icon{flex:none}
 .mrow .signum{gap:var(--s-2);font-size:var(--t-caption);color:var(--muted)}
 .ptag .signum{gap:var(--s-2)}
-@media (max-width:1023px){.band .bfig .spark{margin-left:0}}
 </style></head><body><div id="app"></div><dialog id="sheet" class="sheet"></dialog><div id="toast" class="toast" role="status" hidden></div><input id="import" type="file" accept="application/json,.json" hidden><script>/* ——— Домен v2 ———
    Данные клиента и все законы из UX-MECHANISM.md в виде чистых функций.
    Ни одного знания о DOM — файл целиком проверяется в Node (test-domain.cjs).
@@ -2284,8 +2280,7 @@ function trainScene(){
   <section class="panel"><div class="phead"><h2>${hero?'Дальше':'Ближайшие 7 дней'}</h2></div>
   ${list.length?`<div class="rows">${list.map(w=>wrow(w)).join('')}</div>`:hero?`<p class="meta">Больше тренировок на неделе нет.</p>`:empty('journal','Впереди пусто','Добавьте тренировку или попросите тренера составить план — он сам встанет в расписание.',B(I('plus',18)+'Тренировка','w-new','','small'))}</section>
   <section class="panel"><div class="phead"><h2>История</h2></div>
-  ${weeks.length?weeks.slice(0,ui.weeks||6).map(g=>{const d=g.items.filter(w=>w.status==='done').length;
-   return `<div class="block"><div class="blocktitle wtitle"><span>${wlabel(g.k)}</span>${slots(g.items.map(w=>w.status==='done'?'ok':'skip'),{label:`${d} ${plural(d,'тренировка','тренировки','тренировок')}`})}</div><div class="rows">${g.items.map(w=>wrow(w)).join('')}</div></div>`}).join('')
+  ${weeks.length?weeks.slice(0,ui.weeks||6).map(g=>`<div class="block"><div class="blocktitle">${wlabel(g.k)}</div><div class="rows">${g.items.map(w=>wrow(w)).join('')}</div></div>`).join('')
    +(weeks.length>(ui.weeks||6)?`<div class="pfoot">${B('Показать ещё','more-weeks','','ghost small')}</div>`:''):empty('journal','Истории пока нет','Здесь будут все тренировки по неделям — с рекордами и сравнением.')}</section>
  </div><div class="stack">${shown?workoutDetail(shown):detailHint()}</div></div></section>`}
 
@@ -2535,8 +2530,10 @@ function metricHistSheet(kind){const [name,unit]=D.METRICS[kind];
 function habitsTab(){const s=view(),act=s.habits.filter(h=>!h.archived),arch=s.habits.filter(h=>h.archived);
  const hasCount=act.some(h=>(D.ruleOn(h,D.today())||h.rules[h.rules.length-1]).kind==='count');
  const proj=!hasCount?'':`<div class="seg inline mini" title="Значения — у привычек с количеством">${B('Отметки','hist','marks',prefs.hist==='marks'?'is-on':'')}${B('Значения','hist','values',prefs.hist==='values'?'is-on':'')}</div>`;
+ // Легенда отметок — одна на все карточки; у привычек, показанных значениями, отметок нет.
+ const marks=act.some(h=>!(prefs.hist==='values'&&(D.ruleOn(h,D.today())||h.rules[h.rules.length-1]).kind==='count'));
  if(!act.length)return `<section class="panel">${empty('tasks','Привычек нет','Вода, шаги, сон — всё, что хочется делать регулярно. Появятся в ленте дня в своё время.',B(I('plus',18)+'Привычка','habit-new','','primary small'))}</section>`;
- return `${regularity()}<div class="rowhead"><span class="meta">Привычки · последние 5 недель</span>${proj}</div><div class="grid2">${act.map(h=>habitCard(h)).join('')}</div>
+ return `${regularity()}<div class="rowhead"><div class="rowlead"><span class="meta">Привычки · последние 5 недель</span>${marks?'<p class="mlegend caption"><i class="done"></i>сделано<i class="miss"></i>нет<i class="open"></i>без ответа</p>':''}</div>${proj}</div><div class="grid2">${act.map(h=>habitCard(h)).join('')}</div>
  <div class="rowfoot">${B(I('plus',18)+'Привычка','habit-new','','ghost')}</div>
  ${arch.length?`<section class="panel"><div class="phead"><h2>В архиве</h2></div><div class="rows">${arch.map(h=>`<div class="row plain" data-key="a${h.id}"><div class="grow"><span class="rt">${esc(h.title)}</span><span class="rm">История сохранена</span></div>${B(I('restore',16)+'Вернуть','habit-unarchive',h.id,'small ghost')}</div>`).join('')}</div></section>`:''}`}
 
@@ -2556,7 +2553,6 @@ function habitCard(h){const s=view(),t=D.today(),days=[];
  ${!r.days.length?B('Продолжить','habit-resume',h.id,'small'):''}${B(I('edit',17),'habit-edit',h.id,'icon small ghost','aria-label="Изменить"')}</header>
  ${anyDue?hist:`<p class="meta hfirst">${nextDue?`Первый раз — ${D.fmtDay(nextDue,{lower:true})}`:'Пока не требуется'}</p>`}
  ${count&&hs.due?`<p class="caption">В среднем ${fmtN(hs.avg)} из ${fmtN(r.target)} ${esc(r.unit)} в день</p>`:''}
- ${anyDue&&!values?'<p class="mlegend caption"><i class="done"></i>сделано<i class="miss"></i>нет<i class="open"></i>без ответа</p>':''}
  <footer class="hfoot">${st?`<span class="streakbig">${I('flame',16)}<b class="num">${st}</b> ${plural(st,'день','дня','дней')} подряд</span>`:(anyDue?`<span class="meta">${h.rules[0].from===t?'Начало — сегодня':'Серия — с первой отметки'}</span>`:'<span></span>')}<span class="meta num">${pct===null?'':pct+'% '+(days.length>28?'за 5 недель':'с начала')}</span></footer></article>`}
 
 // Регулярность тренировок (§3.8): сделано по неделям, 8 недель полосой; эта неделя — «сделано из запланированного».
