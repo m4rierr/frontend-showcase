@@ -36,8 +36,8 @@
  --line:#16181B17;--line-strong:#16181B2E;
  --accent:#1A1D21;--accent-press:#33383E;--on-accent:#F7F8F9;
  --mark:#16181B;--mark-soft:#16181B38;
- --ok:#2A7550;--warn:#8F601D;--alert:#B03F37;
- --ok-veil:#2A755017;--warn-veil:#8F601D17;--alert-veil:#B03F3714;
+ --ok:#2A7550;--warn:#9A5500;--alert:#B03F37;--warn-fill:#F2B13E;--on-warn:#16181B;
+ --ok-veil:#2A755017;--warn-veil:#F2B13E33;--alert-veil:#B03F3714;
  --press:#16181B14;--hover:#16181B0D;--ring:#16181B1F;
  /* стекло — только у плавающих слоёв */
  --glass:#FAFAF9C7;--glass-edge:#FFFFFFB3;--spec:#FFFFFF;--pop:#FFFFFF;
@@ -53,8 +53,8 @@
  --ink:#EEF0F2;--ink-soft:#C5CAD0;--muted:#979EA7;--faint:#6E757E;
  --line:#FFFFFF14;--line-strong:#FFFFFF29;
  --accent:#EEF0F2;--accent-press:#FFFFFF;--on-accent:#121417;
- --ok:#62C28E;--warn:#DDA95D;--alert:#E87B72;
- --ok-veil:#62C28E24;--warn-veil:#DDA95D1F;--alert-veil:#E87B721F;
+ --ok:#62C28E;--warn:#F2B866;--alert:#E87B72;--warn-fill:#E9AA3C;--on-warn:#121417;
+ --ok-veil:#62C28E24;--warn-veil:#E9AA3C24;--alert-veil:#E87B721F;
  --press:#FFFFFF1A;--hover:#FFFFFF12;--ring:#FFFFFF2B;--mark:#EEF0F2;--mark-soft:#EEF0F240;
  --glass:#1A1C20C7;--glass-edge:#FFFFFF14;--spec:#FFFFFF26;--pop:#1E2125;
  --shadow-rest:0 1px 2px #00000066;--shadow-float:0 16px 40px -12px #000000A6;--backdrop:#000000A6;
@@ -1008,7 +1008,7 @@ details.more[open]>.field{margin-top:var(--s-2)}
 .rm.flag{color:var(--warn);display:block}
 .rm.flag svg{vertical-align:-2px;margin-right:2px}
 /* тёплая точка на полосе дней: в прошедшем дне остались неотмеченные занятия */
-.wd i.warn{background:var(--warn)}
+.wd i.warn{background:var(--warn-fill)}
 /* У клиента кнопки шапки на телефоне уходят в плавающую кнопку. У тренера в карточке
    клиента это главные действия — «Связался» и «К разговору»: на телефоне они остаются
    видимыми отдельной строкой, иначе доказательство ценности с телефона недоступно. */
@@ -1103,7 +1103,7 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .emb.is-halo{box-shadow:0 0 0 3px var(--canvas),0 0 0 5px var(--accent)}
 .emb.is-ahead{background:transparent;color:var(--faint);box-shadow:inset 0 0 0 1.5px var(--line-strong)}
 .emb.is-empty{background:transparent;color:var(--faint);border:1.5px dashed var(--line-strong)}
-.emb.is-warn{background:var(--warn);color:var(--surface)}
+.emb.is-warn{background:var(--warn-fill);color:var(--on-warn)}
 .emb.is-alert{background:var(--alert);color:var(--surface)}
 .emb.is-calm{background:var(--card-hot);color:var(--ink)}
 .emb .badge{position:absolute;right:-5px;top:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:var(--r-pill);display:grid;place-items:center;
@@ -1114,7 +1114,7 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .slots i{flex:none;width:12px;height:12px;border-radius:var(--r-mark);box-shadow:inset 0 0 0 1.5px var(--line-strong)}
 .slots i.on{background:var(--ink);box-shadow:none}
 .slots i.ok{background:var(--ok);box-shadow:none}
-.slots i.warn{background:var(--warn);box-shadow:none}
+.slots i.warn{background:var(--warn-fill);box-shadow:none}
 .slots i.alert{background:var(--alert);box-shadow:none}
 .slots i.skip{box-shadow:none;border:1.5px dashed var(--line-strong)}
 .slots i.now{box-shadow:inset 0 0 0 2px var(--ink)}
@@ -1125,7 +1125,7 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 /* Заполнение — масса, а не цифра: полоса 8 px, доля — ширина залитой части. */
 .meter{position:relative;display:block;height:8px;min-width:40px;border-radius:var(--r-pill);background:var(--card-hot);overflow:hidden}
 .meter>i{position:absolute;left:0;top:0;bottom:0;border-radius:inherit;background:var(--ink)}
-.meter.ok>i{background:var(--ok)}.meter.warn>i{background:var(--warn)}.meter.alert>i{background:var(--alert)}
+.meter.ok>i{background:var(--ok)}.meter.warn>i{background:var(--warn-fill)}.meter.alert>i{background:var(--alert)}
 .meter.l{height:12px}
 
 /* Заголовок группы несёт знак, цвет и число — внутри группы состояние словом не повторяется. */
@@ -1134,7 +1134,7 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .gh>.gs>svg{width:13px;height:13px;stroke-width:2.4}
 .gh .n{margin-left:auto;color:var(--muted);font-weight:var(--w-medium);font-variant-numeric:tabular-nums}
 .gh.is-ok{color:var(--ok)}.gh.is-ok>.gs{background:var(--ok);color:var(--surface)}
-.gh.is-warn{color:var(--warn)}.gh.is-warn>.gs{background:var(--warn);color:var(--surface)}
+.gh.is-warn{color:var(--warn)}.gh.is-warn>.gs{background:var(--warn-fill);color:var(--on-warn)}
 .gh.is-alert{color:var(--alert)}.gh.is-alert>.gs{background:var(--alert);color:var(--surface)}
 .gh.is-now>.gs{background:var(--accent);color:var(--on-accent)}
 .ggroup{display:flex;flex-direction:column;gap:var(--s-2)}
@@ -1143,7 +1143,7 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 /* Полоса состояния слева у строки и плитки: цвет — состояние, слово не нужно. */
 .has-bar{position:relative;overflow:hidden}
 .has-bar::after{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:transparent;pointer-events:none}
-.has-bar.is-ok::after{background:var(--ok)}.has-bar.is-warn::after{background:var(--warn)}
+.has-bar.is-ok::after{background:var(--ok)}.has-bar.is-warn::after{background:var(--warn-fill)}
 .has-bar.is-alert::after{background:var(--alert)}.has-bar.is-now::after{background:var(--accent)}
 
 /* Главная карточка — одна на экран: эмблема и ответ крупно, действие рядом. */
@@ -1153,7 +1153,7 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .band .bhead>.grow{min-width:0}
 .band .emb{background:var(--on-accent);color:var(--accent)}
 .band .emb.is-ok{background:var(--ok);color:var(--surface)}
-.band .emb.is-warn{background:var(--warn);color:var(--surface)}
+.band .emb.is-warn{background:var(--warn-fill);color:var(--on-warn)}
 .band .emb.is-alert{background:var(--alert);color:var(--surface)}
 .band .bk{display:block;font-size:var(--t-caption);font-weight:var(--w-medium);text-transform:uppercase;letter-spacing:.06em;opacity:.72}
 .band h2{font-size:var(--t-figure);line-height:1.15;font-weight:var(--w-bold);letter-spacing:-.02em;margin-top:2px;overflow-wrap:anywhere}
@@ -1210,7 +1210,7 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .shead .sub .signum{vertical-align:middle}
 .wd i{width:10px;height:10px;border-radius:var(--r-mark)}
 .wd i.done{background:var(--ink)}
-.wd i.warn{background:var(--warn)}
+.wd i.warn{background:var(--warn-fill)}
 .roster{padding:var(--s-2) var(--s-3)}
 .crside{flex:none;display:flex;align-items:center;gap:var(--s-2)}
 .crow .rbody{min-width:0}
@@ -1220,7 +1220,7 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .mrow .slots i{width:10px;height:10px}
 .wkrow .answers{margin-left:56px}
 .answers button.is-on[data-id="work"]{background:var(--ok);color:var(--surface)}
-.answers button.is-on[data-id="talk"]{background:var(--warn);color:var(--surface)}
+.answers button.is-on[data-id="talk"]{background:var(--warn-fill);color:var(--on-warn)}
 .answers button.is-on[data-id="leave"]{background:var(--alert);color:var(--surface)}
 .answers button.is-on[data-id="pause"]{background:var(--card-hot);color:var(--ink)}
 .qcard>.emb{align-self:center}
