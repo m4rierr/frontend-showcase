@@ -100,6 +100,11 @@ svg{display:block;flex:none}
    ним, блик по верхней кромке, тень «плавает». Стеклянное = временное. */
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);box-shadow:var(--shadow-rest);padding:var(--s-6);min-width:0}
 .card{background:var(--card);border-radius:var(--r-card);min-width:0}
+/* Карточка прямо на холсте — поверхность, как панель: заливка карточки с холстом сливается (карточка живёт на панели).
+   Поле — как у панели, чтобы знак и текст стояли на тех же вертикалях. */
+:where(.scene,.stack,.qcards)>.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);box-shadow:var(--shadow-rest)}
+.qcards>.qcard{padding:var(--s-4) var(--s-6)}
+:where(.scene,.stack)>.learncard.card{padding:var(--s-5) var(--s-6)}
 .glass{
  position:relative;isolation:isolate;background:var(--glass);
  -webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
@@ -185,7 +190,7 @@ input.is-error{border-color:var(--alert)}
 .fields.three{grid-template-columns:1fr 1fr 1fr;gap:var(--s-3)}
 
 /* ——— сегмент: один из нескольких ——— */
-.seg{display:flex;flex:none;gap:2px;padding:3px;border-radius:var(--r-pill);background:var(--card);max-width:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.seg{display:flex;flex:none;gap:2px;padding:4px;border-radius:var(--r-pill);background:var(--card);max-width:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
 .seg::-webkit-scrollbar{display:none}
 .seg button{flex:1 1 auto;min-width:0;min-height:36px;padding:0 var(--s-4);border:0;background:transparent;color:var(--muted);font-size:var(--t-meta)}
 @media (hover:hover) and (pointer:fine){.seg button:hover{color:var(--ink)}}
@@ -277,9 +282,13 @@ input.is-error{border-color:var(--alert)}
 .stack{display:flex;flex-direction:column;gap:var(--s-6);min-width:0}
 
 .phead{flex:none;display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);min-height:var(--h-compact);margin-bottom:var(--s-4)}
+.phead>h2{margin-right:auto}
+/* текст и значок действия — на правой вертикали панели, как числа и стрелки строк */
+:is(.phead,.lhead)>button.small.ghost:last-child:not(.icon){margin-right:calc(var(--s-3) * -1)}
+:is(.phead,.lhead)>button.icon.ghost:last-child{margin-right:calc(var(--s-2) * -1)}
+.panel>.btnrow>button.small.ghost:first-child{margin-left:calc(var(--s-3) * -1)}
 .ptag{font-size:var(--t-caption);font-weight:var(--w-medium);color:var(--muted);font-variant-numeric:tabular-nums}
 .pfoot{display:flex;justify-content:center;margin-top:var(--s-3)}
-.footnote{padding:0 var(--s-2)}
 
 /* пример: полоса над сценой, не исчезает, пока смотрите */
 .banner{display:flex;align-items:center;gap:var(--s-4);padding:var(--s-3) var(--s-3) var(--s-3) var(--s-5)}
@@ -357,26 +366,45 @@ a.mback:active{background:var(--press)}
 .qcards{display:flex;flex-direction:column;gap:var(--s-2)}
 .qcard{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-3) var(--s-3) var(--s-3) var(--s-4);flex-wrap:wrap}
 .qcard p{font-weight:var(--w-medium);min-width:180px}
+.qcard p .meta{display:block}
 .qico{width:32px;height:32px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--surface);color:var(--ink-soft)}
 .qcard.warn .qico{color:var(--warn);background:var(--warn-veil)}
 
 .timeline{padding-top:var(--s-4)}
-.block+.block{margin-top:var(--s-4)}
-.blocktitle{font-size:var(--t-caption);font-weight:var(--w-medium);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:0 var(--s-2) var(--s-1)}
+.block+.block{margin-top:var(--s-5)}
+.blocktitle{font-size:var(--t-caption);font-weight:var(--w-medium);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:0 0 var(--s-1)}
 .blocktitle.warn{color:var(--warn)}
-.rows{display:flex;flex-direction:column}
+.rows{display:flex;flex-direction:column;margin-inline:calc(var(--s-2) * -1)}
 .rows.compact{gap:2px}
 
 .row{display:flex;align-items:center;gap:var(--s-3);min-height:var(--h-row);padding:0 var(--s-2);border-radius:var(--r-card);position:relative}
-.row+.row::before{content:"";position:absolute;left:52px;right:var(--s-2);top:0;height:1px;background:var(--line)}
+.row+.row::before{content:"";position:absolute;left:calc(var(--s-2) + var(--lead) + var(--s-3));right:var(--s-2);top:0;height:1px;background:var(--line)}
+/* Черта начинается там же, где текст строки: поле + знак + зазор. --lead — ширина знака впереди
+   (у строки без знака текст стоит прямо на поле); ширины те же, что раскладывают сами знаки. */
+.row{--lead:calc(var(--s-3) * -1);--slot:44px}
+.row:has(>:is(.emb.xs,.exn):first-child){--lead:24px}
+.row:has(>.emb.s:first-child){--lead:32px}
+.row:has(>:is(.lead,.ringbox,.tick,.avatar):first-child){--lead:36px}
+.row:has(>:is(.emb:not(.xs,.s),.datebox):first-child){--lead:44px}
+.row:has(>.tslot:first-child){--lead:var(--slot)}
+.row:has(>.tslot:first-child+.abar){--lead:calc(var(--slot) + var(--s-3) + 3px)}
+.row:has(>.tslot:first-child+.emb){--lead:calc(var(--slot) + var(--s-3) + 44px)}
+.tslot{flex:none;width:var(--slot,44px)}
 .row.plain{padding:var(--s-2)}
 .rbody{
  flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px;
- min-height:var(--h-row);padding:0 var(--s-2);margin:0 calc(var(--s-2) * -1);border:0;border-radius:var(--r-control);
+ min-height:var(--h-row);padding:var(--s-2);margin:0 calc(var(--s-2) * -1);border:0;border-radius:var(--r-control);
  background:transparent;text-align:left;font-weight:var(--w-regular);white-space:normal;
 }
 .rbody:active{background:var(--press)}
 .rt{font-weight:var(--w-medium);color:var(--ink);overflow:hidden;text-overflow:ellipsis;max-width:100%;transition:color var(--d-move)}
+/* Подпись из частей: часть переносится целиком, разделитель стоит в зазоре перед ней
+   и срезается у той, что начала строку. В подписи в одну строку лишнее уходит в многоточие по частям. */
+.parts{display:block;min-width:0;overflow:hidden;text-overflow:inherit}
+.parts>span{display:block;margin-left:-.8em;overflow:hidden;text-overflow:inherit}
+.parts .pt{display:inline-block;max-width:100%;padding-left:.8em;overflow:hidden;text-overflow:ellipsis;vertical-align:top}
+.parts .sep{display:inline-block;width:.8em;margin-left:-.8em;text-align:center;font-style:normal}
+.parts svg{display:inline-block;vertical-align:-2px}
 .rm{display:flex;align-items:center;gap:var(--s-1);font-size:var(--t-meta);color:var(--muted);flex-wrap:wrap}
 .rm b{font-weight:var(--w-medium);color:var(--ink-soft)}
 .rm.warn{color:var(--warn)}
@@ -398,7 +426,8 @@ a.mback:active{background:var(--press)}
 .delta{font-size:var(--t-caption);font-weight:var(--w-medium);color:var(--muted);font-variant-numeric:tabular-nums}
 .delta.up{color:var(--ok)}
 .delta.dn{color:var(--warn)}
-.panel .tiles+.blocktitle{margin-top:var(--s-5)}
+.panel .tiles+:is(.rows,.blocktitle),.panel .rows+.blocktitle{margin-top:var(--s-5)}
+.panel>p+.rows{margin-top:var(--s-3)}
 .nextrow{
  flex-direction:column;align-items:flex-start;justify-content:center;gap:0;min-height:var(--h-row);width:100%;
  padding:0 var(--s-3);border:0;border-radius:var(--r-control);background:transparent;text-align:left;font-weight:var(--w-regular)
@@ -431,7 +460,7 @@ a.mback:active{background:var(--press)}
 .row.is-remind::before,.row.is-remind+.row::before{opacity:0}
 
 /* закрыть день вручную — в конце сегодняшней ленты */
-.closeday{display:flex;align-items:center;gap:var(--s-3);margin-top:var(--s-4);padding:var(--s-3) var(--s-2) 0;border-top:1px solid var(--line)}
+.closeday{display:flex;align-items:center;gap:var(--s-3);margin-top:var(--s-4);padding:var(--s-3) 0 0;border-top:1px solid var(--line)}
 .closeday .meta{display:inline-flex;align-items:center;gap:var(--s-1)}
 /* тихий признак «число открывает точный ввод» */
 .tapnum{text-decoration:underline dotted var(--faint);text-underline-offset:3px}
@@ -445,8 +474,6 @@ a.mback:active{background:var(--press)}
 .datebox.done b{color:var(--ink)}
 .wrow.is-on{background:var(--card)}
 .wrow.is-on::before,.wrow.is-on+.row::before{opacity:0}
-.row .datebox+.rbody{margin-left:0}
-.wrow+.row::before,.row.wrow::before{left:64px}
 
 .detail{display:flex;flex-direction:column;gap:var(--s-4)}
 .dtop{display:flex;align-items:center;gap:var(--s-1);margin:calc(var(--s-2) * -1) calc(var(--s-2) * -1) 0 0}
@@ -529,12 +556,14 @@ body.in-gym .toast{bottom:calc(var(--h-gym) + var(--s-8) + env(safe-area-inset-b
 .pseg{min-width:280px}
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s-4)}
 .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s-4)}
-.rowhead{display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);flex-wrap:wrap;padding:0 var(--s-2)}
+/* три карточки — одним рядом, а не «две и одна» */
+@media (min-width:1280px){.grid2:has(>:nth-child(3):last-child){grid-template-columns:repeat(3,minmax(0,1fr))}}
+.rowhead{display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);flex-wrap:wrap}
 .rowfoot{display:flex;justify-content:center}
 
 /* карточка-число: вся карточка — кнопка, при нажатии только темнеет */
 button.stat{
- display:flex;flex-direction:column;align-items:flex-start;gap:var(--s-1);min-height:0;padding:var(--s-5);
+ display:flex;flex-direction:column;align-items:flex-start;gap:var(--s-1);min-height:0;padding:var(--s-6);
  border-radius:var(--r-panel);text-align:left;white-space:normal;font-weight:var(--w-regular);color:var(--ink);
 }
 button.stat:active{background:var(--card)}
@@ -544,7 +573,7 @@ button.stat:active{background:var(--card)}
 .faintnum{color:var(--faint)}
 .statfoot{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--s-3);width:100%;margin-top:var(--s-2)}
 
-.hcard{display:flex;flex-direction:column;gap:var(--s-4);padding:var(--s-5)}
+.hcard{display:flex;flex-direction:column;gap:var(--s-4);padding:var(--s-6)}
 .hhead{display:flex;align-items:flex-start;gap:var(--s-2)}
 .hhead h3{font-weight:var(--w-bold)}
 /* клетка — день, а не полоса: ширина ограничена (аудит, п. 37) */
@@ -571,20 +600,18 @@ a.btn{
 }
 a.btn.icon{width:var(--h-control)}
 a.btn:active{background:var(--card-hot);transform:scale(.96)}
-.meet .tiles{margin-bottom:var(--s-2)}
-.meet .blocktitle{margin-top:var(--s-4)}
 .mrow{display:flex;align-items:center;gap:var(--s-2);min-height:36px;padding:0 var(--s-2);font-size:var(--t-meta)}
 .mrow b{font-weight:var(--w-medium)}
 .mrow svg{color:var(--ok)}
 .mnote{padding:var(--s-1) 0 var(--s-1) var(--s-3);background:transparent;border-left:2px solid var(--line-strong);border-radius:0}
 .mnote p{font-size:var(--t-meta);color:var(--ink-soft);margin-top:2px}
+.rows>.mnote{margin-inline:var(--s-2)}
 .mnhead{display:flex;align-items:center;justify-content:space-between;margin:calc(var(--s-1) * -1) calc(var(--s-2) * -1) 0 0}
 .qlist .row{min-height:var(--h-control)}
 .qadd{display:flex;gap:var(--s-2);margin-top:var(--s-2)}
 .planrow{justify-content:flex-start;width:100%;min-height:var(--h-row);padding:0 var(--s-2);border:0;background:transparent;border-radius:var(--r-card);color:var(--muted);font-weight:var(--w-regular)}
 .planrow .rbody{margin:0;padding:0;min-height:0;background:transparent}
 
-.regular{margin-bottom:var(--s-2)}
 
 .hfirst{padding:var(--s-3) 0}
 .meetset{width:100%}
@@ -597,7 +624,8 @@ a.btn:active{background:var(--card-hot);transform:scale(.96)}
 .mlegend i.open{background:var(--mark-soft)}
 /* карточка открывается — шеврон в углу */
 button.stat{position:relative}
-.statgo{position:absolute;top:var(--s-4);right:var(--s-4);color:var(--faint)}
+.statgo{position:absolute;top:var(--s-6);right:var(--s-6);color:var(--faint)}
+@media (max-width:719px){.statgo{top:var(--s-4);right:var(--s-4)}}
 
 /* ——— Графики (core/ui/chart.js, CLUB-CORE §14) ———
    Данные громче осей: сетка — --line, подписи оси — --muted мелко, ряд — --mark.
@@ -898,6 +926,7 @@ details.more[open]>.field{margin-top:var(--s-2)}
  .main{padding:var(--s-6) var(--s-6) var(--s-12)}
  .cols{grid-template-columns:minmax(0,1.4fr) minmax(290px,1fr)}
  .grid3{grid-template-columns:repeat(2,minmax(0,1fr))}
+ :is(.grid2,.grid3)>:last-child:nth-child(odd){grid-column:1/-1}
 }
 
 @media (max-width:1023px){
@@ -947,24 +976,23 @@ details.more[open]>.field{margin-top:var(--s-2)}
 @media (max-width:719px){
  .main{padding:0 var(--s-3) calc(164px + env(safe-area-inset-bottom))}
  .mhead{margin:var(--s-2) 0 var(--s-4)}
- .shead{padding:0 var(--s-2)}
- .panel{padding:var(--s-5) var(--s-3)}
+ .panel{padding:var(--s-5) var(--s-4)}
+ .qcards>.qcard,:where(.scene,.stack)>.learncard.card{padding:var(--s-4)}
+ .row{--slot:38px}
+ .tslot{font-size:var(--t-meta)}
  .timeline{padding-top:var(--s-3)}
- .row{padding:0 var(--s-1)}
- .row+.row::before{left:48px}
  .grid2,.grid3{grid-template-columns:1fr}
  .grid2:has(.stat){grid-template-columns:1fr 1fr;gap:var(--s-3)}
- .grid2 .stat{padding:var(--s-4)}
+ :is(.grid2,.grid3) .stat{padding:var(--s-4)}
  .grid2 .stat .cspark{width:100%;max-width:none}
  .grid2 .statfoot{flex-direction:column;align-items:flex-start;gap:var(--s-1)}
  .tiles.four{grid-template-columns:repeat(2,minmax(0,1fr))}
- .tiles.three .tile{padding:var(--s-3)}
  .tile b{font-size:var(--t-heading)}
  .wd{min-height:56px}
  .weekstrip>button{display:none}
  .qcard .btnrow{width:100%;justify-content:flex-end}
  .banner{flex-direction:column;align-items:flex-start;padding:var(--s-4)}
- .detail{padding:var(--s-4) var(--s-3)}
+ .detail{padding:var(--s-4)}
  .ex{padding:var(--s-3)}
  .sethead,.set{grid-template-columns:20px minmax(0,1fr) minmax(0,1fr) 40px 32px;gap:6px}
  .line{grid-template-columns:minmax(0,.8fr) 10px minmax(0,1fr) 10px minmax(0,1fr) 40px;gap:var(--s-1)}
@@ -989,6 +1017,14 @@ details.more[open]>.field{margin-top:var(--s-2)}
  .sheetfoot .spacer{display:none}
  .sheetfoot button[type=submit]{flex:1}
  .prow{grid-template-columns:minmax(0,1fr) 44px 10px 44px 32px;gap:6px}
+}
+/* Палец: у органа меньше 44 px — невидимая зона касания до 44 (вид не меняется). */
+@media (max-width:719px),(pointer:coarse){
+ :where(button){position:relative}
+ :where(button)::after{content:"";position:absolute;inset:min(0px,calc((100% - 44px) / 2))}
+ .seg.mini{padding:4px}
+ .seg.mini button{min-height:36px}
+ .set input,.line input{min-height:var(--h-control)}
 }
 @media (pointer:coarse){
  button.icon.small{width:40px;min-width:40px;min-height:40px}
@@ -1069,10 +1105,10 @@ details.more[open]>.field{margin-top:var(--s-2)}
 .astatus.is-off{color:var(--faint)}
 
 /* строка занятия: время · цветная черта · что и кто · статус */
-.tslot{min-width:44px;flex:none;color:var(--muted);font-weight:var(--w-medium);font-variant-numeric:tabular-nums}
+.tslot{color:var(--muted);font-weight:var(--w-medium);font-variant-numeric:tabular-nums}
 .abar{flex:none;width:3px;align-self:stretch;margin:var(--s-2) 0;border-radius:var(--r-pill);background:var(--rcv,var(--faint))}
 .arow,.trow,.drow,.qrow{gap:var(--s-3)}
-.arow .rbody,.drow .rbody{background:transparent;border:0;padding:var(--s-1) var(--s-2);border-radius:var(--r-control);text-align:left;color:inherit;font:inherit;cursor:pointer;min-width:0}
+.arow .rbody,.drow .rbody{background:transparent;border:0;padding:var(--s-2);border-radius:var(--r-control);text-align:left;color:inherit;font:inherit;cursor:pointer;min-width:0}
 .arow.is-open .rt{font-weight:var(--w-bold)}
 .cdot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:var(--s-1);vertical-align:middle;background:var(--rcv,var(--faint))}
 .rtag{color:var(--muted);font-weight:var(--w-medium)}
@@ -1106,6 +1142,11 @@ details.more[open]>.field{margin-top:var(--s-2)}
 .toolbar{display:flex;align-items:center;gap:var(--s-2);flex-wrap:wrap}
 .toolbar .pick{min-width:180px}
 .toolbar .searchbox{flex:1 1 260px;margin:0}
+:where(.toolbar) .fieldbox{background:var(--surface)}
+:where(.toolbar) .fieldbox:not(:hover,:focus-within){border-color:var(--line)}
+.toolbar .seg.mini{padding:4px}
+.toolbar .seg.mini button{min-height:36px;padding:0 var(--s-4);font-size:var(--t-meta)}
+.toolbar>:is(button.small,.chip){min-height:var(--h-control)}
 .seg.dseg{overflow-x:auto;scrollbar-width:none;max-width:100%}
 .seg.dseg::-webkit-scrollbar{display:none}
 
@@ -1192,8 +1233,8 @@ details.more[open]>.field{margin-top:var(--s-2)}
 /* телефон: неделя листается вбок по дню, таблицы — внутри своей прокрутки */
 @media (max-width:1099px){.wgrid{grid-template-columns:repeat(7,minmax(128px,1fr));overflow-x:auto;scroll-snap-type:x mandatory}.wcol{scroll-snap-align:start}}
 @media (max-width:719px){
- /* плитка на телефоне: пояснение — одной строкой, не столбиком */
- .atiles .tile .meta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ /* на телефоне подпись строки переносится частями, а не уходит в многоточие */
+ .rows .arow .rm,.rows .drow .rm{white-space:normal}
  .toolbar .pick{flex:1 1 100%;min-width:0}
  .toolbar>.seg{flex:1 1 auto}
  .datenav .pick{flex:1;min-width:0}
@@ -1205,7 +1246,8 @@ details.more[open]>.field{margin-top:var(--s-2)}
 /* строка занятия и человека: одна строка подписи, точка тренера — в тексте, не отдельным элементом */
 .arow .rm,.drow .rm,.arow .rt,.drow .rt{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* плитки прямо на холсте (не в панели) — поверхность панели, иначе сливаются со светлым холстом */
-.scene>.atiles .tile{background:var(--surface);box-shadow:var(--shadow-rest)}
+.scene>.atiles .tile{background:var(--surface);box-shadow:var(--shadow-rest);padding:var(--s-4) var(--s-6)}
+@media (max-width:719px){.scene>.atiles .tile{padding:var(--s-3) var(--s-4)}}
 .arow .rbody,.drow .rbody,.trow .rbody,.qrow .rbody{flex:1 1 0;min-width:0;overflow:hidden}
 .toolbar>.seg{min-width:0}
 .seg.dseg button{flex:none}
@@ -1219,10 +1261,10 @@ details.more[open]>.field{margin-top:var(--s-2)}
    Только токены Club; сверх ядра — размеры эмблем 24/32/44/64/96.
    Блок одинаковый у клиента, тренера и администратора. */
 .emb{--sz:44px;position:relative;flex:none;width:var(--sz);height:var(--sz);border-radius:calc(var(--sz) * .3);display:grid;place-items:center;
- background:var(--card);color:var(--ink-soft);font-size:calc(var(--sz) * .36);font-weight:var(--w-bold);letter-spacing:-.02em;line-height:1;
+ background:var(--card);color:var(--ink-soft);font-size:var(--t-body);font-weight:var(--w-bold);letter-spacing:-.02em;line-height:1;
  font-variant-numeric:tabular-nums;text-transform:uppercase;transition:background-color var(--d-move) var(--ease-out),color var(--d-move) var(--ease-out)}
 .emb>svg{width:calc(var(--sz) * .5);height:calc(var(--sz) * .5)}
-.emb.xs{--sz:24px}.emb.s{--sz:32px}.emb.m{--sz:44px}.emb.l{--sz:64px}.emb.xl{--sz:96px}
+.emb.xs{--sz:24px;font-size:var(--t-caption)}.emb.s{--sz:32px;font-size:var(--t-caption)}.emb.m{--sz:44px}.emb.l{--sz:64px;font-size:var(--t-figure)}.emb.xl{--sz:96px;font-size:var(--t-title)}
 .emb.xs>svg{stroke-width:2.2}
 .emb.is-ok{background:var(--ok);color:var(--surface)}
 .emb.is-now{background:var(--accent);color:var(--on-accent)}
@@ -1259,17 +1301,14 @@ details.more[open]>.field{margin-top:var(--s-2)}
 .meter.l{height:12px}
 
 /* Заголовок группы несёт знак, цвет и число — внутри группы состояние словом не повторяется. */
-.gh{display:flex;align-items:center;gap:var(--s-2);min-height:28px;padding:0 var(--s-1);font-size:var(--t-meta);font-weight:var(--w-bold);color:var(--ink)}
+.gh{display:flex;align-items:center;gap:var(--s-2);min-width:0}
 .gh>.gs{flex:none;width:22px;height:22px;min-width:0;padding:0;border-radius:50%;display:grid;place-items:center;background:var(--card-hot);color:var(--ink)}
 .gh>.gs>svg{width:13px;height:13px;stroke-width:2.4}
-.gh .n{margin-left:auto;color:var(--muted);font-weight:var(--w-medium);font-variant-numeric:tabular-nums}
-.gh.is-ok{color:var(--ok)}.gh.is-ok>.gs{background:var(--ok);color:var(--surface)}
-.gh.is-warn{color:var(--warn)}.gh.is-warn>.gs{background:var(--warn-fill);color:var(--on-warn)}
-.gh.is-alert{color:var(--alert)}.gh.is-alert>.gs{background:var(--alert);color:var(--surface)}
+.gh.is-ok>.gs{background:var(--ok);color:var(--surface)}
+.gh.is-warn>.gs{background:var(--warn-fill);color:var(--on-warn)}
+.gh.is-alert>.gs{background:var(--alert);color:var(--surface)}
 .gh.is-now>.gs{background:var(--accent);color:var(--on-accent)}
 .gh.is-new>.gs{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
-.ggroup{display:flex;flex-direction:column;gap:var(--s-2)}
-.ggroup+.ggroup{margin-top:var(--s-5)}
 
 /* Полоса состояния слева у строки и плитки: цвет — состояние, слово не нужно. */
 .has-bar{position:relative;overflow:hidden}
@@ -1278,8 +1317,9 @@ details.more[open]>.field{margin-top:var(--s-2)}
 .has-bar.is-alert::after{background:var(--alert)}.has-bar.is-now::after{background:var(--accent)}
 
 /* Главная карточка — одна на экран: эмблема и ответ крупно, действие рядом. */
-.band{display:flex;flex-direction:column;gap:var(--s-4);padding:var(--s-5);border-radius:var(--r-panel);background:var(--accent);color:var(--on-accent);
+.band{display:flex;flex-direction:column;gap:var(--s-4);padding:var(--s-6);border-radius:var(--r-panel);background:var(--accent);color:var(--on-accent);
  box-shadow:var(--shadow-float);min-width:0;position:relative}
+@media (max-width:719px){.band{padding:var(--s-5) var(--s-4)}}
 .band .bhead{display:flex;align-items:center;gap:var(--s-4);min-width:0}
 .band .bhead>.grow{min-width:0}
 .band .emb{background:var(--on-accent);color:var(--accent)}
@@ -1362,9 +1402,10 @@ details.more[open]>.field{margin-top:var(--s-2)}
 .band .infobtn{width:28px;height:28px;min-height:28px;margin:-4px 0 -4px var(--s-1);border:0;background:transparent;color:inherit}
 /* лицо человека в справочнике — эмблема 44 с рамкой цвета тренера; архив — пунктиром */
 .drow .avatar{width:44px;height:44px;border-radius:var(--r-control);font-size:var(--t-meta)}
+.row.drow:has(>.avatar:first-child){--lead:44px}
 .drow .avatar.tint{box-shadow:inset 0 0 0 2.5px var(--rcv,transparent)}
 .row.is-archived .avatar{background:transparent;color:var(--faint);box-shadow:none;border:1.5px dashed var(--line-strong)}
-.colhint{text-align:right;padding-right:calc(18px + var(--s-3) + var(--s-2));margin:0 0 var(--s-1)}
+.colhint{text-align:right;padding-right:calc(18px + var(--s-3));margin:0 0 var(--s-1)}
 /* месяц смен календарём: день — квадрат, состояние — заливкой */
 .mcalwrap{display:grid;grid-template-columns:minmax(0,520px) minmax(180px,1fr);gap:var(--s-6);align-items:start}
 .mcal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:var(--s-1)}
@@ -1384,8 +1425,8 @@ details.more[open]>.field{margin-top:var(--s-2)}
 @media (min-width:1100px){
  .band.wide{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:var(--s-6)}
 }
-/* узкая правая колонка (планшет, небольшой ноутбук): заполнение — числом, название занятия важнее полосы */
-@media (min-width:720px) and (max-width:1359px){
+/* узкая правая колонка: заполнение — числом, название занятия и зал важнее полосы */
+@media (min-width:720px){
  .cols>.stack+.stack .arow .fill{width:auto}
  .cols>.stack+.stack .arow .fill .meter{display:none}
 }
@@ -1393,7 +1434,6 @@ details.more[open]>.field{margin-top:var(--s-2)}
  .fill{width:88px}
  .mcalwrap{grid-template-columns:1fr}
  .mcal>i,.mcal>button{height:40px}
- .colhint{padding-right:calc(18px + var(--s-3))}
 }
 </style></head><body><div id="app"></div><dialog id="sheet" class="sheet"></dialog><div id="toast" class="toast" role="status" hidden></div><input id="import" type="file" accept="application/json,.json" hidden><script>'use strict'; // строгий режим на всю сборку: ядро идёт первым файлом, поэтому директива действует для всей роли
 /* ——— Ядро · время ———
@@ -2936,8 +2976,8 @@ function tally(done,total,{size='',max=14,tone='on',word=''}={}){if(!total)retur
 // Заполнение 0…1 — полосой; тон — состояние, если оно есть.
 function meter(r,{tone='',size=''}={}){const p=Math.max(0,Math.min(1,Number(r)||0));
  return `<span class="meter${tone?' '+tone:''}${size?' '+size:''}" aria-hidden="true"><i style="width:${Math.round(p*100)}%"></i></span>`}
-// Заголовок группы: знак, слово и число — состояние называется один раз, над группой.
-function gh(state,icon,title,n){return `<div class="gh${state?' is-'+state:''}"><span class="gs">${I(icon,13)}</span><span>${title}</span>${n!==undefined&&n!==null?`<span class="n">${n}</span>`:''}</div>`}
+// Заголовок группы — заголовок её панели: знак состояния перед словом; число ставит шапка (ptag).
+function gh(state,icon,title){return `<h2 class="gh${state?' is-'+state:''}"><span class="gs">${I(icon,13)}</span>${title}</h2>`}
 // Главная карточка экрана: одна, сверху; эмблема, ответ крупно, действие рядом.
 function band({face,state='',kicker='',title='',meta='',fig='',acts='',tone='',cls='',key='band',label=''}){
  return `<section class="band${tone?' is-'+tone:''}${cls?' '+cls:''}" data-key="${key}"${label?` aria-label="${esc(label)}"`:''}><div class="bhead">${emb(face,{size:'l',state})}<div class="grow">${kicker?`<span class="bk">${kicker}</span>`:''}<h2>${title}</h2>${meta?`<span class="bm">${meta}</span>`:''}</div></div>${fig?`<div class="bfig">${fig}</div>`:''}${acts?`<div class="bacts">${acts}</div>`:''}</section>`}
@@ -3223,7 +3263,24 @@ function I(name,size=20){return `<svg width="${size}" height="${size}" viewBox="
    теми же самыми, меняются только атрибуты и текст. Поэтому стекло не
    пересоздаётся (размытие не «моргает»), фокус и прокрутка списков остаются
    на месте, а нажатие ничего не дёргает. */
-function morph(root,html){const tpl=document.createElement('template');tpl.innerHTML=html;patchChildren(root,tpl.content)}
+/* Подпись из частей «а · б · в» переносится только между частями (CSS .parts): разделитель
+   живёт в зазоре перед частью. Число не отрывается от своей единицы и от «×» (неразрывный пробел).
+   Слова подписи те же — меняется раскладка; правка идёт по шаблону до сверки с экраном. */
+const CAPS='.rm,.bm,.meta,.sub,.caption';
+function capParts(root){
+ for(const el of root.querySelectorAll(CAPS)){if(el.querySelector('.parts')||el.parentElement?.closest('.rt,h1,h2,h3,b,button.chip'))continue;
+  const tw=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
+  for(let n=tw.nextNode();n;n=tw.nextNode())n.nodeValue=n.nodeValue.replace(/(\d) (?=[^\s\d·—])/g,'$1\u00a0').replace(/× (?=\d)/g,'×\u00a0');
+  if(![...el.childNodes].some(n=>n.nodeType===3&&n.nodeValue.includes(' · ')))continue;
+  const parts=[[]];
+  for(const n of [...el.childNodes]){if(n.nodeType!==3||!n.nodeValue.includes(' · ')){parts[parts.length-1].push(n);continue}
+   n.nodeValue.split(' · ').forEach((t,i)=>{if(i)parts.push([]);if(t)parts[parts.length-1].push(document.createTextNode(t))})}
+  const full=parts.filter(p=>p.some(n=>n.nodeType!==3||n.nodeValue.trim()));if(full.length<2)continue;
+  const line=document.createElement('span');
+  full.forEach((p,i)=>{const pt=document.createElement('span'),sep=document.createElement('i');pt.className='pt';sep.className='sep';
+   if(i)sep.textContent=' · ';else sep.setAttribute('aria-hidden','true');pt.append(sep,...p);line.append(pt)});
+  const box=document.createElement('span');box.className='parts';box.append(line);el.replaceChildren(box)}}
+function morph(root,html){const tpl=document.createElement('template');tpl.innerHTML=html;capParts(tpl.content);patchChildren(root,tpl.content)}
 function sameNode(a,b){return a.nodeType===b.nodeType&&(a.nodeType!==1||(a.tagName===b.tagName&&(a.getAttribute('data-key')||'')===(b.getAttribute('data-key')||'')))}
 function patchChildren(a,b){
  const an=[...a.childNodes],bn=[...b.childNodes];
@@ -3321,6 +3378,7 @@ function openSheet({title,body,save=null,saveLabel='Сохранить',extra=''
   <div class="sheetbody">${body}</div>
   ${save||extra?`<footer class="sheetfoot">${extra}<span class="spacer"></span>${cancel?B('Отмена','sheet-close','','ghost'):''}${save?`<button type="submit" class="primary">${saveLabel}</button>`:''}</footer>`:''}
  </form>`;
+ capParts(dlg);
  if(!dlg.open)dlg.showModal();
  const first=dlg.querySelector('.sheetbody input:not([type=hidden]),.sheetbody textarea');
  // Шторка-просмотр (настройки и т.п.) открывается сверху: фокус на поле ввода утащил бы её вниз.
@@ -3438,7 +3496,7 @@ function myShiftPanel(q){const done=q.filter(x=>x.status!=='open').length,t=D.to
   :empty('tasks','Маршрута на сегодня нет','Опишите маршрут смены в справочнике — панель будет напоминать и считать итоги.',B('Маршрут','go-dir','tasks','small ghost')),{act:B('Вся смена','go','shift','small ghost'),key:'myshift'})}
 
 function tomorrowPanel(){const d=D.add(D.today(),1),n=D.occurrences(state,d,d).length;
- return panel('Завтра',`<div class="tiles one"><div class="tile"><span class="kicker">${esc(D.fmtDay(d))}</span><b class="num">${n}</b><span class="meta">${plural(n,'занятие','занятия','занятий')} в расписании</span></div></div>`,{act:B('Открыть день','journal-day',d,'small ghost'),key:'tomorrow'})}
+ return panel('Завтра',`<div class="tiles one"><div class="tile"><span class="kicker">${esc(D.fmtShort(d))}</span><b class="num">${n}</b><span class="meta">${plural(n,'занятие','занятия','занятий')} в расписании</span></div></div>`,{act:B('Открыть день','journal-day',d,'small ghost'),key:'tomorrow'})}
 
 /* ——— Напоминания ———
    Очередь: обязательный пункт маршрута, чьё время прошло, и групповое занятие без отметки
@@ -4610,7 +4668,7 @@ function shell(){
 function castFix(){const jv=JV(),sv=SV(),dv=dirKeys();
  if(!jv.some(([k])=>k===ui.jv))ui.jv=jv[0][0];if(!sv.some(([k])=>k===ui.sv))ui.sv=sv[0][0];if(!dv.includes(ui.dv))ui.dv=dv[0]}
 function render(){castFix();const app=$('#app'),first=!app.firstChild,html=shell();
- if(first)app.innerHTML=html;else morph(app,html);
+ if(first){app.innerHTML=html;capParts(app)}else morph(app,html);
  sheetRender();
  document.title=`${ROUTES[ui.route]?.[0]||'Пульт'} · Клуб`;
  quietView([ui.route,ui.jv,ui.sv,ui.dv,ui.date,ui.kind,ui.trainer,ui.role,ui.owner,ui.onlyOpen].join('|'))}

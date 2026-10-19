@@ -99,6 +99,11 @@ svg{display:block;flex:none}
    ним, блик по верхней кромке, тень «плавает». Стеклянное = временное. */
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);box-shadow:var(--shadow-rest);padding:var(--s-6);min-width:0}
 .card{background:var(--card);border-radius:var(--r-card);min-width:0}
+/* Карточка прямо на холсте — поверхность, как панель: заливка карточки с холстом сливается (карточка живёт на панели).
+   Поле — как у панели, чтобы знак и текст стояли на тех же вертикалях. */
+:where(.scene,.stack,.qcards)>.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);box-shadow:var(--shadow-rest)}
+.qcards>.qcard{padding:var(--s-4) var(--s-6)}
+:where(.scene,.stack)>.learncard.card{padding:var(--s-5) var(--s-6)}
 .glass{
  position:relative;isolation:isolate;background:var(--glass);
  -webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
@@ -164,7 +169,7 @@ input.is-error{border-color:var(--alert)}
 .fields.three{grid-template-columns:1fr 1fr 1fr;gap:var(--s-3)}
 
 /* ——— сегмент: один из нескольких ——— */
-.seg{display:flex;flex:none;gap:2px;padding:3px;border-radius:var(--r-pill);background:var(--card);max-width:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.seg{display:flex;flex:none;gap:2px;padding:4px;border-radius:var(--r-pill);background:var(--card);max-width:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
 .seg::-webkit-scrollbar{display:none}
 .seg button{flex:1 1 auto;min-width:0;min-height:36px;padding:0 var(--s-4);border:0;background:transparent;color:var(--muted);font-size:var(--t-meta)}
 @media (hover:hover){.seg button:hover{background:var(--hover);color:var(--ink)}}
@@ -256,9 +261,13 @@ input.is-error{border-color:var(--alert)}
 .stack{display:flex;flex-direction:column;gap:var(--s-6);min-width:0}
 
 .phead{flex:none;display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);min-height:var(--h-compact);margin-bottom:var(--s-4)}
+.phead>h2{margin-right:auto}
+/* текст и значок действия — на правой вертикали панели, как числа и стрелки строк */
+:is(.phead,.lhead)>button.small.ghost:last-child:not(.icon){margin-right:calc(var(--s-3) * -1)}
+:is(.phead,.lhead)>button.icon.ghost:last-child{margin-right:calc(var(--s-2) * -1)}
+.panel>.btnrow>button.small.ghost:first-child{margin-left:calc(var(--s-3) * -1)}
 .ptag{font-size:var(--t-caption);font-weight:var(--w-medium);color:var(--muted);font-variant-numeric:tabular-nums}
 .pfoot{display:flex;justify-content:center;margin-top:var(--s-3)}
-.footnote{padding:0 var(--s-2)}
 
 /* пример: полоса над сценой, не исчезает, пока смотрите */
 .banner{display:flex;align-items:center;gap:var(--s-4);padding:var(--s-3) var(--s-3) var(--s-3) var(--s-5)}
@@ -337,27 +346,46 @@ a.mback:active{background:var(--press)}
 .qcards{display:flex;flex-direction:column;gap:var(--s-2)}
 .qcard{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-3) var(--s-3) var(--s-3) var(--s-4);flex-wrap:wrap}
 .qcard p{font-weight:var(--w-medium);min-width:180px}
+.qcard p .meta{display:block}
 .qico{width:32px;height:32px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--surface);color:var(--ink-soft)}
 .qcard.warn .qico{color:var(--warn);background:var(--warn-veil)}
 
 .timeline{padding-top:var(--s-4)}
-.block+.block{margin-top:var(--s-4)}
-.blocktitle{font-size:var(--t-caption);font-weight:var(--w-medium);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:0 var(--s-2) var(--s-1)}
+.block+.block{margin-top:var(--s-5)}
+.blocktitle{font-size:var(--t-caption);font-weight:var(--w-medium);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:0 0 var(--s-1)}
 .blocktitle.warn{color:var(--warn)}
-.rows{display:flex;flex-direction:column}
+.rows{display:flex;flex-direction:column;margin-inline:calc(var(--s-2) * -1)}
 .rows.compact{gap:2px}
 
 .row{display:flex;align-items:center;gap:var(--s-3);min-height:var(--h-row);padding:0 var(--s-2);border-radius:var(--r-card);position:relative}
-.row+.row::before{content:"";position:absolute;left:52px;right:var(--s-2);top:0;height:1px;background:var(--line)}
+.row+.row::before{content:"";position:absolute;left:calc(var(--s-2) + var(--lead) + var(--s-3));right:var(--s-2);top:0;height:1px;background:var(--line)}
+/* Черта начинается там же, где текст строки: поле + знак + зазор. --lead — ширина знака впереди
+   (у строки без знака текст стоит прямо на поле); ширины те же, что раскладывают сами знаки. */
+.row{--lead:calc(var(--s-3) * -1);--slot:44px}
+.row:has(>:is(.emb.xs,.exn):first-child){--lead:24px}
+.row:has(>.emb.s:first-child){--lead:32px}
+.row:has(>:is(.lead,.ringbox,.tick,.avatar):first-child){--lead:36px}
+.row:has(>:is(.emb:not(.xs,.s),.datebox):first-child){--lead:44px}
+.row:has(>.tslot:first-child){--lead:var(--slot)}
+.row:has(>.tslot:first-child+.abar){--lead:calc(var(--slot) + var(--s-3) + 3px)}
+.row:has(>.tslot:first-child+.emb){--lead:calc(var(--slot) + var(--s-3) + 44px)}
+.tslot{flex:none;width:var(--slot,44px)}
 .row.plain{padding:var(--s-2)}
 .rbody{
  flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px;
- min-height:var(--h-row);padding:0 var(--s-2);margin:0 calc(var(--s-2) * -1);border:0;border-radius:var(--r-control);
+ min-height:var(--h-row);padding:var(--s-2);margin:0 calc(var(--s-2) * -1);border:0;border-radius:var(--r-control);
  background:transparent;text-align:left;font-weight:var(--w-regular);white-space:normal;
 }
 @media (hover:hover){.rbody:hover{background:var(--hover)}}
 .rbody:active{background:var(--press)}
 .rt{font-weight:var(--w-medium);color:var(--ink);overflow:hidden;text-overflow:ellipsis;max-width:100%;transition:color var(--d-move)}
+/* Подпись из частей: часть переносится целиком, разделитель стоит в зазоре перед ней
+   и срезается у той, что начала строку. В подписи в одну строку лишнее уходит в многоточие по частям. */
+.parts{display:block;min-width:0;overflow:hidden;text-overflow:inherit}
+.parts>span{display:block;margin-left:-.8em;overflow:hidden;text-overflow:inherit}
+.parts .pt{display:inline-block;max-width:100%;padding-left:.8em;overflow:hidden;text-overflow:ellipsis;vertical-align:top}
+.parts .sep{display:inline-block;width:.8em;margin-left:-.8em;text-align:center;font-style:normal}
+.parts svg{display:inline-block;vertical-align:-2px}
 .rm{display:flex;align-items:center;gap:var(--s-1);font-size:var(--t-meta);color:var(--muted);flex-wrap:wrap}
 .rm b{font-weight:var(--w-medium);color:var(--ink-soft)}
 .rm.warn{color:var(--warn)}
@@ -379,7 +407,8 @@ a.mback:active{background:var(--press)}
 .delta{font-size:var(--t-caption);font-weight:var(--w-medium);color:var(--muted);font-variant-numeric:tabular-nums}
 .delta.up{color:var(--ok)}
 .delta.dn{color:var(--warn)}
-.panel .tiles+.blocktitle{margin-top:var(--s-5)}
+.panel .tiles+:is(.rows,.blocktitle),.panel .rows+.blocktitle{margin-top:var(--s-5)}
+.panel>p+.rows{margin-top:var(--s-3)}
 .nextrow{
  flex-direction:column;align-items:flex-start;justify-content:center;gap:0;min-height:var(--h-row);width:100%;
  padding:0 var(--s-3);border:0;border-radius:var(--r-control);background:transparent;text-align:left;font-weight:var(--w-regular)
@@ -399,6 +428,9 @@ a.mback:active{background:var(--press)}
 @media (min-width:720px){.row.is-next .rt{font-size:var(--t-heading);letter-spacing:-.01em}}
 .late{color:var(--warn)}
 .tiles.one{grid-template-columns:1fr}
+/* Число внутри панели или шторки — не плашка, а строка с волосной чертой слева (один слой, §15).
+   На холсте (сцена) плитка остаётся карточкой. */
+:is(.panel,.sheet) .tile{background:transparent;border-radius:0;padding:var(--s-1) 0 var(--s-1) var(--s-4);border-left:1px solid var(--line-strong)}
 @media (max-width:1023px){.deskonly{display:none}}
 .okword{color:var(--ok)}
 .row.is-future .rt{color:var(--ink-soft)}
@@ -410,7 +442,7 @@ a.mback:active{background:var(--press)}
 .row.is-remind::before,.row.is-remind+.row::before{opacity:0}
 
 /* закрыть день вручную — в конце сегодняшней ленты */
-.closeday{display:flex;align-items:center;gap:var(--s-3);margin-top:var(--s-4);padding:var(--s-3) var(--s-2) 0;border-top:1px solid var(--line)}
+.closeday{display:flex;align-items:center;gap:var(--s-3);margin-top:var(--s-4);padding:var(--s-3) 0 0;border-top:1px solid var(--line)}
 .closeday .meta{display:inline-flex;align-items:center;gap:var(--s-1)}
 /* тихий признак «число открывает точный ввод» */
 .tapnum{text-decoration:underline dotted var(--faint);text-underline-offset:3px}
@@ -424,8 +456,6 @@ a.mback:active{background:var(--press)}
 .datebox.done b{color:var(--ink)}
 .wrow.is-on{background:var(--card)}
 .wrow.is-on::before,.wrow.is-on+.row::before{opacity:0}
-.row .datebox+.rbody{margin-left:0}
-.wrow+.row::before,.row.wrow::before{left:64px}
 
 .detail{display:flex;flex-direction:column;gap:var(--s-4)}
 .dtop{display:flex;align-items:center;gap:var(--s-1);margin:calc(var(--s-2) * -1) calc(var(--s-2) * -1) 0 0}
@@ -456,7 +486,6 @@ a.mback:active{background:var(--press)}
 .wnote{display:flex;gap:var(--s-2);align-items:flex-start}
 .dfoot{display:flex;justify-content:flex-end;gap:var(--s-2);flex-wrap:wrap;padding-top:var(--s-2)}
 .dfoot button.ghost{padding:0 var(--s-3)}
-.row.plain .exn{background:var(--card)}
 
 /* ——— «В зале»: всегда тёмный, всё под большой палец ——— */
 body.in-gym{overflow:hidden}
@@ -508,12 +537,14 @@ body.in-gym .toast{bottom:calc(var(--h-gym) + var(--s-8) + env(safe-area-inset-b
 .pseg{min-width:280px}
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s-4)}
 .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s-4)}
-.rowhead{display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);flex-wrap:wrap;padding:0 var(--s-2)}
+/* три карточки — одним рядом, а не «две и одна» */
+@media (min-width:1280px){.grid2:has(>:nth-child(3):last-child){grid-template-columns:repeat(3,minmax(0,1fr))}}
+.rowhead{display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);flex-wrap:wrap}
 .rowfoot{display:flex;justify-content:center}
 
 /* карточка-число: вся карточка — кнопка, при нажатии только темнеет */
 button.stat{
- display:flex;flex-direction:column;align-items:flex-start;gap:var(--s-1);min-height:0;padding:var(--s-5);
+ display:flex;flex-direction:column;align-items:flex-start;gap:var(--s-1);min-height:0;padding:var(--s-6);
  border-radius:var(--r-panel);text-align:left;white-space:normal;font-weight:var(--w-regular);color:var(--ink);
 }
 @media (hover:hover){button.stat:hover{background:var(--surface);border-color:var(--line-strong)}}
@@ -530,7 +561,7 @@ button.stat:active{background:var(--card)}
 .chartbox{background:var(--card);border-radius:var(--r-card);padding:var(--s-4);margin-bottom:var(--s-4)}
 .chartx{display:flex;justify-content:space-between;margin-top:var(--s-2)}
 
-.hcard{display:flex;flex-direction:column;gap:var(--s-4);padding:var(--s-5)}
+.hcard{display:flex;flex-direction:column;gap:var(--s-4);padding:var(--s-6)}
 .hhead{display:flex;align-items:flex-start;gap:var(--s-2)}
 .hhead h3{font-weight:var(--w-bold)}
 /* клетка — день, а не полоса: ширина ограничена (аудит, п. 37) */
@@ -564,13 +595,12 @@ a.btn{
 a.btn.icon{width:var(--h-control)}
 @media (hover:hover){a.btn:hover{background:var(--card)}}
 a.btn:active{background:var(--card-hot);transform:scale(.96)}
-.meet .tiles{margin-bottom:var(--s-2)}
-.meet .blocktitle{margin-top:var(--s-4)}
 .mrow{display:flex;align-items:center;gap:var(--s-2);min-height:36px;padding:0 var(--s-2);font-size:var(--t-meta)}
 .mrow b{font-weight:var(--w-medium)}
 .mrow svg{color:var(--ok)}
 .mnote{padding:var(--s-2) var(--s-3);background:var(--card);border-radius:var(--r-control)}
 .mnote p{font-size:var(--t-meta);color:var(--ink-soft);margin-top:2px}
+.rows>.mnote{margin-inline:var(--s-2)}
 .mnhead{display:flex;align-items:center;justify-content:space-between;margin:calc(var(--s-1) * -1) calc(var(--s-2) * -1) 0 0}
 .qlist .row{min-height:var(--h-control)}
 .qadd{display:flex;gap:var(--s-2);margin-top:var(--s-2)}
@@ -583,7 +613,6 @@ a.btn:active{background:var(--card-hot);transform:scale(.96)}
 .wbar{height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:var(--s-1)}
 .wbar i{width:100%;max-width:36px;border-radius:var(--r-small);background:var(--card-hot)}
 .wbar.now i{background:var(--ink)}
-.regular{margin-bottom:var(--s-2)}
 
 .hfirst{padding:var(--s-3) 0}
 .meetset{width:100%}
@@ -596,7 +625,8 @@ a.btn:active{background:var(--card-hot);transform:scale(.96)}
 .mlegend i.open{background:var(--card-hot)}
 /* карточка открывается — шеврон в углу */
 button.stat{position:relative}
-.statgo{position:absolute;top:var(--s-4);right:var(--s-4);color:var(--faint)}
+.statgo{position:absolute;top:var(--s-6);right:var(--s-6);color:var(--faint)}
+@media (max-width:719px){.statgo{top:var(--s-4);right:var(--s-4)}}
 
 /* ——— Плавающие слои: шторка, выпадающие, тост ———
    Стекло — только здесь и в каркасе телефона (VISUAL §4). Выпадающие —
@@ -764,6 +794,7 @@ details.more[open]>.field{margin-top:var(--s-2)}
  .main{padding:var(--s-6) var(--s-6) var(--s-12)}
  .cols{grid-template-columns:minmax(0,1.4fr) minmax(290px,1fr)}
  .grid3{grid-template-columns:repeat(2,minmax(0,1fr))}
+ :is(.grid2,.grid3)>:last-child:nth-child(odd){grid-column:1/-1}
 }
 
 @media (max-width:1023px){
@@ -813,24 +844,23 @@ details.more[open]>.field{margin-top:var(--s-2)}
 @media (max-width:719px){
  .main{padding:0 var(--s-3) calc(164px + env(safe-area-inset-bottom))}
  .mhead{margin:var(--s-2) 0 var(--s-4)}
- .shead{padding:0 var(--s-2)}
- .panel{padding:var(--s-5) var(--s-3)}
+ .panel{padding:var(--s-5) var(--s-4)}
+ .qcards>.qcard,:where(.scene,.stack)>.learncard.card{padding:var(--s-4)}
+ .row{--slot:38px}
+ .tslot{font-size:var(--t-meta)}
  .timeline{padding-top:var(--s-3)}
- .row{padding:0 var(--s-1)}
- .row+.row::before{left:48px}
  .grid2,.grid3{grid-template-columns:1fr}
  .grid2:has(.stat){grid-template-columns:1fr 1fr;gap:var(--s-3)}
- .grid2 .stat{padding:var(--s-4)}
+ :is(.grid2,.grid3) .stat{padding:var(--s-4)}
  .grid2 .stat .spark{width:72px}
  .grid2 .statfoot{flex-direction:column;align-items:flex-start;gap:var(--s-1)}
  .tiles.four{grid-template-columns:repeat(2,minmax(0,1fr))}
- .tiles.three .tile{padding:var(--s-3)}
  .tile b{font-size:var(--t-heading)}
  .wd{min-height:56px}
  .weekstrip>button{display:none}
  .qcard .btnrow{width:100%;justify-content:flex-end}
  .banner{flex-direction:column;align-items:flex-start;padding:var(--s-4)}
- .detail{padding:var(--s-4) var(--s-3)}
+ .detail{padding:var(--s-4)}
  .ex{padding:var(--s-3)}
  .sethead,.set{grid-template-columns:20px minmax(0,1fr) minmax(0,1fr) 40px 32px;gap:6px}
  .line{grid-template-columns:minmax(0,.8fr) 10px minmax(0,1fr) 10px minmax(0,1fr) 40px;gap:var(--s-1)}
@@ -855,6 +885,14 @@ details.more[open]>.field{margin-top:var(--s-2)}
  .sheetfoot .spacer{display:none}
  .sheetfoot button[type=submit]{flex:1}
  .prow{grid-template-columns:minmax(0,1fr) 44px 10px 44px 32px;gap:6px}
+}
+/* Палец: у органа меньше 44 px — невидимая зона касания до 44 (вид не меняется). */
+@media (max-width:719px),(pointer:coarse){
+ :where(button){position:relative}
+ :where(button)::after{content:"";position:absolute;inset:min(0px,calc((100% - 44px) / 2))}
+ .seg.mini{padding:4px}
+ .seg.mini button{min-height:36px}
+ .set input,.line input{min-height:var(--h-control)}
 }
 @media (pointer:coarse){
  button.icon.small{width:40px;min-width:40px;min-height:40px}
@@ -979,10 +1017,10 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
    Только токены Club; сверх ядра — размеры эмблем 24/32/44/64/96.
    Блок одинаковый у клиента, тренера и администратора. */
 .emb{--sz:44px;position:relative;flex:none;width:var(--sz);height:var(--sz);border-radius:calc(var(--sz) * .3);display:grid;place-items:center;
- background:var(--card);color:var(--ink-soft);font-size:calc(var(--sz) * .36);font-weight:var(--w-bold);letter-spacing:-.02em;line-height:1;
+ background:var(--card);color:var(--ink-soft);font-size:var(--t-body);font-weight:var(--w-bold);letter-spacing:-.02em;line-height:1;
  font-variant-numeric:tabular-nums;text-transform:uppercase;transition:background-color var(--d-move) var(--ease-out),color var(--d-move) var(--ease-out)}
 .emb>svg{width:calc(var(--sz) * .5);height:calc(var(--sz) * .5)}
-.emb.xs{--sz:24px}.emb.s{--sz:32px}.emb.m{--sz:44px}.emb.l{--sz:64px}.emb.xl{--sz:96px}
+.emb.xs{--sz:24px;font-size:var(--t-caption)}.emb.s{--sz:32px;font-size:var(--t-caption)}.emb.m{--sz:44px}.emb.l{--sz:64px;font-size:var(--t-figure)}.emb.xl{--sz:96px;font-size:var(--t-title)}
 .emb.xs>svg{stroke-width:2.2}
 .emb.is-ok{background:var(--ok);color:var(--surface)}
 .emb.is-now{background:var(--accent);color:var(--on-accent)}
@@ -1019,17 +1057,14 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .meter.l{height:12px}
 
 /* Заголовок группы несёт знак, цвет и число — внутри группы состояние словом не повторяется. */
-.gh{display:flex;align-items:center;gap:var(--s-2);min-height:28px;padding:0 var(--s-1);font-size:var(--t-meta);font-weight:var(--w-bold);color:var(--ink)}
+.gh{display:flex;align-items:center;gap:var(--s-2);min-width:0}
 .gh>.gs{flex:none;width:22px;height:22px;min-width:0;padding:0;border-radius:50%;display:grid;place-items:center;background:var(--card-hot);color:var(--ink)}
 .gh>.gs>svg{width:13px;height:13px;stroke-width:2.4}
-.gh .n{margin-left:auto;color:var(--muted);font-weight:var(--w-medium);font-variant-numeric:tabular-nums}
-.gh.is-ok{color:var(--ok)}.gh.is-ok>.gs{background:var(--ok);color:var(--surface)}
-.gh.is-warn{color:var(--warn)}.gh.is-warn>.gs{background:var(--warn-fill);color:var(--on-warn)}
-.gh.is-alert{color:var(--alert)}.gh.is-alert>.gs{background:var(--alert);color:var(--surface)}
+.gh.is-ok>.gs{background:var(--ok);color:var(--surface)}
+.gh.is-warn>.gs{background:var(--warn-fill);color:var(--on-warn)}
+.gh.is-alert>.gs{background:var(--alert);color:var(--surface)}
 .gh.is-now>.gs{background:var(--accent);color:var(--on-accent)}
 .gh.is-new>.gs{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
-.ggroup{display:flex;flex-direction:column;gap:var(--s-2)}
-.ggroup+.ggroup{margin-top:var(--s-5)}
 
 /* Полоса состояния слева у строки и плитки: цвет — состояние, слово не нужно. */
 .has-bar{position:relative;overflow:hidden}
@@ -1038,8 +1073,9 @@ textarea.mta{min-height:var(--h-control);resize:none;overflow:hidden}
 .has-bar.is-alert::after{background:var(--alert)}.has-bar.is-now::after{background:var(--accent)}
 
 /* Главная карточка — одна на экран: эмблема и ответ крупно, действие рядом. */
-.band{display:flex;flex-direction:column;gap:var(--s-4);padding:var(--s-5);border-radius:var(--r-panel);background:var(--accent);color:var(--on-accent);
+.band{display:flex;flex-direction:column;gap:var(--s-4);padding:var(--s-6);border-radius:var(--r-panel);background:var(--accent);color:var(--on-accent);
  box-shadow:var(--shadow-float);min-width:0;position:relative}
+@media (max-width:719px){.band{padding:var(--s-5) var(--s-4)}}
 .band .bhead{display:flex;align-items:center;gap:var(--s-4);min-width:0}
 .band .bhead>.grow{min-width:0}
 .band .emb{background:var(--on-accent);color:var(--accent)}
@@ -1811,6 +1847,8 @@ function applyTheme(){const t=prefs.theme==='system'?(matchMedia('(prefers-color
 // ——— находки и числа ———
 const find=(list,id)=>view()[list].find(x=>x.id===id);
 const fmtN=n=>Number(n||0).toLocaleString('ru-RU',{maximumFractionDigits:2});
+// Число со знаком: плюс у роста, настоящий минус у снижения.
+const fmtD=n=>(n>0?'+':n<0?'−':'')+fmtN(Math.abs(n));
 const fmtK=n=>{n=Number(n||0);return n>=1000?String(Math.round(n/100)/10).replace('.',',')+'к':fmtN(n)};
 const numText=v=>v===null||v===undefined||v===''?'':String(v).replace('.',',');
 const plural=(n,a,b,c)=>{const x=Math.abs(n)%100,y=x%10;return x>10&&x<20?c:y>1&&y<5?b:y===1?a:c};
@@ -1847,8 +1885,8 @@ function tally(done,total,{size='',max=14,tone='on',word=''}={}){if(!total)retur
 // Заполнение 0…1 — полосой; тон — состояние, если оно есть.
 function meter(r,{tone='',size=''}={}){const p=Math.max(0,Math.min(1,Number(r)||0));
  return `<span class="meter${tone?' '+tone:''}${size?' '+size:''}" aria-hidden="true"><i style="width:${Math.round(p*100)}%"></i></span>`}
-// Заголовок группы: знак, слово и число — состояние называется один раз, над группой.
-function gh(state,icon,title,n){return `<div class="gh${state?' is-'+state:''}"><span class="gs">${I(icon,13)}</span><span>${title}</span>${n!==undefined&&n!==null?`<span class="n">${n}</span>`:''}</div>`}
+// Заголовок группы — заголовок её панели: знак состояния перед словом; число ставит шапка (ptag).
+function gh(state,icon,title){return `<h2 class="gh${state?' is-'+state:''}"><span class="gs">${I(icon,13)}</span>${title}</h2>`}
 // Главная карточка экрана: одна, сверху; эмблема, ответ крупно, действие рядом.
 function band({face,state='',kicker='',title='',meta='',fig='',acts='',tone='',cls='',key='band',label=''}){
  return `<section class="band${tone?' is-'+tone:''}${cls?' '+cls:''}" data-key="${key}"${label?` aria-label="${esc(label)}"`:''}><div class="bhead">${emb(face,{size:'l',state})}<div class="grow">${kicker?`<span class="bk">${kicker}</span>`:''}<h2>${title}</h2>${meta?`<span class="bm">${meta}</span>`:''}</div></div>${fig?`<div class="bfig">${fig}</div>`:''}${acts?`<div class="bacts">${acts}</div>`:''}</section>`}
@@ -1930,7 +1968,24 @@ function I(name,size=20){return `<svg width="${size}" height="${size}" viewBox="
    теми же самыми, меняются только атрибуты и текст. Поэтому стекло не
    пересоздаётся (размытие не «моргает»), фокус и прокрутка списков остаются
    на месте, а нажатие ничего не дёргает. */
-function morph(root,html){const tpl=document.createElement('template');tpl.innerHTML=html;patchChildren(root,tpl.content)}
+/* Подпись из частей «а · б · в» переносится только между частями (CSS .parts): разделитель
+   живёт в зазоре перед частью. Число не отрывается от своей единицы и от «×» (неразрывный пробел).
+   Слова подписи те же — меняется раскладка; правка идёт по шаблону до сверки с экраном. */
+const CAPS='.rm,.bm,.meta,.sub,.caption';
+function capParts(root){
+ for(const el of root.querySelectorAll(CAPS)){if(el.querySelector('.parts')||el.parentElement?.closest('.rt,h1,h2,h3,b,button.chip'))continue;
+  const tw=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
+  for(let n=tw.nextNode();n;n=tw.nextNode())n.nodeValue=n.nodeValue.replace(/(\d) (?=[^\s\d·—])/g,'$1\u00a0').replace(/× (?=\d)/g,'×\u00a0');
+  if(![...el.childNodes].some(n=>n.nodeType===3&&n.nodeValue.includes(' · ')))continue;
+  const parts=[[]];
+  for(const n of [...el.childNodes]){if(n.nodeType!==3||!n.nodeValue.includes(' · ')){parts[parts.length-1].push(n);continue}
+   n.nodeValue.split(' · ').forEach((t,i)=>{if(i)parts.push([]);if(t)parts[parts.length-1].push(document.createTextNode(t))})}
+  const full=parts.filter(p=>p.some(n=>n.nodeType!==3||n.nodeValue.trim()));if(full.length<2)continue;
+  const line=document.createElement('span');
+  full.forEach((p,i)=>{const pt=document.createElement('span'),sep=document.createElement('i');pt.className='pt';sep.className='sep';
+   if(i)sep.textContent=' · ';else sep.setAttribute('aria-hidden','true');pt.append(sep,...p);line.append(pt)});
+  const box=document.createElement('span');box.className='parts';box.append(line);el.replaceChildren(box)}}
+function morph(root,html){const tpl=document.createElement('template');tpl.innerHTML=html;capParts(tpl.content);patchChildren(root,tpl.content)}
 function sameNode(a,b){return a.nodeType===b.nodeType&&(a.nodeType!==1||(a.tagName===b.tagName&&(a.getAttribute('data-key')||'')===(b.getAttribute('data-key')||'')))}
 function patchChildren(a,b){
  const an=[...a.childNodes],bn=[...b.childNodes];
@@ -2028,6 +2083,7 @@ function openSheet({title,body,save=null,saveLabel='Сохранить',extra=''
   <div class="sheetbody">${body}</div>
   ${save||extra?`<footer class="sheetfoot">${extra}<span class="spacer"></span>${cancel?B('Отмена','sheet-close','','ghost'):''}${save?`<button type="submit" class="primary">${saveLabel}</button>`:''}</footer>`:''}
  </form>`;
+ capParts(dlg);
  if(!dlg.open)dlg.showModal();
  const first=dlg.querySelector('.sheetbody input:not([type=hidden]),.sheetbody textarea');
  if(first&&matchMedia('(hover:hover)').matches)first.focus();else dlg.querySelector('.sheethead button')?.focus({preventScroll:true});
@@ -2195,7 +2251,7 @@ function sideToday(){const s=view(),next=D.schedule(s,D.addDays(D.today(),1),6).
 function deskSide(s){const c=s.coach,qn=s.questions.filter(q=>!q.askedAt).length,wt=D.metricSeries(s,'weight'),last=wt[wt.length-1],dw=D.metricDelta(s,'weight',7);
  const coach=c.name?`<section class="panel deskonly"><div class="phead"><h2>Тренер</h2>${B('Открыть','go','coach','small ghost')}</div>
   <div class="sidecoach">${emb(initials(c.name),{size:'m',state:'calm'})}<div class="grow"><b>${esc(c.name)}</b><span class="meta">${c.nextMeeting?`встреча ${D.fmtDay(c.nextMeeting,{lower:true})}`:'встреча не назначена'}</span></div>${qn?`<span class="qcount" aria-label="${qn} ${plural(qn,'вопрос','вопроса','вопросов')} к встрече">${I('question',14)}<b class="num">${qn}</b></span>`:''}</div></section>`:'';
- const body=last?`<section class="panel deskonly"><div class="phead"><h2>Вес</h2>${B('Замер','metric-open','weight','small ghost')}</div><div class="sideweight"><b class="num">${fmtN(last.value)}<span> кг</span></b>${spark(wt.slice(-12).map(m=>m.value),{w:140,h:44})}</div><span class="delta">${D.fmtDay(last.date)}${dw!==null?` · ${dw>0?'+':''}${fmtN(dw)} за неделю`:''}</span></section>`:'';
+ const body=last?`<section class="panel deskonly"><div class="phead"><h2>Вес</h2>${B('Замер','metric-open','weight','small ghost')}</div><div class="sideweight"><b class="num">${fmtN(last.value)}<span> кг</span></b>${spark(wt.slice(-12).map(m=>m.value),{w:140,h:44})}</div><span class="delta">${D.fmtDay(last.date)}${dw!==null?` · ${fmtD(dw)} за неделю`:''}</span></section>`:'';
  return coach+body}
 
 
@@ -2270,10 +2326,10 @@ function workoutDetail(id){
  <div class="dtop">${B(I('back',20),'go','train','icon ghost backbtn','aria-label="К списку"')}<span class="kicker grow">${D.fmtDay(w.date)} · ${w.time}${w.coach?' · с тренером':''}</span>
   ${B(I('edit',18),'w-edit',w.id,'icon small ghost','aria-label="Изменить"')}${B(I('copy',18),'w-copy',w.id,'icon small ghost','aria-label="Повторить сегодня"')}${B(I('trash',18),'w-del',w.id,'icon small ghost','aria-label="Удалить"')}</div>
  <h2 class="dtitle">${esc(w.title)}</h2>
- <div class="tiles four"><div class="tile"><span class="caption">Подходы</span><b class="num">${D.setsDone(w)}<span> из ${D.setsTotal(w)}</span></b>${D.setsTotal(w)?slots(w.exercises.flatMap(e=>e.sets.map(q=>q.doneAt?'ok':'')).slice(0,24)):''}</div>
-  <div class="tile"><span class="caption">Объём</span><b class="num">${D.volume(w)?kg(D.volume(w)):'—'}</b></div>
-  <div class="tile"><span class="caption">Время</span><b class="num">${dur?dur+'<span> мин</span>':'—'}</b></div>
-  <div class="tile"><span class="caption">Рекорды</span><b class="num">${recs.length||'—'}</b>${recs.length?`<span class="recmark">${I('trophy',14)}</span>`:''}</div></div>
+ <div class="tiles four"><div class="tile"><span class="kicker">Подходы</span><b class="num">${D.setsDone(w)}<span> из ${D.setsTotal(w)}</span></b>${D.setsTotal(w)?slots(w.exercises.flatMap(e=>e.sets.map(q=>q.doneAt?'ok':'')).slice(0,24)):''}</div>
+  <div class="tile"><span class="kicker">Объём</span><b class="num">${D.volume(w)?kg(D.volume(w)):'—'}</b></div>
+  <div class="tile"><span class="kicker">Время</span><b class="num">${dur?dur+'<span> мин</span>':'—'}</b></div>
+  <div class="tile"><span class="kicker">Рекорды</span><b class="num">${recs.length||'—'}</b>${recs.length?`<span class="recmark">${I('trophy',14)}</span>`:''}</div></div>
  <div class="exlist">${w.exercises.map((e,i)=>exCard(w,e,i)).join('')||empty('journal','Упражнений нет','Добавьте первое — подходы и веса будут подсказываться с прошлого раза.')}</div>
  ${B(I('plus',18)+'Упражнение','ex-new',w.id,'addex wide')}
  ${w.note?`<p class="wnote meta">${I('note',14)} ${esc(w.note)}</p>`:''}
@@ -2401,8 +2457,8 @@ function summarySheet(id){const s=view(),w=find('workouts',id);if(!w)return;
  const note=s.notes.find(n=>n.wid===w.id);
  openSheet({title:w.status==='done'?'Тренировка сделана':'Сводка',wide:false,
   body:`<div class="summary">
-  <div class="tiles three"><div class="tile"><span class="caption">Время</span><b class="num">${dur?dur+'<span> мин</span>':w.startedAt?'<1<span> мин</span>':'—'}</b></div>
-  <div class="tile"><span class="caption">Подходы</span><b class="num">${D.setsDone(w)}</b></div><div class="tile"><span class="caption">Объём</span><b class="num">${D.volume(w)?kg(D.volume(w)):'—'}</b></div></div>
+  <div class="tiles three"><div class="tile"><span class="kicker">Время</span><b class="num">${dur?dur+'<span> мин</span>':w.startedAt?'<1<span> мин</span>':'—'}</b></div>
+  <div class="tile"><span class="kicker">Подходы</span><b class="num">${D.setsDone(w)}</b></div><div class="tile"><span class="kicker">Объём</span><b class="num">${D.volume(w)?kg(D.volume(w)):'—'}</b></div></div>
   ${recs.length?`<div class="records">${recs.map(r=>`<div class="record card">${I('trophy',18)}<div class="grow"><b>${esc(r.name)}</b><span class="meta">${numText(r.weight)} кг × ${r.reps}</span></div><span class="rtag">Рекорд · ${r.plus>0?`+${numText(r.plus)} кг`:'больше повторов'}</span></div>`).join('')}</div>`:''}
   ${!cmp.length&&!recs.length?`<p class="meta firstrec">Первая запись — со следующего раза здесь будет сравнение и рекорды.</p>`:''}
   ${cmp.length?`<div class="field"><span class="label">С прошлым разом</span><div class="rows compact">${cmp.map(c=>`<div class="cmprow"><span class="grow">${esc(c.name)}</span>${arrow(c.trend)}</div>`).join('')}</div></div>`:''}
@@ -2425,7 +2481,7 @@ function spark(vals,{w=120,h=36,cls=''}={}){const pts=vals.map((v,i)=>[i,v]).fil
  return `<svg class="spark ${cls}" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true"><path d="${d}"/><circle cx="${l[0].toFixed(1)}" cy="${l[1].toFixed(1)}" r="3"/></svg>`}
 function delta(v,unit,{good=1,days=''}={}){if(v===null||v===undefined||!isFinite(v))return '';// Цвет только у роста силы; тело нейтрально — цель у всех своя (набор или снижение).
  const t=!good||v<=0?'':'up';
- return `<span class="delta ${t}">${v>0?'+':''}${fmtN(v)} ${unit}${days?` ${days}`:''}</span>`}
+ return `<span class="delta ${t}">${fmtD(v)} ${unit}${days?` ${days}`:''}</span>`}
 
 function progressScene(){
  const tab=ui.prog;
@@ -2460,7 +2516,7 @@ function exStatSheet(name){openSheet({title:esc(name),view:()=>{const s=view(),s
 function bodyTab(){const s=view(),wt=D.metricSeries(s,'weight'),last=wt[wt.length-1];
  // Главная карточка — вес: последний замер крупно и линия за последние недели.
  const hero=last?band({face:'scale',tone:'calm',kicker:`Вес · ${D.fmtDay(last.date,{lower:true})}`,title:`${fmtN(last.value)} кг`,
-  meta:(()=>{const d=D.metricDelta(s,'weight',30);return d===null?'первый замер':`${d>0?'+':''}${fmtN(d)} кг за месяц`})(),
+  meta:(()=>{const d=D.metricDelta(s,'weight',30);return d===null?'первый замер':`${fmtD(d)} кг за месяц`})(),
   fig:wt.length>1?spark(wt.slice(-12).map(m=>m.value),{w:220,h:48}):'',acts:B(I('plus',16)+'Замер','metric-open','weight','primary')+B('История','metric-hist','weight',''),key:'band-body'}):'';
  const cards=Object.entries(D.METRICS).filter(([k])=>!(hero&&k==='weight')).map(([k,[name,unit]])=>{const l=D.metricSeries(s,k),last=l[l.length-1];
   if(!last)return `<button type="button" class="panel stat is-empty" data-action="metric-open" data-id="${k}" data-key="m${k}">${emb('plus',{size:'s',state:'empty'})}<span class="kicker">${name}</span><span class="caption">Добавить первый замер</span></button>`;
@@ -2536,9 +2592,9 @@ function meetingPanel(){const s=view(),m=D.sinceMeeting(s),c=s.coach;
  const hab=m.habits.map(h=>`<div class="mrow"><span class="grow">${esc(h.title)}</span>${tally(h.hit,h.due,{tone:'ok',max:10})}</div>`).join('');
  const qs=s.questions.filter(q=>!q.askedAt);
  return `<section class="panel meet"><div class="phead"><h2>К встрече</h2><span class="ptag">${m.fromStart?'с начала дневника':s.notes.some(n=>n.source==='meeting')?`после встречи ${D.fmtShort(m.from)}`:`с ${D.fmtShort(D.addDays(m.from,1))}`}</span></div>
- ${m.done||m.skipped||m.weight!==null?`<div class="tiles three"><div class="tile"><span class="caption">Тренировки</span><b class="num">${m.done}</b>${m.done+m.skipped?slots([...Array(Math.min(m.done,10)).fill('ok'),...Array(Math.min(m.skipped,10)).fill('skip')]):''}</div>
- <div class="tile"><span class="caption">Рекорды</span><b class="num">${m.records.length||'—'}</b>${m.records.length?`<span class="recmark">${I('trophy',14)}</span>`:''}</div>
- <div class="tile"><span class="caption">Вес</span><b class="num">${m.weight===null?'—':(m.weight>0?'+':'')+fmtN(m.weight)}<span>${m.weight===null?'':' кг'}</span></b></div></div>`
+ ${m.done||m.skipped||m.weight!==null?`<div class="tiles three"><div class="tile"><span class="kicker">Тренировки</span><b class="num">${m.done}</b>${m.done+m.skipped?slots([...Array(Math.min(m.done,10)).fill('ok'),...Array(Math.min(m.skipped,10)).fill('skip')]):''}</div>
+ <div class="tile"><span class="kicker">Рекорды</span><b class="num">${m.records.length||'—'}</b>${m.records.length?`<span class="recmark">${I('trophy',14)}</span>`:''}</div>
+ <div class="tile"><span class="kicker">Вес</span><b class="num">${m.weight===null?'—':fmtD(m.weight)}<span>${m.weight===null?'':' кг'}</span></b></div></div>`
  :`<p class="meta">Здесь само соберётся всё к встрече: тренировки, рекорды, привычки, вес и заметки после тренировок.</p>`}
  ${m.records.length?`<div class="blocktitle">Рекорды</div><div class="rows compact">${m.records.map(r=>`<div class="mrow">${I('trophy',15)}<span class="grow">${esc(r.name)} <span class="caption">· ${D.fmtShort(r.date)}</span></span><b class="num">${numText(r.weight)} × ${r.reps}</b></div>`).join('')}</div>`:''}
  ${hab?`<div class="blocktitle">Привычки</div><div class="rows compact">${hab}</div>`:''}
@@ -2719,7 +2775,7 @@ function metricSheet(kind='weight',date=D.today()){const s=view(),l=D.metricSeri
   save:f=>{const v=toNum(f.value);if(!(v>0)){toast('Введите значение');return false}
    const ok=commit(st=>{const x=st.metrics.find(m=>m.kind===f.kind&&m.date===f.date);if(x)x.value=v;else st.metrics.push({id:D.uid('m'),date:f.date,kind:f.kind,value:v})});
    // Результат замера на «Сегодня» не виден — подтверждаем тостом с разницей (VISUAL §5.4).
-   if(ok&&!(ui.route==='progress'&&ui.prog==='body')){const [,u]=D.METRICS[f.kind],dw=D.metricDelta(state,f.kind,7);toast(`${fmtN(v)} ${u}${dw!==null?` · ${dw>0?'+':''}${fmtN(dw)} за неделю`:' · первый замер'}`)}
+   if(ok&&!(ui.route==='progress'&&ui.prog==='body')){const [,u]=D.METRICS[f.kind],dw=D.metricDelta(state,f.kind,7);toast(`${fmtN(v)} ${u}${dw!==null?` · ${fmtD(dw)} за неделю`:' · первый замер'}`)}
    return ok}});
  const k=$('#sheet [name=kind]');if(k)k.dataset.reopen='metric'}
 
@@ -3069,7 +3125,7 @@ function render(){
  if(!example&&!state.profile.onboarded){html=onboarding();title='Добро пожаловать'}
  else if(ui.route==='gym'){html=gymScene(ui.id);title='В зале'}
  else{html=shell();title=ROUTES[ui.route]?.[0]||'Методика'}
- if(first)app.innerHTML=html;else morph(app,html);
+ if(first){app.innerHTML=html;capParts(app)}else morph(app,html);
  sheetRender();
  toastCheck();learnAfter();
  document.title=`${title} · Дневник`;
